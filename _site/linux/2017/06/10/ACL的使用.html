@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>ACL的使用</title>
-  <meta name="description" content="什么是ACL">
+  <meta name="description" content="ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://yourdomain.com/linux/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8.html">
@@ -62,11 +62,9 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <h4 id="acl"><strong>什么是ACL</strong></h4>
+    <p>ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。</p>
 
-<p>ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。</p>
-
-<h4 id="acl-1"><strong>启动ACL支持</strong></h4>
+<h4 id="acl"><strong>启动ACL支持</strong></h4>
 
 <p>ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。<br /></p>
 
@@ -80,7 +78,7 @@
 
 <p><img src="/assets/Screenshot from 2017-06-10 19-43-52.png" alt="图片" /></p>
 
-<h4 id="acl-2"><strong>设置ACL</strong></h4>
+<h4 id="acl-1"><strong>设置ACL</strong></h4>
 
 <ul>
   <li>

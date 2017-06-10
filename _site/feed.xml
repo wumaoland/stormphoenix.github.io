@@ -6,17 +6,15 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 10 Jun 2017 19:50:24 +0800</pubDate>
-    <lastBuildDate>Sat, 10 Jun 2017 19:50:24 +0800</lastBuildDate>
+    <pubDate>Sat, 10 Jun 2017 23:22:06 +0800</pubDate>
+    <lastBuildDate>Sat, 10 Jun 2017 23:22:06 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
         <title>ACL的使用</title>
-        <description>&lt;h4 id=&quot;acl&quot;&gt;&lt;strong&gt;什么是ACL&lt;/strong&gt;&lt;/h4&gt;
+        <description>&lt;p&gt;ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。&lt;/p&gt;
 
-&lt;p&gt;ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。&lt;/p&gt;
-
-&lt;h4 id=&quot;acl-1&quot;&gt;&lt;strong&gt;启动ACL支持&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id=&quot;acl&quot;&gt;&lt;strong&gt;启动ACL支持&lt;/strong&gt;&lt;/h4&gt;
 
 &lt;p&gt;ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。&lt;br /&gt;&lt;/p&gt;
 
@@ -30,7 +28,7 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 19-43-52.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;acl-2&quot;&gt;&lt;strong&gt;设置ACL&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id=&quot;acl-1&quot;&gt;&lt;strong&gt;设置ACL&lt;/strong&gt;&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
