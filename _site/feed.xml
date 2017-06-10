@@ -6,9 +6,201 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 10 Jun 2017 12:12:40 +0800</pubDate>
-    <lastBuildDate>Sat, 10 Jun 2017 12:12:40 +0800</lastBuildDate>
+    <pubDate>Sat, 10 Jun 2017 17:23:31 +0800</pubDate>
+    <lastBuildDate>Sat, 10 Jun 2017 17:23:31 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>ACL的使用</title>
+        <description>&lt;h4 id=&quot;acl&quot;&gt;&lt;strong&gt;什么是ACL&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。&lt;/p&gt;
+
+&lt;h4 id=&quot;acl-1&quot;&gt;&lt;strong&gt;启动ACL支持&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 17-10-33.jpg&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;从图中可以看到有sda2和sda4两个磁盘分区挂载了文件系统。以“sda2”为例子，用”dumpe2fs -h /dev/sda2 | grep acl”命令去查询这个文件系统是否支持acl。只要有”Default mount options：user_xattr acl“显示，就证明系统启动了acl支持。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;acl-2&quot;&gt;&lt;strong&gt;设置ACL&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;setfacl 用于设置针对某一个文件或某一个用户的acl属性。&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;-m : 选项用于给文件添加某一个acl属性。例如：setfacl -m u:用户名称:权限 文件名字。&lt;/li&gt;
+      &lt;li&gt;-b：删除文件的所有acl属性。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;getfacl 查看某一个文件的acl属性。例如：getfacl testfile。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;mask说明。使用getfacl命令的时候，会看到mask这个字段。mask代表在设置acl的时候，用户和用户组的权限范围不得超过mask的设置值。例如如果user1针对文件test的acl属性是rwx，但是test的mask字段设置为r–，由于user1的权限范围不超过mask设置的值，所以user1针对test文件只具有r–的权限。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sat, 10 Jun 2017 16:07:39 +0800</pubDate>
+        <link>http://yourdomain.com/linux/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/linux/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8.html</guid>
+        
+        
+        <category>Linux</category>
+        
+      </item>
+    
+      <item>
+        <title>Linux账号管理</title>
+        <description>&lt;h4 id=&quot;uidgid&quot;&gt;&lt;strong&gt;用户标识符UID与GID&lt;/strong&gt;&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;uid：用户的的id，用一个数字标志&lt;/p&gt;
+
+  &lt;p&gt;gid：用户所在组的id，用一个数值标志&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;&lt;strong&gt;相关文件结构&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;/etc/passwd文件结构&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;保存了系统中所有账号的信息，每一行都代表一个账号。账号的种类分为两个：系统账号和用户账号。其中系统账号是系统正常允许必须的。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;root:x:0:0:root:/root:/bin/bash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;实例中的一行包括7列，分别说明：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1.账号名称&lt;/p&gt;
+
+  &lt;p&gt;2.账号密码，为了账号的安全性，账号的密码被保存在了/etc/shadow文件中，所以此处的密码变成了x&lt;/p&gt;
+
+  &lt;p&gt;3.UID&lt;/p&gt;
+
+  &lt;p&gt;4.GID&lt;/p&gt;
+
+  &lt;p&gt;5.用户信息说明，无重要用途&lt;/p&gt;
+
+  &lt;p&gt;6.主文件夹&lt;/p&gt;
+
+  &lt;p&gt;7.Shell用户登录系统后取得的默认的shell&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;/etc/shadow文件结构&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;root:&lt;span class=&quot;nv&quot;&gt;$6$qE8d&lt;/span&gt;/k2K&lt;span class=&quot;nv&quot;&gt;$NpCCL0kCsQdpAO5pC4QD91YAKpTS8w6&lt;/span&gt;.qdhl/fgZurM/2npI2bvEYY.LDNtll/Jnqlq1GH.AH3Z8hGiKJgIfy.:17111:0:99999:7:::&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;提前说明三个概念：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;密码过期：指超过了密码必须被修改的截止时间依然没有修改密码。在此情况下，用户依然可以使用此账号，但是账号登录的时候，系统会强制要求用户必须重新设置密码才能继续使用。&lt;/p&gt;
+
+  &lt;p&gt;密码失效：指的是密码过期超过了一定的天数，用户就无法使用此密码登录了。&lt;/p&gt;
+
+  &lt;p&gt;账号失效：账号无法使用了&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;实例中的一行包括9列：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1.账号名称&lt;/p&gt;
+
+  &lt;p&gt;2.账号密码，不过已经被加密过了。由于固定的编码系统产生的密码长度必须一致，所以这个字段的长度改变之后，密码就会失效&lt;/p&gt;
+
+  &lt;p&gt;3.最近更改密码的日期，这个时间是以1970年1月1日为1而累加得到的&lt;/p&gt;
+
+  &lt;p&gt;4.密码被修改后必须过几天才能再修改&lt;/p&gt;
+
+  &lt;p&gt;5.密码被更改后必须在多少天内再被修改&lt;/p&gt;
+
+  &lt;p&gt;6.在密码过期前的多少天之内提醒用户密码快到期了&lt;/p&gt;
+
+  &lt;p&gt;7.密码过期后的宽限时间，如果超过了这个时间，会发生密码失效&lt;/p&gt;
+
+  &lt;p&gt;8.账号在过了规定的日期就会无法使用，这个时间的设置同3&lt;/p&gt;
+
+  &lt;p&gt;9.保留字段&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;/etc/group文件结构&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;root:x:0:root&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;实例中的一行包括4列：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;用户组名字&lt;/p&gt;
+
+  &lt;p&gt;用户组密码，给用户组管理员使用&lt;/p&gt;
+
+  &lt;p&gt;GID&lt;/p&gt;
+
+  &lt;p&gt;用户组支持的用户&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;/etc/gshadow文件结构&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;root:x:0:root&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;实例中的一行包括4列：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;用户组名字    	
+密码列，同/etc/shadow。不过如果密码列上面是!的话，代表此用户组没有管理员    	
+用户组管理员账号    	
+用户组成员，成员之间用逗号分隔开&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;&lt;strong&gt;有效用户组和初始用户组&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在/etc/passwd文件中，第四列就是用户的初始用户组组号GID，表示用户一登录系统就会取得该用户组的权限。而有效用户组是什么呢？当你登录shell，输入groups命令将会返回你所加入的所有用户组，其中第一个显示的用户组就是有效用户组。
+    &lt;ul&gt;
+      &lt;li&gt;当用户新建一个文件的时候，文件所属的用户组是创建者当前的有效用户组。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;newgrp命令可以切换当前用户的有效用户组，不过这个命令将会重新启动一个shell。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;&lt;strong&gt;账号管理&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;useradd 添加一个用户&lt;/li&gt;
+  &lt;li&gt;passwd 修改用户的密码&lt;/li&gt;
+  &lt;li&gt;chage 修改密码的时间设置&lt;/li&gt;
+  &lt;li&gt;usermod 修改用户的信息&lt;/li&gt;
+  &lt;li&gt;finger 查看当前登录用户的详细信息&lt;/li&gt;
+  &lt;li&gt;chfn 修改个人信息&lt;/li&gt;
+  &lt;li&gt;id 查看用户的uid和gid&lt;/li&gt;
+  &lt;li&gt;groupadd 添加组&lt;/li&gt;
+  &lt;li&gt;groupmod 修改group的相关参数&lt;/li&gt;
+  &lt;li&gt;groupdel 删除用户组&lt;/li&gt;
+  &lt;li&gt;gpasswd 用户组管理员功能&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Sat, 10 Jun 2017 13:05:30 +0800</pubDate>
+        <link>http://yourdomain.com/linux/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/linux/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86.html</guid>
+        
+        
+        <category>Linux</category>
+        
+      </item>
     
       <item>
         <title>Welcome to Jekyll!</title>
