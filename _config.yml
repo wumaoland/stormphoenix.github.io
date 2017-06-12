@@ -1,26 +1,41 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
+# Site settings
+name: StormPhoenix的博客
+email: hzau.cs.wangcheng@gmail.com
+author: StormPhoenix
+url: http://stormphoenix.github.com
+resume_site: http://github.com/stormphoenix/
+github: https://github.com/stormphoenix/
+baseurl: ""
+description: 为了生命中的美好，不妥协直到变老.
+meta_description: 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
+motto: 为了生命中的美好，不妥协直到变老.
+banner: 学而不思则罔，思而不学则殆。
 
 gems: [jekyll-paginate]
 
-# Site settings
-title: StormPhoenix的博客
-email: hzau.cs.wangcheng@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-    为了心中的美好，不妥协直到变老
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://yourdomain.com" # the base hostname & protocol for your site
-twitter_username: StormPhoenix
-github_username:  StromPhoenix
+#permalink: /:categories/:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
+paginate: 10
 
-about: 关于
+exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
 
-paginate: 5
-paginate_path: "page:num"
+github_username: StormPhoenix
+highlighter: Pygments
 
 # Build settings
 markdown: kramdown
+
+baidu_analysis: 94be4b0f9fc5d94cc0d0415ea6761ae9
+
+FB:
+  comments :
+    provider : yungentie
+    duoshuo:
+        short_name : luoyan35714
+    disqus :
+        short_name : freudkang
+    # facebook :
+    #   appid : 123
+    #   num_posts: 5
+    #   width: 580
+    #   colorscheme: light
