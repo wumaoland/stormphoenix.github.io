@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title></title>
+    <description>为了生命中的美好，不妥协直到变老.</description>
+    <link>http://stormphoenix.github.com/</link>
+    <atom:link href="http://stormphoenix.github.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 13 Jun 2017 00:02:47 +0800</pubDate>
+    <lastBuildDate>Tue, 13 Jun 2017 00:02:47 +0800</lastBuildDate>
+    <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>ACL的使用</title>
+        <description>&lt;p&gt;ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。&lt;/p&gt;
+
+&lt;h4 id=&quot;acl&quot;&gt;&lt;strong&gt;启动ACL支持&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 19-31-56.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从图中可以看到有sda2和sda4两个磁盘分区挂载了文件系统。以&lt;code&gt;sda2&lt;/code&gt;为例子，用&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;dumpe2fs -h /dev/sda2 | grep acl&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;命令去查询这个文件系统是否支持acl。只要有如下的acl出现，就证明系统启动了ACL支持。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 19-43-52.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;acl-1&quot;&gt;&lt;strong&gt;设置ACL&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code&gt;setfacl&lt;/code&gt; 用于设置针对某一个文件或某一个用户的acl属性。&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;-m : 选项用于给文件添加某一个acl属性。例如：setfacl -m u:用户名称:权限 文件名字。&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;-b：删除文件的所有acl属性。&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 17-05-52.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;getfacl&lt;/code&gt; 查看某一个文件的acl属性。例如：getfacl testfile。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 16-27-38.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;mask&lt;/code&gt;说明。使用&lt;code&gt;getfacl&lt;/code&gt;命令的时候，会看到&lt;code&gt;mask&lt;/code&gt;这个字段。&lt;code&gt;mask&lt;/code&gt;代表在设置acl的时候，用户和用户组的权限范围不得超过&lt;code&gt;mask&lt;/code&gt;的设置值。例如如果user1针对文件test的acl属性是rwx，但是test的&lt;code&gt;mask&lt;/code&gt;字段设置为r–，由于user1的权限范围不超过mask设置的值，所以user1针对test文件只具有r–的权限。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sat, 10 Jun 2017 16:07:39 +0800</pubDate>
+        <link>http://stormphoenix.github.com/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
+        <guid isPermaLink="true">http://stormphoenix.github.com/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
+        
+        
+        <category>Linux</category>
+        
+      </item>
+    
+      <item>
+        <title>Linux账号管理</title>
+        <description>&lt;h4 id=&quot;uidgid&quot;&gt;&lt;strong&gt;用户标识符UID与GID&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;uid：用户的的id，用一个数字标志。&lt;/li&gt;
+  &lt;li&gt;gid：用户所在组的id，用一个数值标志。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;&lt;strong&gt;相关文件结构&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;/etc/passwd文件结构&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;保存了系统中所有账号的信息，每一行都代表一个账号。账号的种类分为两个：&lt;code&gt;系统账号&lt;/code&gt;和&lt;code&gt;用户账号&lt;/code&gt;。其中系统账号是系统正常运行必须的。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:x:0:0:root:/root:/bin/bash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;实例中的一行包括7列，用冒号“：”间隔分别说明：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1. 账号名称 
+
+2. 账号密码，为了账号的安全性，账号的密码被保存在了/etc/shadow文件中，所以此处的密码变成了x
+
+3. UID
+
+4. GID
+
+5. 用户信息说明，无重要用途
+
+6. 主文件夹
+
+7. Shell用户登录系统后取得的默认的shell
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;/etc/shadow文件结构&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:$6$qE8d/k2K$NpCCL0kCsQdpAO5pC4QD91YAKpTS8w6.qdhl/fgZurM/2npI2bvEYY.LDNtll/Jnqlq1GH.AH3Z8hGiKJgIfy.:17111:0:99999:7:::&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;提前说明三个概念：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;密码过期&lt;/strong&gt;：指超过了密码必须被修改的截止时间依然没有修改密码。在此情况下，用户依然可以使用此账号，但是账号登录的时候，系统会强制要求用户必须重新设置密码才能继续使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;密码失效&lt;/strong&gt;：指的是密码过期超过了一定的天数，用户就无法使用此密码登录了。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;账号失效&lt;/strong&gt;：账号无法使用了&lt;/p&gt;
+
+&lt;p&gt;实例中的一行包括9列：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1.账号名称
+
+2.账号密码，不过已经被加密过了。由于固定的编码系统产生的密码长度必须一致，所以这个字段的长度改变之后，密码就会失效
+
+3.最近更改密码的日期，这个时间是以1970年1月1日为1而累加得到的
+
+4.密码被修改后必须过几天才能再修改
+
+5.密码被更改后必须在多少天内再被修改
+
+6.在密码过期前的多少天之内提醒用户密码快到期了
+
+7.密码过期后的宽限时间，如果超过了这个时间，会发生密码失效
+
+8.账号在过了规定的日期就会无法使用，这个时间的设置同3
+
+9.保留字段
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;/etc/group文件结构&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:x:0:root&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;实例中的一行包括4列：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1.用户组名字
+
+2.用户组密码，给用户组管理员使用
+
+3.GID
+
+4.用户组支持的用户
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;/etc/gshadow文件结构&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:x:0:root&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;实例中的一行包括4列：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1.用户组名字。
+
+2.密码列，同/etc/shadow。不过如果密码列上面是!的话，代表此用户组没有管理员。
+
+3.用户组管理员账号。
+
+4.用户组成员，成员之间用逗号分隔开
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;&lt;strong&gt;有效用户组和初始用户组&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;在/etc/passwd文件中，第四列就是用户的初始用户组组号GID，表示用户一登录系统就会取得该用户组的权限。而有效用户组是什么呢？当你登录shell，输入groups命令将会返回你所加入的所有用户组，其中第一个显示的用户组就是有效用户组。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当用户新建一个文件的时候，文件所属的用户组是创建者当前的有效用户组。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;newgrp命令可以切换当前用户的有效用户组，不过这个命令将会重新启动一个shell。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;&lt;strong&gt;账号管理&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;useradd 添加一个用户&lt;/li&gt;
+  &lt;li&gt;passwd 修改用户的密码&lt;/li&gt;
+  &lt;li&gt;chage 修改密码的时间设置&lt;/li&gt;
+  &lt;li&gt;usermod 修改用户的信息&lt;/li&gt;
+  &lt;li&gt;finger 查看当前登录用户的详细信息&lt;/li&gt;
+  &lt;li&gt;chfn 修改个人信息&lt;/li&gt;
+  &lt;li&gt;id 查看用户的uid和gid&lt;/li&gt;
+  &lt;li&gt;groupadd 添加组&lt;/li&gt;
+  &lt;li&gt;groupmod 修改group的相关参数&lt;/li&gt;
+  &lt;li&gt;groupdel 删除用户组&lt;/li&gt;
+  &lt;li&gt;gpasswd 用户组管理员功能&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Sat, 10 Jun 2017 13:05:30 +0800</pubDate>
+        <link>http://stormphoenix.github.com/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86/</link>
+        <guid isPermaLink="true">http://stormphoenix.github.com/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86/</guid>
+        
+        
+        <category>Linux</category>
+        
+      </item>
+    
+      <item>
+        <title>Linux文件操作</title>
+        <description>&lt;p&gt;记录一下几天前学习的Linux文件和目录操作的知识。&lt;/p&gt;
+
+&lt;p&gt;cd： 切换目录&lt;/p&gt;
+
+&lt;p&gt;pwd：显示当前目录的路径，-p参数用于显示当前的路径，而不是显示连接路径&lt;/p&gt;
+
+&lt;p&gt;mkdir：新建一个新的目录。&lt;/p&gt;
+
+&lt;p&gt;rmdir：删除一个空的目录。
+其中，mkdir每次只能创建一级目录。比如：mkdir test 将会创建一个test目录。如果想要创建多级目录，类似与dir1/dir2/dir3，就必须加上-p参数，如下：&lt;/p&gt;
+
+&lt;p&gt;# mkdir -p dir1/dir2/dir3
+创建目录的同时还可以加上 -m 参数来指定目录的权限（关于权限以后会有详细讲解）。&lt;/p&gt;
+
+&lt;p&gt;# mkdir -m 711 test
+ # ls -l
+drwx–x–x 2 root root 4096 9月 27 10:32 test
+关于rmdir也差不多，每次只能删除一级目录且该目录必须为空。要删除多级目录就要加上参数 -p。如果要删除目录和目录里面所有的东西（包括文件），那么可以采用 rm -r &lt;目录名称&gt;。&lt;/目录名称&gt;&lt;/p&gt;
+
+&lt;p&gt;查看文件与目录的命令：&lt;/p&gt;
+
+&lt;p&gt;ls:用于查看文件或目录的详细信息。
+几个常用的参数说明：
+-a : 显示目录下全部的文件
+-d : 只查看目录本身，而无需列举出目录内的文件数据。
+-h : 将文件的容量用GB，MB，KB等方式列出（方便理解）。
+-i : 列出inode号码。
+-l : 列出文件的属性和权限信息。
+–time=&lt;值&gt; : 输出相应的时间。如果值等于atime，输出该文件上一次被访问的时间，如果值等于ctime，输出该文件上一次权限被修改的时间。
+--full-time : 以年、月、日、时、分的格式输出时间。
+复制文件的命令：&lt;/值&gt;&lt;/p&gt;
+
+&lt;p&gt;cp: 复制文件
+用法：cp source（源文件） destination（目标文件）//将source复制到destination里面
+相关参数：
+-p: 连同权限的属性一起复制过去。
+-s: 生成一个文件，使得该文件是源文件的快捷方式。
+删除文件的命令：&lt;/p&gt;
+
+&lt;p&gt;rm: 删除文件
+用法: rm source（被删除的文件名）
+相关参数:
+-r: 如果被删除的目录中有文件，那么一并删除该目录和里面的文件。如果不加上-r参数，那么rm只能删除单一文件或空目录。
+移动文件的命令：&lt;/p&gt;
+
+&lt;p&gt;mv: 移动文件
+用法: mv source （源文件） destination （目的地）
+相关参数:
+-u: 若目的地文件已经存在，且源文件较新，才会移动并覆盖目的地文件。
+-i: 若目的地文件已经存在，就会询问是否覆盖目的地文件。
+获取文件的完整名字:&lt;/p&gt;
+
+&lt;p&gt;basename: 获取完整名字
+用法：basename path （获取路径下的文件名称）
+示例: 
+ # basename /bin/mv
+mv
+获取文件的目录名称:&lt;/p&gt;
+
+&lt;p&gt;dirname:
+用法: 和basename类似。
+示例:
+ # dirname /bin/mv
+/bin
+文件内容查询命令:&lt;/p&gt;
+
+&lt;p&gt;cat:
+用法： cat 文件路径
+相关参数： 
+-n：打印行号。&lt;/p&gt;
+
+&lt;p&gt;tac：
+用法： 类似与cat，只不过将文件内容反向输出。&lt;/p&gt;
+
+&lt;p&gt;more：
+用法： 类似与cat。但是不会一口气将文件内容在屏幕上输出，而是一页一页的查看。
+相关操作
+Enter： 查看下一行。
+Space空格键： 查看下一页。&lt;/p&gt;
+
+&lt;p&gt;less： 类似与cat，效果和more一样，不过可以通过page down和page up向下或者向下翻页。
+相关操作： 
+page Down： 向下翻页。
+page Up： 向上翻页。&lt;/p&gt;
+
+&lt;p&gt;head：
+用法： 类似与cat，但是只会取出前n行数据，具体的n又参数制定。
+参数： 
+-n &lt;数字&gt;： 代表去取前n行数据。&lt;/数字&gt;&lt;/p&gt;
+
+&lt;p&gt;tail： 
+用法： 同head，只不过取得是文件末尾n行数据。&lt;/p&gt;
+
+&lt;p&gt;od：
+用法： 以特定的方式来读取文件，方式是 cd [-t TYPE] 文件路径，具体看下面。
+相关参数： 
+-t： 以某种方式读取文件内容，-t后面也会接上参数，他有如下参数： 
+    a： 默认字符来输出。
+    c： 利用ASCII来输出。
+    d[size]： 利用十进制输出，每个数字占用size个bytes。
+    o[size]： 利用八进制输出，其他同d。
+    f[size]： 摸底，其他同d。
+    x[size]： 利用十六进制输出，其他同d。
+修改/创建文件命令touch&lt;/p&gt;
+
+&lt;p&gt;先介绍和文件相关的几个时间概念：&lt;/p&gt;
+
+&lt;p&gt;modification time （mtime）：当文件内容改变时，mtime会被修改成文件内容变动时的时间。&lt;/p&gt;
+
+&lt;p&gt;status time （ctime）：当文件的权限和属性变动时，ctime会被修改成属性变动的时间。&lt;/p&gt;
+
+&lt;p&gt;access time （atime）：当文件被人访问时，atime会被修改成别人当时访问的时间。&lt;/p&gt;
+
+&lt;p&gt;touch使用的格式： touch [参数] 文件名。&lt;/p&gt;
+
+&lt;p&gt;具体如下&lt;/p&gt;
+
+&lt;p&gt;新建一个空文件：&lt;/p&gt;
+
+&lt;p&gt;# touch test
+ # ls -l test
+-rw-r–r– 1 root root 0 9月 29 19:28 test
+/×此时test文件的三个时间就会更新为当前的时间×/
+修改文件的时间&lt;/p&gt;
+
+&lt;p&gt;# touch -t 0710250213 test
+ # ll test; ll –time=atime test; ll –time=ctime test
+-rw-rw-r– 1 root root 0 10月 25 2007 test
+-rw-rw-r– 1 root root 0 10月 25 2007 test
+-rw-rw-r– 1 root root 0 9月 29 20:29 test
+/&lt;em&gt;如果没有添加–time参数，则默认输出mtime&lt;/em&gt;/
+touch创建目录时默认的权限&lt;/p&gt;
+
+&lt;p&gt;先谈一谈 umask&lt;/p&gt;
+
+&lt;p&gt;在终端内输入如下语句，打印unmask的值。&lt;/p&gt;
+
+&lt;p&gt;# umask
+0022
+在分别打印文件所有者、组员、其他人的默认权限&lt;/p&gt;
+
+&lt;p&gt;# umask -S
+u=rwx,g=rx,o=rx
+做一下解释，当用户创建一个文件时，这个文件的权限时怎么确定的。&lt;/p&gt;
+
+&lt;p&gt;首先来看创建文件，文件默认没有可执行权限（x），只有（r）（w）权限，所以默认权限为-rw-rw-rw-，化成数字就是666。那么最终权限的确定就是由这个数字666减去umask的后三位，也就是022，得到644，变换成字符表示就这样的：-rw-r–r–。&lt;/p&gt;
+
+&lt;p&gt;再来看创建文件夹。由于（x）权限与是否可以进入此文件夹有关，所以文件夹的（x）权限默认开放，也就是drwxrwxrwx，化成数字777。然后777减去umask的后三位，得到755，也就是drwxr-xr-x。&lt;/p&gt;
+
+&lt;p&gt;所以说创建文件或者文件夹时的默认权限和unmask有关，修改默认的权限就是修改umask，修改方法如下：&lt;/p&gt;
+
+&lt;p&gt;# umask 044 //修改来unmask，然后来看看默认权限是否改变
+ # touch test
+ # mkdir test2
+-rw–w–w- 1 root root 0 9月 29 21:14 test
+drwx-wx-wx 2 root root 4096 9月 29 21:14 test1
+（对于权限不理解的，可以看看我写的关于权限的文章。）&lt;/p&gt;
+
+&lt;p&gt;文件的隐藏属性&lt;/p&gt;
+
+&lt;p&gt;文件的隐藏属性主要时和文件安全相关系的，比如某些属性可以使得文件无法被删除，有些使得文件只能被添加数据等。&lt;/p&gt;
+
+&lt;p&gt;那么对这些隐藏属性进行操作的命令就是：&lt;/p&gt;
+
+&lt;p&gt;chattr：修改文件隐藏属性。 
+lsattr：列举出文件的隐藏属性。&lt;/p&gt;
+
+&lt;p&gt;举个例子：&lt;/p&gt;
+
+&lt;p&gt;# chattr +i test
+这个命令使得test这个文件加上来不可被其他人修改、删除的属性。&lt;/p&gt;
+
+&lt;p&gt;再来一个：&lt;/p&gt;
+
+&lt;p&gt;# chattr -i test
+这样就使得test文件剔除了i属性，也就是说test这个文件可以被其他人修改或删除了。&lt;/p&gt;
+
+&lt;p&gt;下面是相关的属性列表：&lt;/p&gt;
+
+&lt;p&gt;+：增加一个属性。
+-：剔除一个属性。
+a：让文件只能被添加数据，而不能被删除或修改数据，只有root能够设置该属性。
+i：任何人都不能对该。文件做任何修改（添加、删除等）
+其他的自行man。&lt;/p&gt;
+
+&lt;p&gt;查找可执行文件(.sh)的路径&lt;/p&gt;
+
+&lt;p&gt;which：查找某一个可执行文件的完整路径。它的原理时是搜索PATH路径下的后缀为（.sh）的文件。&lt;/p&gt;
+
+&lt;p&gt;参数：
+-a：将可以找到的所有可执行命令路径全部列出。
+示例：
+ # which ls
+ # /bin/ls
+查找普通文件的路径&lt;/p&gt;
+
+&lt;p&gt;whereis：该命令用于查找一般的文件，查找的原理是利用数据库来查找数据，并没有查询整个磁盘。再说find命令，它才是通过整个磁盘来查询文件的。&lt;/p&gt;
+
+&lt;p&gt;所以说有的命令文件没有被加入PATH，但却被存储进数据库里面，所以whereis有时候会找到which找不到的文件。&lt;/p&gt;
+
+&lt;p&gt;参数：
+-b：只找二进制的文件。
+-m：找到man文件路径下的文件。
+-s：只找source源文件。
+-u：查找不是上面三个选项的其他特殊文件。
+locate：locate是这样用的，只要文件名/路径名包含你要查找的字符串，那么就会将文件名/路径名显示出来。（locate也是通过查询数据库来输出结果）&lt;/p&gt;
+
+&lt;p&gt;参数：
+-i：忽略大小写的差异。
+-r：在后面介入正则表达式。
+示例：
+ # locate ls
+ # …….
+//包含ls字符串的文件名/路径名太多，所以用…代替
+find：直接在整个磁盘搜索相关文件名。&lt;/p&gt;
+
+&lt;p&gt;有好几种用法，且听我一一道来。&lt;/p&gt;
+
+&lt;p&gt;用法1：将路径下所有符合时间条件的文件全部列出来。&lt;/p&gt;
+
+&lt;p&gt;find &lt;在什么路径下搜索&gt; &lt;按照什么条件搜索&gt; &lt;搜索条件的取值&gt;
+相关搜索条件：&lt;按照什么条件搜索&gt; &lt;搜索条件的取值&gt;
+-mtime +n：搜索在n天之前（不包含第n天）修改过的文件。
+-mtime n：搜索在n天之前的一天之内被更改的文件。
+-mtime -n：搜索在n天之内（包含n天）被更改过的文件。
+-newer file :file是一个文件，这个条件的含义是搜索比这个file更加新的文件。&lt;/搜索条件的取值&gt;&lt;/按照什么条件搜索&gt;&lt;/搜索条件的取值&gt;&lt;/按照什么条件搜索&gt;&lt;/在什么路径下搜索&gt;&lt;/p&gt;
+
+&lt;p&gt;用法2：将路径下所有符合文件所有者、所有组和其他人权限的文件列出来。&lt;/p&gt;
+
+&lt;p&gt;find &lt;在什么路径下搜索&gt; &lt;搜索条件&gt; &lt;搜索条件的取值&gt;
+相关搜索条件：
+-uid n：n代表用户帐号的ID，只要文件的所有者的id是这个n，则列出这个文件。
+-gid n：n代表用户组的ID，只要文件的所有组的id是这个n，则列出这个文件。
+-user name：那么是用户的名字，只要文件所有者是这个名字，则列出这个文件。
+-group name：同上，这不过这个name是文件所有组的名字。
+-nouser：列出文件所有者不存在的文件。
+-nogroup：列出所有文件所有组不存在的文件。&lt;/搜索条件的取值&gt;&lt;/搜索条件&gt;&lt;/在什么路径下搜索&gt;&lt;/p&gt;
+
+&lt;p&gt;用法3：将路径下符合指定的文件名、文件类型、文件权限的的文件列出来。&lt;/p&gt;
+
+&lt;p&gt;-name filename：列出符合文件名是filename的文件。
+-size +size：列出文件大小大于size的文件。
+-size -size：类出文件大小小于size的文件。
+    这个size有几个单位：
+    c：代表byte。 
+    k：代表KB
+    所以1000k代表的是1MB。
+-type type：类出文件类型是type的文件。具体的type有如下几个：
+    f：一般文件。
+    b，c：设备文件。 
+    d：目录。 
+    l：连接文件。 
+    s：socket文件。 
+    p：FIFO文件。 
+-perm mode：列出文件权限是mode的文件。这个mode是一个数字，其余的可以参考Linux文件的权限。
+-perm -mode：只要文件的权限包含了mode所指示的权限，则列出它。
+-perm +mode：只要文件的权限包含了mode所指示的权限中任意一个，则列出这个文件。&lt;/p&gt;
+
+&lt;p&gt;用法4：可以在find的前三种用法的基础上，在末尾添加而外的处理命令。
+参数：
+-exec COMMAND命令：对find查找的结果用COMMAND命令进行额外的处理。&lt;/p&gt;
+
+&lt;p&gt;用例：
+ # find / -mtime +4 -exec ls -al {} \;
+//对find查找出来的结果进行ls -al命令的处理。&lt;/p&gt;
+
+&lt;p&gt;-exec命令的具体说明：
+其实-exec的具体格式是这样的-exec COMMAND {} ;&lt;/p&gt;
+
+&lt;p&gt;1.其中{}存放着find命令找出来的结果，所以COMMAND {}的含义是对find命令找出来的结果执行COMMAND命令。&lt;/p&gt;
+
+&lt;p&gt;2.那么“-exec”和“;”分别代表着分割符号，-exec是起始符号，“;”代表结束符号，那么位于这两者之间的就是需要执行的额外命令。&lt;/p&gt;
+
+&lt;p&gt;3.“;”是命令的分割符号，有它自己特殊的意义，所以在这个地方要进行字符的转义，于是用“\;”代替“;”。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 10 Jun 2017 12:09:39 +0800</pubDate>
+        <link>http://stormphoenix.github.com/2017/06/10/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</link>
+        <guid isPermaLink="true">http://stormphoenix.github.com/2017/06/10/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</guid>
+        
+        
+        <category>Linux</category>
+        
+      </item>
+    
+  </channel>
+</rss>
