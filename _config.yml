@@ -1,0 +1,41 @@
+# Site settings
+name: StormPhoenix的博客
+email: hzau.cs.wangcheng@gmail.com
+author: StormPhoenix
+url: http://stormphoenix.github.com
+resume_site: http://github.com/stormphoenix/
+github: https://github.com/stormphoenix/
+baseurl: ""
+description: 为了生命中的美好，不妥协直到变老.
+meta_description: 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
+motto: 为了生命中的美好，不妥协直到变老.
+banner: 学而不思则罔，思而不学则殆。
+
+gems: [jekyll-paginate]
+
+#permalink: /:categories/:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
+paginate: 10
+
+exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
+
+github_username: StormPhoenix
+highlighter: Pygments
+
+# Build settings
+markdown: kramdown
+
+baidu_analysis: 94be4b0f9fc5d94cc0d0415ea6761ae9
+
+FB:
+  comments :
+    provider : yungentie
+    duoshuo:
+        short_name : luoyan35714
+    disqus :
+        short_name : freudkang
+    # facebook :
+    #   appid : 123
+    #   num_posts: 5
+    #   width: 580
+    #   colorscheme: light
