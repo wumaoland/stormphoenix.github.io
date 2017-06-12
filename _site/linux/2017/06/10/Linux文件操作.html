@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Linux文件操作</title>
+  <title>Welcome to Jekyll!</title>
   <meta name="description" content="记录一下几天前学习的Linux文件和目录操作的知识。">
 
   <link rel="stylesheet" href="/css/main.css">
@@ -33,17 +33,7 @@
       </a>
 
       <div class="trigger">
-        
-          
-          <a class="page-link" href="/about/">关于</a>
-          
-        
-          
-        
-          
-        
-          
-        
+        <h4>关于</h4>
       </div>
     </nav>
 
@@ -57,8 +47,8 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Linux文件操作</h1>
-    <p class="post-meta"><time datetime="2017-06-10T12:33:08+08:00" itemprop="datePublished">Jun 10, 2017</time></p>
+    <h1 class="post-title" itemprop="name headline">Welcome to Jekyll!</h1>
+    <p class="post-meta"><time datetime="2017-06-10T12:09:39+08:00" itemprop="datePublished">Jun 10, 2017</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
@@ -73,14 +63,13 @@
 <p>rmdir：删除一个空的目录。
 其中，mkdir每次只能创建一级目录。比如：mkdir test 将会创建一个test目录。如果想要创建多级目录，类似与dir1/dir2/dir3，就必须加上-p参数，如下：</p>
 
-<figure class="highlight"><pre><code class="language-shell" data-lang="shell"> <span class="c"># mkdir -p dir1/dir2/dir3</span>
-创建目录的同时还可以加上 -m 参数来指定目录的权限（关于权限以后会有详细讲解）。
+<p># mkdir -p dir1/dir2/dir3
+创建目录的同时还可以加上 -m 参数来指定目录的权限（关于权限以后会有详细讲解）。</p>
 
- <span class="c"># mkdir -m 711 test</span>
- <span class="c"># ls -l</span>
-drwx--x--x 2 root root 4096 9月 27 10:32 <span class="nb">test</span></code></pre></figure>
-
-<p>关于rmdir也差不多，每次只能删除一级目录且该目录必须为空。要删除多级目录就要加上参数 -p。如果要删除目录和目录里面所有的东西（包括文件），那么可以采用 rm -r <目录名称>。</目录名称></p>
+<p># mkdir -m 711 test
+ # ls -l
+drwx–x–x 2 root root 4096 9月 27 10:32 test
+关于rmdir也差不多，每次只能删除一级目录且该目录必须为空。要删除多级目录就要加上参数 -p。如果要删除目录和目录里面所有的东西（包括文件），那么可以采用 rm -r <目录名称>。</目录名称></p>
 
 <p>查看文件与目录的命令：</p>
 

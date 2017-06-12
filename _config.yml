@@ -5,6 +5,8 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'jekyll serve'. If you change this file, please restart the server process.
 
+gems: [jekyll-paginate]
+
 # Site settings
 title: StormPhoenix的博客
 email: hzau.cs.wangcheng@gmail.com
@@ -14,6 +16,11 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://yourdomain.com" # the base hostname & protocol for your site
 twitter_username: StormPhoenix
 github_username:  StromPhoenix
+
+about: 关于
+
+paginate: 5
+paginate_path: "page:num"
 
 # Build settings
 markdown: kramdown

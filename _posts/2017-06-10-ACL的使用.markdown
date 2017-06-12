@@ -2,7 +2,7 @@
 layout: post
 title:    "ACL的使用"
 date:    2017-06-10 16:07:39 +0800
-categories:    Linux
+category:    Linux
 ---
 
 ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。
