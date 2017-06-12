@@ -1,3 +1,14 @@
+/*#page_table{
+	display: table;
+}
+#table_row1{
+	display: table-cell;
+	margin-left: 50px;
+}*/
+#table_row2 {
+  float: right;
+  margin-right: 100px; }
+
 /**
  * Reset some basic elements
  */

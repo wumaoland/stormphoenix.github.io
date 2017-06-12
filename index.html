@@ -4,34 +4,41 @@ layout: default
 
 <div class="home">
 
-    <h1 class="page-heading">Posts</h1>
-	<h4>分类</h4>
-	<ul>
-			    {% for category in site.categories %}
-				    <li><a href="/categories/{{ category | first }}/" title="view all
-					posts">{{ category | first }} {{ category | last | size }}</a>
-				    </li>
-				{% endfor %}
-	</ul>
-    <ul class="post-list">
-        {% for post in paginator.posts %}
-        <li>
-            <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-            <h2>
-                <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-            </h2>
-        </li>
-        {% endfor %}
-    </ul>
+    <div id="page_table">
+        <div id="table_row2">
+            <h4>分类</h4>
+            <ul>
+                {% for category in site.categories %}
+                <li><a href="/categories/{{ category | first }}/" title="view all
+				posts">{{ category | first }} <sup>{{ category | last | size }}</sup></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="table_row1">
+            <h1 class="page-heading">Post</h1>
+            <ul class="post-list">
+                {% for post in paginator.posts %}
+                <li>
+                    <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+                    <h2>
+                        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+                    </h2>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
     {% for page in (1..paginator.total_pages) %}
-        {% if page == paginator.page %}
-            <span class="active">{{ page }}</span>
-        {% elsif page == 1 %}
-            <a href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }} </a>
-        {% else %}
-        <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
-        {% endif %}
+    {% if page == paginator.page %}
+    <span class="active">{{ page }}</span>
+    {% elsif page == 1 %}
+    <a href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }} </a>
+    {% else %}
+    <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page
+        }}</a>
+    {% endif %}
     {% endfor %}
 
     <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
