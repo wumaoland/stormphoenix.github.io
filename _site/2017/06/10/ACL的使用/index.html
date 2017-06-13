@@ -161,6 +161,19 @@
       
 
       
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
             </ul>
           </li>
       
@@ -182,9 +195,14 @@
               <br />
             </header>
             <article class="post-content">
-              <p>ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。</p>
+              <ul id="markdown-toc">
+  <li><a href="#acl" id="markdown-toc-acl">启动ACL支持</a></li>
+  <li><a href="#acl-1" id="markdown-toc-acl-1">设置ACL</a></li>
+</ul>
 
-<h4 id="acl"><strong>启动ACL支持</strong></h4>
+<p>ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。</p>
+
+<h1 id="acl">启动ACL支持</h1>
 
 <p>ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。<br /></p>
 
@@ -198,7 +216,7 @@
 
 <p><img src="/assets/Screenshot from 2017-06-10 19-43-52.png" alt="图片" /></p>
 
-<h4 id="acl-1"><strong>设置ACL</strong></h4>
+<h1 id="acl-1">设置ACL</h1>
 
 <ul>
   <li>
@@ -263,7 +281,7 @@ Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true)
     <footer class="footer" role="contentinfo">
 	<div class="container">
 		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>StormPhoenix</code></a>.</p>
-		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">Freud Kang</a></p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">StormPhoenix</a></p>
 	</div>
 </footer>
 
@@ -273,6 +291,7 @@ Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true)
 <script src="/styles/js/lessismore.js"></script>
 <script src="/styles/js/application.js"></script>
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
 
   </body>
 </html>

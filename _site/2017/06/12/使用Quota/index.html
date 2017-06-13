@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>使用Quota - StormPhoenix的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.jpg">
+	<link rel="icon" href="/styles/images/favicon.jpg">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2017/06/12/%E4%BD%BF%E7%94%A8Quota/">
+	<link rel="alternate" type="application/rss+xml" title="StormPhoenix的博客" href="/feed.xml">
+	
+	<meta name="keywords" content="使用Quota, StormPhoenix的博客, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+	<meta name="description" content="王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?94be4b0f9fc5d94cc0d0415ea6761ae9";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">    
+        <li>
+          <a href="/">主页</a>
+        </li>
+        <li>
+          <a href="/categories/">大类</a>
+        </li>
+        <li>
+          <a href="/tag">小类</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li>
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/stormphoenix/">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="http://github.com/stormphoenix/">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+			<!--            <li><a rel="nofollow" href="http://www.hifreud.com/domains/">域名管理</a></li> -->
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <li><a href="/feed.xml">RSS订阅</a></li>
+            <li class="divider"></li>
+            <li><a rel="nofollow" target="_blank" href="https://github.com/stormphoenix/stormphoenix.github.io/">本项目</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>使用Quota</h1>
+		    <p>Post on Jun 12, 2017 by <a href="/about">StormPhoenix</a></p>
+		-->
+		    <h1>为了生命中的美好，不妥协直到变老.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#Linux-ref">Linux</a>	/
+    	<a href="/tag/#-ref"></a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_June">June</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">使用Quota</h1>
+              <!--
+                <p class="post-meta">Jun 12, 2017</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Jun 12, 2017</span> By <a target="_blank" href="http://stormphoenix.github.com">StormPhoenix</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">注意事项</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">相关名词概念</a></li>
+  <li><a href="#quota" id="markdown-toc-quota">设置文件系统支持Quota</a></li>
+  <li><a href="#quota-1" id="markdown-toc-quota-1">创建Quota配置文件</a></li>
+  <li><a href="#quota-2" id="markdown-toc-quota-2">使用Quota</a></li>
+  <li><a href="#quota-3" id="markdown-toc-quota-3">生成Quota报表</a></li>
+  <li><a href="#section-2" id="markdown-toc-section-2">其他</a></li>
+</ul>
+
+<p>Quota翻译成中文就是“限额”的意思，在Linux中Quota用来对用户的磁盘用量进行管理，这种管理多余多用户的Linux系统而言是很有必要的。假设有这样一种情况，好多个用户同时登录主机工作，其中一个用户无加限制的使用了很大的磁盘空间，这样就导致了其他用户可用的磁盘空间变小了，所以我们必须要对这个用户做一些磁盘容量的使用限制。</p>
+
+<h1 id="section">注意事项</h1>
+<ul>
+  <li>
+    <p>Quota和ACL一样需要内核的支持，一样是针对整个文件系统而言的。所谓的针对整个文件系统，意思是假设你将/dev/sda2挂载了/home目录下并设置Quota，那么受影响的只是/home下面所有的目录，其他目录是不会受影响的。还有一点，Quota一般是默认打开的，如果没有那就需要手动打开Quota哟。</p>
+  </li>
+  <li>
+    <p>Quota只针对普通用户有效，对root无效</p>
+  </li>
+</ul>
+
+<h1 id="section-1">相关名词概念</h1>
+
+<ul>
+  <li>
+    <p>容量限制
+  容量限制包括block限制和inode限制。设置block值的大小可以限制用户能够使用的最大磁盘容量，设置inode值的大小限制了用户能够创建的最大文件数量</p>
+  </li>
+  <li>
+    <p>soft/hard
+  soft限制（软限制）指明了用使用量超过多少时向用户发出警告，hard限制（硬限制）指明用户最多能使用多少用量，一旦超过就停止用户对磁盘的使用权（无法新增文件）。</p>
+  </li>
+  <li>
+    <p>grace time
+  grace time（宽限时间）表示一个倒数时间，当用户的使用量处于soft和hard设置的值之间时，就会启动倒计时，如果超过了这个倒计时用户的磁盘使用量还处于soft和hard之间的话，用户的磁盘使用全就会锁住（无法新增文件）。</p>
+  </li>
+</ul>
+
+<h1 id="quota">设置文件系统支持Quota</h1>
+<p>一般ext2、ext3和ext4都是能够支持Quota的。我们可以通过如下命令设置立即支持Quota。</p>
+
+<pre><code>root@ubuntu:~#mount -o remount, usrquota,grpquota /home
+root@ubuntu:~#mount | grep home
+/dev/sda4 on /home type ext4 (rw,relatime,quota,usrquota,grpquota,data=ordered)
+</code></pre>
+
+<p>有几点要注意
+1. 只有root能够使用这个功能。
+2. 此处用 <code>/home</code> 目录做实验是因为/home恰好是挂载点。
+3. usrquota是对单个用户做限制，grpquota是对一个组做限制。
+4. 输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。
+5. 输出的信息其实存储在 <code>/etc/mtab</code> 文件中。之前 <code>mount -o remount,usrquota,grpquota /home</code> 其实是对文件系统进行了设置，这个设置会被保存在 <code>/etc/mtab</code>文件中</p>
+
+<p>以上的命令只在此次开机中有效，如果想让系统在每次开机中都能够支持quota，则需要在/etc/fstab中添加如下语句</p>
+
+<pre><code>LABEL=/home    /home    ext4    default,usrquota,grpquota 1 2
+</code></pre>
+
+<p>在第四个字段的default后面加上usrquota，grpquota即可。</p>
+
+<h1 id="quota-1">创建Quota配置文件</h1>
+<p>有了文件系统支持quota还不够，还需要创建quota的配置文件，那么这个配置文件的作用就是用来保存不同的用户在此文件系统中已经使用的磁盘容量、容量使用限制等信息。</p>
+
+<p>那么quota具体是怎么工作的呢？在没有配置文件的时候，quota会扫描整个文件系统，查询每个用户（或用户组）拥有的文件总数和总大小，将查询到的信息记录到这个文件系统的根目录的配置文件之中。然后根据配置文件中对每个用户（或用户组）的限制信息来规定磁盘使用限制。</p>
+
+<p>也就是说，这个配置文件不是我们手动创建的，而是quota自己扫描整个文件系统信息然后创建的（因为你怎么知道不同的用户或者用户组使用了多少磁盘容量。。）。</p>
+
+<p>所以quotacheck命令是用来扫描这个磁盘，并在文件系统根目录创建配置文件的。</p>
+
+<pre><code>root@ubuntu:~#quotacheck -augv -mf
+</code></pre>
+
+<p>值得一提的是-mf两个选项，作用是强制扫描整个文件系统。因为某些时候会有其他程序在对文件系统进行读写，所以quotacheck查询出的文件数量可能是不准确的，系统会拒绝执行quotachec。不妥加上-mf参数就可以强制执行了，其他参数的含义不表。</p>
+
+<p>quotacheck命令先话一段时间扫描整个文件系统，执行完毕后会在/home目录下生成两个文件aquota.group和aquota.user两个文件，分别是针对用户组和用户的配置文件。</p>
+
+<h1 id="quota-2">使用Quota</h1>
+
+<p>开启Quota服务</p>
+
+<pre><code>root@ubuntu:~#quotaon -avug
+</code></pre>
+
+<p>关闭Quota服务</p>
+
+<pre><code>root@ubuntu:~#quotaoff -a
+</code></pre>
+
+<p>编辑具体的限制值</p>
+
+<pre><code>edquota -u [username] -g [groupname] -t
+说明：
+-u 对某一个用户进行编辑，后面接上用户名
+-g 对某一个用户组进行编辑，后面接上用户组组名字
+-t 设置宽限时间
+</code></pre>
+
+<p>样例：</p>
+
+<pre><code>root@ubuntu:~#edquota -u stormphoenix
+Disk quotas for user StormPhoenix (uid 1001):
+Filesystem	blocks	    soft	hard    inodes      soft hard
+/dev/sda4	60331452	0	    0	    1029831     0    0
+</code></pre>
+
+<p>分为7列，具体说明：
+1. 具体的限制值是针对哪一个文件系统
+2. 当前用户已经使用的磁盘容量
+3. 当前用户使用磁盘容量的软限制值
+4. 当前用户使用磁盘容量的硬限制值
+5. 当前用户创建的文件数量
+6. 当前用户穿件文件数量的软限制值
+7. 当前用户创建文件数量的硬限制值</p>
+
+<h1 id="quota-3">生成Quota报表</h1>
+<p>简单的说就是查看用户或者用户组当前的使用量和限制量。</p>
+
+<p>查看某一个用户报表</p>
+
+<pre><code>quota -uvs StormPhoenix
+Disk quotes for user Developer (uid 1001):
+Filesystem		space		quota		limit		grace		files		quota		limit		grace
+/dev/sda4		58918M		0K			0K						1030K		0			0
+</code></pre>
+
+<p>查看某一个用户组报表同上，不同的是命令参数是 -gvs。</p>
+
+<p>查看某一个文件系统的限额报表。</p>
+
+<pre><code>root@ubuntu:~#repquota -auvs
+</code></pre>
+
+<h1 id="section-2">其他</h1>
+<p>介绍两个命令</p>
+
+<p><code>warnquota</code>用来对超出使用限制的用户发出警告，一般是用邮件发送。具体的发送信息是根据 <code>/etc/warnquota</code> 的内容设置的。<code>warnquota</code> 不会自动触发，需要手动启动，只要使用量处于soft和hard之间就会收到此警告（不过使用量到达了hard，就不会收到此消息了，因为用户的磁盘使用全已经被剥夺，无法继续收信了）。</p>
+
+<p><code>setquota</code> 可以直接在命令行中设置限额，用法如下：</p>
+
+<pre><code>root@ubuntu:~#setquota [-u|-g] [name] block(soft) block(hard) inode(soft) inode(hard) [filesystem]
+</code></pre>
+
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+            
+
+
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+var cloudTieConfig = {
+  url: document.location.href, 
+  sourceId: "",
+  productKey: "e68668572a574120ad554fab5b49d365",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+
+
+
+ 
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>StormPhoenix</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">StormPhoenix</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  </body>
+</html>

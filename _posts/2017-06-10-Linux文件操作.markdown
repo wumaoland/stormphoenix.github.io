@@ -5,6 +5,9 @@ date:   2017-06-10 12:09:39 +0800
 categories: Linux
 ---
 
+* content
+{:toc}
+
 记录一下几天前学习的Linux文件和目录操作的知识。
 
 cd： 切换目录

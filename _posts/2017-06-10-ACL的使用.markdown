@@ -5,9 +5,13 @@ date:    2017-06-10 16:07:39 +0800
 category:    Linux
 ---
 
+* content
+{:toc}
+
 ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。
 
-#### **启动ACL支持**
+启动ACL支持
+======================================
 
  ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。<br>
 
@@ -22,7 +26,8 @@ ACL全称访问控制列表（Access Controll List），用于提供owner，grou
 ![图片](/assets/Screenshot from 2017-06-10 19-43-52.png)
 
 
-#### **设置ACL**
+设置ACL
+=====================================
 
 * `setfacl` 用于设置针对某一个文件或某一个用户的acl属性。
 

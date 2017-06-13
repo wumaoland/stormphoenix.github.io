@@ -5,15 +5,175 @@
     <description>为了生命中的美好，不妥协直到变老.</description>
     <link>http://stormphoenix.github.com/</link>
     <atom:link href="http://stormphoenix.github.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 13 Jun 2017 00:20:18 +0800</pubDate>
-    <lastBuildDate>Tue, 13 Jun 2017 00:20:18 +0800</lastBuildDate>
+    <pubDate>Tue, 13 Jun 2017 15:33:33 +0800</pubDate>
+    <lastBuildDate>Tue, 13 Jun 2017 15:33:33 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
-        <title>ACL的使用</title>
-        <description>&lt;p&gt;ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。&lt;/p&gt;
+        <title>使用Quota</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;注意事项&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;相关名词概念&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#quota&quot; id=&quot;markdown-toc-quota&quot;&gt;设置文件系统支持Quota&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#quota-1&quot; id=&quot;markdown-toc-quota-1&quot;&gt;创建Quota配置文件&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#quota-2&quot; id=&quot;markdown-toc-quota-2&quot;&gt;使用Quota&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#quota-3&quot; id=&quot;markdown-toc-quota-3&quot;&gt;生成Quota报表&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;其他&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;h4 id=&quot;acl&quot;&gt;&lt;strong&gt;启动ACL支持&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;Quota翻译成中文就是“限额”的意思，在Linux中Quota用来对用户的磁盘用量进行管理，这种管理多余多用户的Linux系统而言是很有必要的。假设有这样一种情况，好多个用户同时登录主机工作，其中一个用户无加限制的使用了很大的磁盘空间，这样就导致了其他用户可用的磁盘空间变小了，所以我们必须要对这个用户做一些磁盘容量的使用限制。&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;注意事项&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Quota和ACL一样需要内核的支持，一样是针对整个文件系统而言的。所谓的针对整个文件系统，意思是假设你将/dev/sda2挂载了/home目录下并设置Quota，那么受影响的只是/home下面所有的目录，其他目录是不会受影响的。还有一点，Quota一般是默认打开的，如果没有那就需要手动打开Quota哟。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Quota只针对普通用户有效，对root无效&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;相关名词概念&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;容量限制
+  容量限制包括block限制和inode限制。设置block值的大小可以限制用户能够使用的最大磁盘容量，设置inode值的大小限制了用户能够创建的最大文件数量&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;soft/hard
+  soft限制（软限制）指明了用使用量超过多少时向用户发出警告，hard限制（硬限制）指明用户最多能使用多少用量，一旦超过就停止用户对磁盘的使用权（无法新增文件）。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;grace time
+  grace time（宽限时间）表示一个倒数时间，当用户的使用量处于soft和hard设置的值之间时，就会启动倒计时，如果超过了这个倒计时用户的磁盘使用量还处于soft和hard之间的话，用户的磁盘使用全就会锁住（无法新增文件）。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;quota&quot;&gt;设置文件系统支持Quota&lt;/h1&gt;
+&lt;p&gt;一般ext2、ext3和ext4都是能够支持Quota的。我们可以通过如下命令设置立即支持Quota。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root@ubuntu:~#mount -o remount, usrquota,grpquota /home
+root@ubuntu:~#mount | grep home
+/dev/sda4 on /home type ext4 (rw,relatime,quota,usrquota,grpquota,data=ordered)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有几点要注意
+1. 只有root能够使用这个功能。
+2. 此处用 &lt;code&gt;/home&lt;/code&gt; 目录做实验是因为/home恰好是挂载点。
+3. usrquota是对单个用户做限制，grpquota是对一个组做限制。
+4. 输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。
+5. 输出的信息其实存储在 &lt;code&gt;/etc/mtab&lt;/code&gt; 文件中。之前 &lt;code&gt;mount -o remount,usrquota,grpquota /home&lt;/code&gt; 其实是对文件系统进行了设置，这个设置会被保存在 &lt;code&gt;/etc/mtab&lt;/code&gt;文件中&lt;/p&gt;
+
+&lt;p&gt;以上的命令只在此次开机中有效，如果想让系统在每次开机中都能够支持quota，则需要在/etc/fstab中添加如下语句&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;LABEL=/home    /home    ext4    default,usrquota,grpquota 1 2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在第四个字段的default后面加上usrquota，grpquota即可。&lt;/p&gt;
+
+&lt;h1 id=&quot;quota-1&quot;&gt;创建Quota配置文件&lt;/h1&gt;
+&lt;p&gt;有了文件系统支持quota还不够，还需要创建quota的配置文件，那么这个配置文件的作用就是用来保存不同的用户在此文件系统中已经使用的磁盘容量、容量使用限制等信息。&lt;/p&gt;
+
+&lt;p&gt;那么quota具体是怎么工作的呢？在没有配置文件的时候，quota会扫描整个文件系统，查询每个用户（或用户组）拥有的文件总数和总大小，将查询到的信息记录到这个文件系统的根目录的配置文件之中。然后根据配置文件中对每个用户（或用户组）的限制信息来规定磁盘使用限制。&lt;/p&gt;
+
+&lt;p&gt;也就是说，这个配置文件不是我们手动创建的，而是quota自己扫描整个文件系统信息然后创建的（因为你怎么知道不同的用户或者用户组使用了多少磁盘容量。。）。&lt;/p&gt;
+
+&lt;p&gt;所以quotacheck命令是用来扫描这个磁盘，并在文件系统根目录创建配置文件的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root@ubuntu:~#quotacheck -augv -mf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;值得一提的是-mf两个选项，作用是强制扫描整个文件系统。因为某些时候会有其他程序在对文件系统进行读写，所以quotacheck查询出的文件数量可能是不准确的，系统会拒绝执行quotachec。不妥加上-mf参数就可以强制执行了，其他参数的含义不表。&lt;/p&gt;
+
+&lt;p&gt;quotacheck命令先话一段时间扫描整个文件系统，执行完毕后会在/home目录下生成两个文件aquota.group和aquota.user两个文件，分别是针对用户组和用户的配置文件。&lt;/p&gt;
+
+&lt;h1 id=&quot;quota-2&quot;&gt;使用Quota&lt;/h1&gt;
+
+&lt;p&gt;开启Quota服务&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root@ubuntu:~#quotaon -avug
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;关闭Quota服务&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root@ubuntu:~#quotaoff -a
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编辑具体的限制值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;edquota -u [username] -g [groupname] -t
+说明：
+-u 对某一个用户进行编辑，后面接上用户名
+-g 对某一个用户组进行编辑，后面接上用户组组名字
+-t 设置宽限时间
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;样例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root@ubuntu:~#edquota -u stormphoenix
+Disk quotas for user StormPhoenix (uid 1001):
+Filesystem	blocks	    soft	hard    inodes      soft hard
+/dev/sda4	60331452	0	    0	    1029831     0    0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;分为7列，具体说明：
+1. 具体的限制值是针对哪一个文件系统
+2. 当前用户已经使用的磁盘容量
+3. 当前用户使用磁盘容量的软限制值
+4. 当前用户使用磁盘容量的硬限制值
+5. 当前用户创建的文件数量
+6. 当前用户穿件文件数量的软限制值
+7. 当前用户创建文件数量的硬限制值&lt;/p&gt;
+
+&lt;h1 id=&quot;quota-3&quot;&gt;生成Quota报表&lt;/h1&gt;
+&lt;p&gt;简单的说就是查看用户或者用户组当前的使用量和限制量。&lt;/p&gt;
+
+&lt;p&gt;查看某一个用户报表&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;quota -uvs StormPhoenix
+Disk quotes for user Developer (uid 1001):
+Filesystem		space		quota		limit		grace		files		quota		limit		grace
+/dev/sda4		58918M		0K			0K						1030K		0			0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看某一个用户组报表同上，不同的是命令参数是 -gvs。&lt;/p&gt;
+
+&lt;p&gt;查看某一个文件系统的限额报表。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root@ubuntu:~#repquota -auvs
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;其他&lt;/h1&gt;
+&lt;p&gt;介绍两个命令&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;warnquota&lt;/code&gt;用来对超出使用限制的用户发出警告，一般是用邮件发送。具体的发送信息是根据 &lt;code&gt;/etc/warnquota&lt;/code&gt; 的内容设置的。&lt;code&gt;warnquota&lt;/code&gt; 不会自动触发，需要手动启动，只要使用量处于soft和hard之间就会收到此警告（不过使用量到达了hard，就不会收到此消息了，因为用户的磁盘使用全已经被剥夺，无法继续收信了）。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;setquota&lt;/code&gt; 可以直接在命令行中设置限额，用法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;root@ubuntu:~#setquota [-u|-g] [name] block(soft) block(hard) inode(soft) inode(hard) [filesystem]
+&lt;/code&gt;&lt;/pre&gt;
+
+</description>
+        <pubDate>Mon, 12 Jun 2017 22:49:35 +0800</pubDate>
+        <link>http://stormphoenix.github.com/2017/06/12/%E4%BD%BF%E7%94%A8Quota/</link>
+        <guid isPermaLink="true">http://stormphoenix.github.com/2017/06/12/%E4%BD%BF%E7%94%A8Quota/</guid>
+        
+        
+        <category>Linux</category>
+        
+      </item>
+    
+      <item>
+        <title>ACL的使用</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#acl&quot; id=&quot;markdown-toc-acl&quot;&gt;启动ACL支持&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#acl-1&quot; id=&quot;markdown-toc-acl-1&quot;&gt;设置ACL&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。&lt;/p&gt;
+
+&lt;h1 id=&quot;acl&quot;&gt;启动ACL支持&lt;/h1&gt;
 
 &lt;p&gt;ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。&lt;br /&gt;&lt;/p&gt;
 
@@ -27,7 +187,7 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 19-43-52.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;acl-1&quot;&gt;&lt;strong&gt;设置ACL&lt;/strong&gt;&lt;/h4&gt;
+&lt;h1 id=&quot;acl-1&quot;&gt;设置ACL&lt;/h1&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -67,13 +227,20 @@
     
       <item>
         <title>Linux账号管理</title>
-        <description>&lt;h4 id=&quot;uidgid&quot;&gt;&lt;strong&gt;用户标识符UID与GID&lt;/strong&gt;&lt;/h4&gt;
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#uidgid&quot; id=&quot;markdown-toc-uidgid&quot;&gt;&lt;strong&gt;用户标识符UID与GID&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;&lt;strong&gt;相关文件结构&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;&lt;strong&gt;有效用户组和初始用户组&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;&lt;strong&gt;账号管理&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;uidgid&quot;&gt;&lt;strong&gt;用户标识符UID与GID&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;uid：用户的的id，用一个数字标志。&lt;/li&gt;
   &lt;li&gt;gid：用户所在组的id，用一个数值标志。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;section&quot;&gt;&lt;strong&gt;相关文件结构&lt;/strong&gt;&lt;/h4&gt;
+&lt;h2 id=&quot;section&quot;&gt;&lt;strong&gt;相关文件结构&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;/etc/passwd文件结构&lt;/li&gt;
@@ -169,7 +336,7 @@
 4.用户组成员，成员之间用逗号分隔开
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;section-1&quot;&gt;&lt;strong&gt;有效用户组和初始用户组&lt;/strong&gt;&lt;/h4&gt;
+&lt;h2 id=&quot;section-1&quot;&gt;&lt;strong&gt;有效用户组和初始用户组&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -183,7 +350,7 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;&lt;strong&gt;账号管理&lt;/strong&gt;&lt;/h4&gt;
+&lt;h2 id=&quot;section-2&quot;&gt;&lt;strong&gt;账号管理&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;useradd 添加一个用户&lt;/li&gt;
@@ -211,7 +378,8 @@
     
       <item>
         <title>Linux文件操作</title>
-        <description>&lt;p&gt;记录一下几天前学习的Linux文件和目录操作的知识。&lt;/p&gt;
+        <description>
+&lt;p&gt;记录一下几天前学习的Linux文件和目录操作的知识。&lt;/p&gt;
 
 &lt;p&gt;cd： 切换目录&lt;/p&gt;
 
