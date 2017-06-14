@@ -4,6 +4,8 @@ title:    "Linux账号管理"
 date:    2017-06-10 13:05:30 +0800
 categories:    Linux
 comments:    true
+tag: Linux
+
 ---
 
 * content
