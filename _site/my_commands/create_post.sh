@@ -14,5 +14,10 @@ layout: post
 title:    \"${name}\"
 date:    ${time}
 categories:    ${categories}
+comments: true
 ---
+
+* content
+{:toc}
+
 write your content" >> ${basePath}${fileName}

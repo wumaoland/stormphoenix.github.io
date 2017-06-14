@@ -5,8 +5,8 @@
     <description>为了生命中的美好，不妥协直到变老.</description>
     <link>http://stormphoenix.github.com/</link>
     <atom:link href="http://stormphoenix.github.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 13 Jun 2017 15:33:33 +0800</pubDate>
-    <lastBuildDate>Tue, 13 Jun 2017 15:33:33 +0800</lastBuildDate>
+    <pubDate>Wed, 14 Jun 2017 13:32:34 +0800</pubDate>
+    <lastBuildDate>Wed, 14 Jun 2017 13:32:34 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -21,12 +21,12 @@
   &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;其他&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Quota翻译成中文就是“限额”的意思，在Linux中Quota用来对用户的磁盘用量进行管理，这种管理多余多用户的Linux系统而言是很有必要的。假设有这样一种情况，好多个用户同时登录主机工作，其中一个用户无加限制的使用了很大的磁盘空间，这样就导致了其他用户可用的磁盘空间变小了，所以我们必须要对这个用户做一些磁盘容量的使用限制。&lt;/p&gt;
+&lt;p&gt;Quota翻译成中文就是“限额”的意思，在Linux中Quota用来对用户（或用户组）的磁盘用量进行管理，这种管理在多用户的Linux系统上是很有必要的。假设有这样一种情况，好多个用户同时在主机上工作，其中一个用户无加限制的使用了很大的磁盘空间，这样就导致了其他用户可用的磁盘空间变小了，所以我们必须要对这个用户做一些磁盘容量的使用限制。&lt;/p&gt;
 
 &lt;h1 id=&quot;section&quot;&gt;注意事项&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;Quota和ACL一样需要内核的支持，一样是针对整个文件系统而言的。所谓的针对整个文件系统，意思是假设你将/dev/sda2挂载了/home目录下并设置Quota，那么受影响的只是/home下面所有的目录，其他目录是不会受影响的。还有一点，Quota一般是默认打开的，如果没有那就需要手动打开Quota哟。&lt;/p&gt;
+    &lt;p&gt;Quota和ACL一样需要内核的支持，一样是针对整个文件系统而言的。所谓的针对整个文件系统，意思是假设你将&lt;code&gt;/dev/sda2&lt;/code&gt;挂载了&lt;code&gt;/home&lt;/code&gt;目录下并设置Quota，那么受影响的只是&lt;code&gt;/home&lt;/code&gt;下面所有的目录，其他目录是不会受影响的。还有一点，Quota一般是默认打开的，如果没有那就需要手动打开Quota哟。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Quota只针对普通用户有效，对root无效&lt;/p&gt;
@@ -38,15 +38,15 @@
 &lt;ul&gt;
   &lt;li&gt;
     &lt;p&gt;容量限制
-  容量限制包括block限制和inode限制。设置block值的大小可以限制用户能够使用的最大磁盘容量，设置inode值的大小限制了用户能够创建的最大文件数量&lt;/p&gt;
+  容量限制包括block限制和inode限制。通过设置block值的大小可以限制用户能够使用的最大磁盘容量，而设置inode值的大小限制了用户能够创建的最大文件数量&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;soft/hard
-  soft限制（软限制）指明了用使用量超过多少时向用户发出警告，hard限制（硬限制）指明用户最多能使用多少用量，一旦超过就停止用户对磁盘的使用权（无法新增文件）。&lt;/p&gt;
+  soft限制（软限制）指明了用使用量超过多少时向用户发出警告，hard限制（硬限制）指明用户最多能使用多少用量，一旦超过就解除用户对磁盘的使用权（无法新增文件）。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;grace time
-  grace time（宽限时间）表示一个倒数时间，当用户的使用量处于soft和hard设置的值之间时，就会启动倒计时，如果超过了这个倒计时用户的磁盘使用量还处于soft和hard之间的话，用户的磁盘使用全就会锁住（无法新增文件）。&lt;/p&gt;
+  grace time（宽限时间）表示一个倒数时间，当用户的使用量处于soft和hard设置的值之间时，就会启动倒计时，如果超过了这个倒计时用户的磁盘使用量还处于soft和hard之间的话，用户的磁盘使用权就会锁住（无法新增文件）。&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
