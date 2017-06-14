@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>学习使用软件磁盘阵列 - StormPhoenix的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.jpg">
+	<link rel="icon" href="/styles/images/favicon.jpg">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2017/06/14/%E5%AD%A6%E4%B9%A0%E4%BD%BF%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%A3%81%E7%9B%98%E9%98%B5%E5%88%97/">
+	<link rel="alternate" type="application/rss+xml" title="StormPhoenix的博客" href="/feed.xml">
+	
+	<meta name="keywords" content="学习使用软件磁盘阵列, StormPhoenix的博客, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+	<meta name="description" content="王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?94be4b0f9fc5d94cc0d0415ea6761ae9";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">    
+        <li>
+          <a href="/">主页</a>
+        </li>
+        <li>
+          <a href="/categories/">大类</a>
+        </li>
+        <li>
+          <a href="/tag">小类</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li>
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/stormphoenix/">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="http://github.com/stormphoenix/">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+			<!--            <li><a rel="nofollow" href="http://www.hifreud.com/domains/">域名管理</a></li> -->
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <li><a href="/feed.xml">RSS订阅</a></li>
+            <li class="divider"></li>
+            <li><a rel="nofollow" target="_blank" href="https://github.com/stormphoenix/stormphoenix.github.io/">本项目</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>学习使用软件磁盘阵列</h1>
+		    <p>Post on Jun 14, 2017 by <a href="/about">StormPhoenix</a></p>
+		-->
+		    <h1>为了生命中的美好，不妥协直到变老.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#Linux-ref">Linux</a>	/
+    	<a href="/tag/#-ref"></a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_June">June</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">学习使用软件磁盘阵列</h1>
+              <!--
+                <p class="post-meta">Jun 14, 2017</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Jun 14, 2017</span> By <a target="_blank" href="http://stormphoenix.github.com">StormPhoenix</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#raid" id="markdown-toc-raid">RAID</a>    <ul>
+      <li><a href="#raid---0" id="markdown-toc-raid---0">RAID - 0</a></li>
+      <li><a href="#raid---1" id="markdown-toc-raid---1">RAID - 1</a></li>
+      <li><a href="#raid-0--1--raid-1--0" id="markdown-toc-raid-0--1--raid-1--0">RAID 0 + 1 / RAID 1 + 0</a></li>
+      <li><a href="#raid---5" id="markdown-toc-raid---5">RAID - 5</a></li>
+      <li><a href="#spare-disk" id="markdown-toc-spare-disk">Spare Disk</a></li>
+    </ul>
+  </li>
+  <li><a href="#software-raid--hardware-raid" id="markdown-toc-software-raid--hardware-raid">Software RAID 和 Hardware RAID</a>    <ul>
+      <li><a href="#hardware-raid" id="markdown-toc-hardware-raid">Hardware RAID</a></li>
+      <li><a href="#software-raid" id="markdown-toc-software-raid">Software RAID</a></li>
+    </ul>
+  </li>
+  <li><a href="#software-raid-1" id="markdown-toc-software-raid-1">设置 Software RAID</a>    <ul>
+      <li><a href="#section" id="markdown-toc-section">准备练习分区</a></li>
+      <li><a href="#raid-1" id="markdown-toc-raid-1">创建 RAID</a></li>
+      <li><a href="#raid-2" id="markdown-toc-raid-2">格式化并挂载 RAID</a></li>
+    </ul>
+  </li>
+  <li><a href="#software-raid-" id="markdown-toc-software-raid-">利用 Software RAID 处理数据损毁</a></li>
+  <li><a href="#raid-3" id="markdown-toc-raid-3">设置开机挂载 RAID</a></li>
+  <li><a href="#software-raid-2" id="markdown-toc-software-raid-2">关闭 Software RAID</a></li>
+</ul>
+
+<p>先从遇到的问题谈起，然后再讲讲什么是<code>磁盘阵列(Software RAID)</code>和<code>软件磁盘阵列(Software RAID) </code>，以及为什么要使用使用软件磁盘阵列。</p>
+
+<p>在使用磁盘时可能会遇到很多这样些问题。比如说在存储一些超大文件的时候，发现磁盘容量不够用了；磁盘长期进行大数据量的读写导致磁盘损毁，无法恢复数据之类的问题。为了解决这个问题，引入了RAID。</p>
+
+<h1 id="raid">RAID</h1>
+
+<p>RAID 全称是 Redundant Array of Inexpensive Disks（廉价磁盘冗余阵列）。从字面意思就可以看出了，RAID 是一个有多个磁盘组合在一起的磁盘组。之前不是提到过，引入 RAID 就是为了解决磁盘容量小，数据损毁无法恢复的问题，那么 RAID 是如何解决这几个问题的呢？答案是通过多个磁盘不同的组合方式来解决。RAID 的组合方式目前有四种，下面就分别介绍这四种，并说明他们解决了什么问题以及其优缺点。</p>
+
+<h3 id="raid---0">RAID - 0</h3>
+
+<p>这种组合方式采用了同种型号的、同样大小的两块磁盘组合在一起。然后将两块磁盘中划分等量大小的块（比如4KB）。在把文件写入磁盘的时候，会先将文件划分成等大小的块（块的大小和磁盘划分的块一样），然后将每一块交错的写入两块磁盘，如下图：</p>
+
+<p><img src="/assets/0_1329357743uKQT.jpg" alt="图片" /></p>
+
+<ul>
+  <li>优点
+    <ul>
+      <li>增大了磁盘容量；读写文件的时候是两块磁盘同时工作，增大了读写的带宽；</li>
+      <li>减少了每一块磁盘的访问量，减少了负载。</li>
+    </ul>
+  </li>
+  <li>
+    <p>缺点</p>
+
+    <ul>
+      <li>如果一块磁盘损毁了，那么存储的文件就会缺了一部分，整个文件就会损毁了。而且上述的 RAID - 0 只是以两块磁盘作为例子，如果采用多块磁盘，只要一块磁盘损毁了，那么整个磁盘组中保留的文件都会损毁，使得文件的损毁概率大大增加；</li>
+      <li>RAID - 0 中的所有磁盘都是同等大小了，如果采用了不一样大小的磁盘，当小容量的磁盘使用完毕，剩下的文件将全部被写入大磁盘，无形的降低了读写效率；</li>
+      <li>RAID - 0 阵列中每块磁盘会以阵列中最慢的那个磁盘的速率来传输数据。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="raid---1">RAID - 1</h3>
+
+<p>将两块同种型号、同样大小的两块磁盘组合在一起（这里和 RAID - 0 是一样的），文件在写入的时候，会以两份的形式分别写入两块磁盘。如下图：</p>
+
+<p><img src="/assets/0_1329358091FfY1.jpg" alt="图片" /></p>
+
+<ul>
+  <li>
+    <p>优点</p>
+
+    <ul>
+      <li>数据更加安全了，只要有一块磁盘上的数据损毁了，就可以从另外一个磁盘上恢复数据。这里不考虑两块磁盘恰好同时损毁的情况，这种情况发生的概率是很小的，因为只要发现了有一块磁盘损毁，我们就会将坏掉的磁盘更换掉，这样就降低了两块磁盘同时损毁的概率。</li>
+      <li>如果多个进程读取同一份文件，由于数据有两份，RAID 可以取得最佳的平衡。</li>
+    </ul>
+  </li>
+  <li>
+    <p>缺点</p>
+
+    <ul>
+      <li>磁盘是冗余的，无形之中降低了磁盘的容量。举个例子就是：如果两块120GB的磁盘组合成 RAID - 1，其中一块磁盘是用来对文件备份的，所以实际的磁盘容量只有120GB。</li>
+      <li>写的性能可能会非常的差。因为数据在写入磁盘的过程中是要写入两份的，采用软件磁盘阵列（Software RAID，后文会提到)写入，由于只有一个南桥芯片，所以两份数据都要占用I/O总线，造成了性能很差。不过如果采用的是硬件磁盘阵列，那么磁盘阵列卡会将写入的数据复制一份，不会占用I/O总线，所以性能不会有太大损失。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="raid-0--1--raid-1--0">RAID 0 + 1 / RAID 1 + 0</h3>
+
+<p>RAID 0 + 1 和 RAID 1 + 0 将前两者结合了起来，举个立即就是如果我限制有四块磁盘A、B、C、D，可以先将AB、CD分别组合成 RAID - 0，然后将这两个 RAID - 0 组合成 RAID - 1，反之亦可。</p>
+
+<p><img src="/assets/0_1329358502tPjX.jpg" alt="图片" /></p>
+
+<h3 id="raid---5">RAID - 5</h3>
+
+<p>RAID - 5 至少需要3块磁盘，其中两块磁盘的组合和 RADI - 0 差不多，另外一块用来对其他两块做数据校验。假设有A、B、C三块磁盘，三块型号一样，大小相等。其中磁盘C用来对数据做校验。先将文件分块，循环写入A和B磁盘（就是先写入数据块到A，然后写入B，再写入A，在写入B … …），这样磁盘A上每一个数据块都和B上一个块对应，然后将这两个块的数据进行校验，得到的校验码（Parity）会被存入磁盘C对应的块，懂吧！那么这个校验码有什么用呢？当磁盘A或者B损毁了，那么其上的数据就可以通过校验码和另一块好的磁盘上的数据计算出来，从而实现数据的恢复。</p>
+
+<p><img src="/assets/0_13293587958s5n.jpg" alt="图片" /></p>
+
+<ul>
+  <li>
+    <p>优点</p>
+
+    <p>将性能和数据安全综合考虑了进来。性能方面读性能和 RAID - 0差不多，但是写性能会慢。在容量方面，RAID - 5 是磁盘总数量减去1（因为有一个磁盘用来存储校验码）。安全方面，只要有一个磁盘损坏了，丢失的数据可以通过校验码和其他磁盘上的数据通过计算得到。</p>
+  </li>
+  <li>
+    <p>缺点</p>
+
+    <p>写入的时候需要计算校验码，所以写入的速度较慢。</p>
+  </li>
+  <li>
+    <p>补充</p>
+
+    <p>关于校验码的计算没有具体说明，不过感觉和计算机网络中的校验位的计算方法差不多。</p>
+  </li>
+</ul>
+
+<h3 id="spare-disk">Spare Disk</h3>
+
+<p>Spare Disk 在磁盘阵列中的地位属于预留的磁盘。它的功能是在某一个磁盘损坏的时候，系统可以自动将预留的磁盘加入磁盘阵列组，替代已经损坏的磁盘。</p>
+
+<h1 id="software-raid--hardware-raid">Software RAID 和 Hardware RAID</h1>
+
+<h3 id="hardware-raid">Hardware RAID</h3>
+<p>是利用硬件实现的 RAID ，它的性能会更好，因为 <code>Hardware RAID</code> 专门的芯片处理 RAID，在进行数据传输时不会重复占用I/O总线，理论上性能会更好。不过缺点就是太贵。</p>
+
+<h3 id="software-raid">Software RAID</h3>
+<p>是利用软件来模拟硬件RAID的功能。模拟软件是 mdadm。在 <code>Hardware RAID</code> 中是以磁盘作为 RAID 的基本单位，不过用软件模拟的话，只需要对磁盘分区即可，磁盘分区或磁盘是 <code>Software RAID</code> 的基本单位。同时 <code>Software RAID</code> 是针对 RAID 硬件的仿真，所以在系统看来，<code>Software RAID	</code> 模拟的结果就是一个名为 <code>/dev/xxx</code> 的设备，需要进行挂载。下文将具体讲解如何在Ubuntu上设置 <code>Software RAID</code>。</p>
+
+<h1 id="software-raid-1">设置 Software RAID</h1>
+
+<h3 id="section">准备练习分区</h3>
+
+<p>在磁盘中划分出几个分区用作练习，展示一下本人的分区</p>
+
+<pre><code>root@ubuntu:~# fdisk -l
+Disk /dev/sda: 119.2 GiB, 128035676160 bytes, 250069680 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 81B67BAA-92F7-4E6C-994A-EE5431EC7109
+
+Device         Start       End   Sectors  Size Type
+/dev/sda1       2048   1953791   1951744  953M EFI System
+/dev/sda2    1953792  41015295  39061504 18.6G Linux filesystem
+/dev/sda3   41015296  56639487  15624192  7.5G Linux swap
+/dev/sda4   56639488 232491007 175851520 83.9G Linux filesystem
+/dev/sda5  232491008 234588159   2097152    1G Linux filesystem
+/dev/sda6  234588160 236685311   2097152    1G Linux filesystem
+/dev/sda7  236685312 238782463   2097152    1G Linux filesystem
+/dev/sda8  238782464 240879615   2097152    1G Linux filesystem
+/dev/sda9  240879616 242976767   2097152    1G Linux filesystem
+root@ubuntu:/home/Developer# df
+Filesystem     1K-blocks     Used Available Use% Mounted on
+udev             1945768        0   1945768   0% /dev
+tmpfs             393196    11668    381528   3% /run
+/dev/sda2       19091584 16613608   1485108  92% /
+tmpfs            1965960   144672   1821288   8% /dev/shm
+tmpfs               5120        4      5116   1% /run/lock
+tmpfs            1965960        0   1965960   0% /sys/fs/cgroup
+/dev/sda1         973952     3540    970412   1% /boot/efi
+/dev/sda4       86414720 75004380   6997668  92% /home
+cgmfs                100        0       100   0% /run/cgmanager/fs
+tmpfs             393196       92    393104   1% /run/user/1001
+</code></pre>
+
+<p><code>fdisk -l</code> 命令查看本机上有多少分区，<code>df</code> 查看有哪些分区没有被挂载，这些些没有被挂载的分区用来做此次的实验。从上面可以看出 /dev/sda{5 - 9} 是此次的实验分区。</p>
+
+<h3 id="raid-1">创建 RAID</h3>
+
+<p>利用 <code>mdadm</code> 命令创建 RAID</p>
+
+<pre><code>root@ubuntu:~# mdadm --create --auto=yes /dev/raid0 --level=5 --raid-devices=4 --spare-devices=1 /dev/sda{5,6,7,8,9}
+mdadm: /dev/raid0 is an invalid name for an md device.  Try /dev/md/raid0
+root@ubuntu:~# mdadm --create --auto=yes /dev/md0 --level=5 --raid-devices=4 --spare-devices=1 /dev/sda{5,6,7,8,9} 
+mdadm: Defaulting to version 1.2 metadata
+mdadm: array /dev/md0 started.
+</code></pre>
+
+<ol>
+  <li><code>--create</code> 表示创建 RAID。</li>
+  <li><code>--auto=yes</code> 后面接上创建的 raid 设备的名字，第一次创建时使用了 <code>/dev/raid0</code> 失败了，是因为必须使用md开头的命名规范。</li>
+  <li><code>--raid-devices=N</code> 表示使用多少个磁盘或者分区作为raid设备。</li>
+  <li>`–spare-devices=N1 表示使用多少个磁盘或者分区作为预备分区。</li>
+  <li><code>--level=N</code> 表示创建哪一种级别的raid</li>
+  <li>创建 raid 时，后面接上 <code>/dev/sdaX</code> 表示哪些磁盘或者分区参加创建 raid ，注意了，这些磁盘或者分区的数量一定要和 raid-devices 加上 spare-devices 的值相等。</li>
+</ol>
+
+<p>查看创建完成的 RAID 设备信息</p>
+
+<pre><code>root@ubuntu:~# mdadm --detail /dev/md0
+/dev/md0:
+Number   Major   Minor   RaidDevice State
+0       8        5        0      active sync   /dev/sda5
+1       8        6        1      active sync   /dev/sda6
+2       8        7        2      active sync   /dev/sda7
+5       8        8        3      active sync   /dev/sda8
+
+4       8        9        -      spare   /dev/sda9
+</code></pre>
+
+<p>看最后几行，发现 <code>/dev/sda{5 - 8}</code> 已经成为了 RAID 设备，<code>/dev/sda9</code> 是预备的设备。</p>
+
+<p>补充一下，还可以通过 <code>cat /proc/mdstat</code> 命令查看 RAID 设备信息。</p>
+
+<h3 id="raid-2">格式化并挂载 RAID</h3>
+
+<pre><code>root@ubuntu:~# mkfs -t ext4 /dev/md0
+root@ubuntu:~# mkdir /mnt/raid
+root@ubuntu:~# mount /dev/md0 /mnt/raid
+root@ubuntu:~# df
+Filesystem     1K-blocks     Used Available Use% Mounted on
+/dev/sda2       19091584 16613668   1485048  92% /
+/dev/sda1         973952     3540    970412   1% /boot/efi
+/dev/sda4       86414720 75005600   6996448  92% /home
+/dev/md0         3027728     4608   2849604   1% /mnt/raid
+</code></pre>
+
+<h1 id="software-raid-">利用 Software RAID 处理数据损毁</h1>
+
+<p>先向 <code>/mnt/raid</code> 中添加一些数据，然后模拟 <code>/dev/sda8</code> 的出错状态</p>
+
+<pre><code>root@ubuntu:~# cp -a /etc /mnt/raid
+root@ubuntu:~# mdadm --manage /dev/md0 --fail /dev/sda8
+mdadm: set /dev/sda8 faulty in /dev/md0
+root@ubuntu:~# mdadm --detail /dev/md0
+Number   Major   Minor   RaidDevice State
+0       8        5        0      active sync   /dev/sda5
+1       8        6        1      active sync   /dev/sda6
+2       8        7        2      active sync   /dev/sda7
+4       8        9        3      active sync   /dev/sda9
+
+5       8        8        -      faulty   /dev/sda8
+</code></pre>
+
+<p>查看可发现 /dev/sda8 确实被设置出现了错误状态，接下来我将出现错误的磁盘从 RAID 中移除，并添加一块新的磁盘，在这里新的磁盘是 <code>/dev/sda10</code>。</p>
+
+<pre><code>root@ubuntu:~# mdadm --manage /dev/md0 --add /dev/sda10 --remove /dev/sda8
+root@ubuntu:~# mdadm --detail
+Number   Major   Minor   RaidDevice State
+0       8        5        0      active sync   /dev/sda5
+1       8        6        1      active sync   /dev/sda6
+2       8        7        2      active sync   /dev/sda7
+4       8        9        3      active sync   /dev/sda9
+
+6       8       10        -      spare   /dev/sda10
+</code></pre>
+
+<p>可以看到 <code>/dev/sda8</code> 已经被替换，而 <code>/dev/sda10</code> 出现在预留磁盘的位置，可以查看一下 RAID 里面的数据</p>
+
+<pre><code>root@ubuntu:~# du -sm /mnt/raid/*
+17		/mnt/raid/etc
+1		/mnt/raid/lost+found
+</code></pre>
+
+<p>发现数据完好。</p>
+
+<h1 id="raid-3">设置开机挂载 RAID</h1>
+
+<p>获取 RAID 设备的 uuid号码</p>
+
+<pre><code>root@ubuntu:~# mdadm --detail | grep -i uuid
+UUID : 0a861ec3:399accad:00927385:a9c784c1
+</code></pre>
+
+<p>将设备号写入配置文件，供系统在挂载 RAID 设备的时候读取</p>
+
+<pre><code>root@ubuntu:~# vim /etc/mdadm.conf
+ARRAY /dev/md0 UUID=0a861ec3:399accad:00927385:a9c784c1
+</code></pre>
+
+<p>编辑 <code>/etc/fstab</code> 进行开机挂载</p>
+
+<pre><code>root@ubuntu:~# vim /etc/fstab
+/dev/md0 /mnt/raid ext4 defaults 1 2
+</code></pre>
+
+<p>重新挂载</p>
+
+<pre><code>root@ubuntu:~# umount /dev/md0 ; mount -a
+</code></pre>
+
+<h1 id="software-raid-2">关闭 Software RAID</h1>
+
+<p>如何在你不想使用 Software RAID 的时候关闭 RAID，其实很简单，只要将你之前创建的各种配置文件删除即可，有一下几步：</p>
+
+<pre><code>1. 卸载 /dev/md0
+2. 删除 `/etc/fstab` 中的记录
+3. 通过 `mdadm --stop /dev/md0` 停止 RAID 服务
+4. 删除 `/etc/mdadm.conf` 中的uid记录
+</code></pre>
+
+<p>完。</p>
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+            
+
+
+  <div id="disqus_thread"></div>
+<script>
+
+/**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+   var disqus_config = function () {
+   this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+   this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+   };
+   */
+(function() { // DON'T EDIT BELOW THIS LINE
+ var d = document, s = d.createElement('script');
+ s.src = 'https://stormphoenixde-bo-ke.disqus.com/embed.js';
+ s.setAttribute('data-timestamp', +new Date());
+ (d.head || d.body).appendChild(s);
+ })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                                
+
+
+
+
+ 
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>StormPhoenix</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">StormPhoenix</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  </body>
+</html>
