@@ -104,4 +104,4 @@ jekyll server
 微信
 ----------------
 
-<img src="/style/images/weixin.png" alt="微信二维码付款给StormPhoenix" width="310" />
+<img src="/styles/images/weixin.png" alt="微信二维码付款给StormPhoenix" width="310" />
