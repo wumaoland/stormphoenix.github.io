@@ -1,7 +1,12 @@
+# this shell script is used to create a post template in "_drafts" 
+# directory which belongs to this project
+
 categories=$1
 name=$2
 
-basePath='/home/Developer/Workspace/Blog/stormphoenix.github.io/_drafts/'
+basePath=$(cd `dirname $0`;cd ../_drafts;pwd)
+basePath=${basePath}"/"
+
 fileName=$(date "+%Y-%m-%d-")
 time=$(date "+%Y-%m-%d %H:%M:%S +0800")
 
