@@ -187,6 +187,19 @@
       
 
       
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
             </ul>
           </li>
       
@@ -387,7 +400,7 @@ mdadm: array /dev/md0 started.
   <li><code>--create</code> 表示创建 RAID。</li>
   <li><code>--auto=yes</code> 后面接上创建的 raid 设备的名字，第一次创建时使用了 <code>/dev/raid0</code> 失败了，是因为必须使用md开头的命名规范。</li>
   <li><code>--raid-devices=N</code> 表示使用多少个磁盘或者分区作为raid设备。</li>
-  <li>`–spare-devices=N1 表示使用多少个磁盘或者分区作为预备分区。</li>
+  <li><code>--spare-devices=N1</code> 表示使用多少个磁盘或者分区作为预备分区。</li>
   <li><code>--level=N</code> 表示创建哪一种级别的raid</li>
   <li>创建 raid 时，后面接上 <code>/dev/sdaX</code> 表示哪些磁盘或者分区参加创建 raid ，注意了，这些磁盘或者分区的数量一定要和 raid-devices 加上 spare-devices 的值相等。</li>
 </ol>
