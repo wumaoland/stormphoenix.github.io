@@ -12,3 +12,5 @@ permalink: /books/
 
 + 《鸟哥的Linux私房菜基础学习篇-第三版》
 + 《深入JVM虚拟机》
++ 《苏菲的世界》
++ 《高性能MySQL》
