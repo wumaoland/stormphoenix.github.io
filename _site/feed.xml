@@ -5,9 +5,152 @@
     <description>为了生命中的美好，不妥协直到变老.</description>
     <link>http://stormphoenix.github.com/</link>
     <atom:link href="http://stormphoenix.github.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 23 Jun 2017 00:45:29 +0800</pubDate>
-    <lastBuildDate>Fri, 23 Jun 2017 00:45:29 +0800</lastBuildDate>
+    <pubDate>Fri, 07 Jul 2017 13:57:11 +0800</pubDate>
+    <lastBuildDate>Fri, 07 Jul 2017 13:57:11 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>初识Spring（一）</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#spring&quot; id=&quot;markdown-toc-spring&quot;&gt;Spring采用的几种基本策略&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#beanbean&quot; id=&quot;markdown-toc-beanbean&quot;&gt;Bean和Bean容器&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#spring-1&quot; id=&quot;markdown-toc-spring-1&quot;&gt;Spring还可以做什么&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作为一个Java框架，Spring的根本使命就是简化Java开发。主要是让Java开发变得更加简单，更加具有可测试性，更加的松耦合。然而，Spring实现以上功能的仅仅只是基于少许的基本理念，比如说：松耦合、可重用等等。为了实现简化Java开发的使命，Spring采取了几种基本策略，如下。&lt;/p&gt;
+
+&lt;h1 id=&quot;spring&quot;&gt;Spring采用的几种基本策略&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;基于对象的轻量级和最小侵入性&lt;br /&gt;
+非侵入性编程，通俗点说就是某一个类在使用了框架和不使用框架的情况下都能够发挥相同的作用。用Struts2框架举个例子。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;public class HelloAction extends ActionSupport {
+	public String execute() {
+		return &amp;quot;Hello world!&amp;quot;;
+	}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;在这个例子中如果想让&lt;code&gt;HelloAction&lt;/code&gt;能够正常的工作，必须要继承&lt;code&gt;ActionSupport&lt;/code&gt;，这就意味着&lt;code&gt;HelloAction&lt;/code&gt;和Struts2框架死死的绑定在了一起。这就是侵入式，从字面意思理解就是Struts2“侵入了“&lt;code&gt;HelloAction&lt;/code&gt;这个对象。这样带来了两个问题：&lt;br /&gt;
+	1. 如果&lt;code&gt;HelloAction&lt;/code&gt;的功能需要被另一个模块重用，那么目标模块就不得不导入Struts框架，否则&lt;code&gt;HelloAction&lt;/code&gt;就无法工作，这样就加大了项目的代码冗余。&lt;br /&gt;
+	2. 倘若决定不采用Struts2框架，那么这个&lt;code&gt;HelloAction&lt;/code&gt;将无法发挥它的正常功能，内部的逻辑代码必须要重写。所以，以上两点就降低了代码的可重用度。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;通过依赖注入（Dependency injection）和面向接口实现松耦合&lt;br /&gt;
+程序中的对象和对象之间必然是有关联的。如果一个对象A需要使用B的某些功能，就可以称A对B产生了依赖。见如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;public class Kid {
+	private Ball ball;
+
+	public Kid() {
+		this.ball = new Ball();
+	}
+
+	public void playBall() {
+		ball.play();
+	}
+}
+
+public class Ball {
+	public void play() {
+		// do something
+	}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;这里的 Kid 依赖于 Ball ，所以在Kid的构造方法里面创建了Ball接口的一个实现——Basketball。那么问题来了：构造 Ball 是 Kid 应该负责的事情吗？如果 Basketball 的构造方法改变了，那么 Kid 的代码是不是也需要改变呢？&lt;/p&gt;
+
+&lt;p&gt;上面描述的就是两个类之间过度&lt;strong&gt;耦合&lt;/strong&gt;的现象，它导致的问题就是：一个类如果修改了将导致其他的类变化，从而可能引入了“打地鼠”式的bug。&lt;/p&gt;
+
+&lt;p&gt;在看看下面两个修改过后的代码。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;public class Kid {
+        private Ball ball;
+
+	public Kid(Ball ball) {
+		this.ball = ball;
+	}
+	// do something
+}
+
+public interface Ball {
+	void play();
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;public class Kid {
+	private Ball ball;
+
+	public void setBall(Ball ball) {
+		this.ball = ball;
+	}
+    // do something
+}
+
+public interface Ball {
+	void play();
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Kid 不需要知道 Ball 是如何具体实现的，所以通过构造器或者setter方法注入 Ball —— &lt;strong&gt;依赖注入（Dependency Injection , DI)&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;Kid 不需要知道 Ball 是什么类型的，不需要知道到底是篮球还是足球，只需要知道 Ball 可以用来 play，所以 Ball 用接口进行替代—— &lt;strong&gt;面向接口编程&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;好处就是，不管 Ball 的实现如何变化，都不会影响到 Kid 的代码。（推荐一本书： Dhanji R. Prasanna 的 Dependency Injection，据说很不错）&lt;/p&gt;
+
+&lt;p&gt;问题在于，这个构造器或者setter方法的中的 Ball 又是如何注入的？在 Spring 中，你不需要手动调用构造器或者setter方法，Spring会替你做的。关于这一点以后会讲到。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;基于切面（aspect-oriented programming）和惯例进行声明式编程&lt;br /&gt;
+在一个应用中可能有许多地方都使用了相同的功能，这样导致的问题就是——代码冗余。同一个功能的代码重复的分布在系统的各个地方，如果需要对功能进行修改，就不得不在许多个功能调用点对代码进行修改。而AOP的作用，就是将这些地方的功能抽取出来形成一个独立的&lt;strong&gt;组件&lt;/strong&gt;，在需要的地方对组件进行调用。形象化的说，调用&lt;strong&gt;组件&lt;/strong&gt;的地方称之为&lt;strong&gt;切点&lt;/strong&gt;，所谓组件的调用就是将某个组件插入到某个&lt;strong&gt;切点&lt;/strong&gt;之中。不过令人惊喜的是，用Spring实现AOP甚至都不需要在切点编写调用方法！只要在配置文件声明切点的位置和相应的组件就行了。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;通过切面和模板减少样板式代码&lt;br /&gt;
+我见过最多的样板代码就是JDBC操作。Spring 提供了许多这样的模板，让开发人员只需要关注应用的逻辑。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;beanbean&quot;&gt;Bean和Bean容器&lt;/h1&gt;
+
+&lt;p&gt;一个应用之中是有很多的对象的，对象和对象之间有着各种相互依赖的关系。在 Spring 中，每个对象被称之为 &lt;strong&gt;Bean&lt;/strong&gt;，所有的 Bean 都被容纳在 Spring 的一个容器（Container）里面，这个容器就是 &lt;strong&gt;Bean 容器&lt;/strong&gt;，而 Bean 和 Bean 之间的关系是 Bean 容器利用 DI 进行处理的。&lt;/p&gt;
+
+&lt;p&gt;容器里面的对象是有生命周期的，Bean 容器管理着 Bean 的生命周期。Bean 容器会在每个 Bean 的不同生命周期阶段调用不同的生命周期方法（和Android中的Activity一模一样），下面举一个例子：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;public class MyBean implements BeanNameAware {
+	/**
+	* 如果MyBean处于设置BeanName的生命周期阶段，并且MyBean实现了
+	* BeanNameAware接口，那么对应的setBeanName方法就会被调用，
+	*/
+	@Override
+	public void setBeanName(String beanName) {
+		// do something
+	}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Bean 容器是通过 bean 工厂 / 应用上下文（ApplicationContext）来创建所有的 bean 对象的，bean 工厂了解的不多，主要讲解应用上下文。&lt;br /&gt;
+* AnnotationConfigApplicationContext&lt;br /&gt;
+* ClassPathXmlApplicationContext&lt;br /&gt;
+* 其他 … …&lt;/p&gt;
+
+&lt;p&gt;上面列出了两个常用的应用上下文类。如果你在main方法中创建了相应的 Application Context，它就会自动加载相关的配置文件，从配置文件中读取它需要创建哪些 bean，并初始化它们。不同的 ApplicationContext 的区别在于加载的配置文件的不同。其中 AnnotationConfigApplicationContext 通过读取 Java 注解来创建 Bean ，而 ClassPathXmlApplicationContext 则是通过读取 xml 文件来读取。&lt;/p&gt;
+
+&lt;h1 id=&quot;spring-1&quot;&gt;Spring还可以做什么&lt;/h1&gt;
+
+&lt;p&gt;基于 Spring 的核心容器上，Spring 还有着许多功能模块。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;SpringMVC —— 网站开发&lt;/li&gt;
+  &lt;li&gt;数据集成和访问 —— 数据库操作&lt;/li&gt;
+  &lt;li&gt;其他许多 … …&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sat, 24 Jun 2017 23:26:34 +0800</pubDate>
+        <link>http://stormphoenix.github.com/2017/06/24/%E5%88%9D%E8%AF%86Spring-%E4%B8%80/</link>
+        <guid isPermaLink="true">http://stormphoenix.github.com/2017/06/24/%E5%88%9D%E8%AF%86Spring-%E4%B8%80/</guid>
+        
+        
+        <category>Spring</category>
+        
+      </item>
     
       <item>
         <title>我失去了什么？</title>
@@ -50,7 +193,7 @@
 
 &lt;p&gt;这些年来，虽然失去了很多，但是也得到了一些真心朋友。唐平、健健、农哥，做你们的组长是我的幸运。倪子君，有你做朋友，我很开心。吴宇伦，你这个学霸，我好羡慕你。唐睿晨，相互嘲讽了这么久，你也是我人生的一部分。&lt;/p&gt;
 
-&lt;p&gt;恩，有你们真好。从今天开始，不停的反思，只为了成为更好的一个人。
+&lt;p&gt;恩，有你们真好。从今天开始，不停的反思，只为了成为更好的一个人。&lt;br /&gt;
 哪怕只是为了你们。&lt;/p&gt;
 
 </description>
@@ -396,15 +539,15 @@ ARRAY /dev/md0 UUID=0a861ec3:399accad:00927385:a9c784c1
 
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;容量限制
+    &lt;p&gt;容量限制&lt;br /&gt;
   容量限制包括block限制和inode限制。通过设置block值的大小可以限制用户能够使用的最大磁盘容量，而设置inode值的大小限制了用户能够创建的最大文件数量&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;soft/hard
+    &lt;p&gt;soft/hard&lt;br /&gt;
   soft限制（软限制）指明了用使用量超过多少时向用户发出警告，hard限制（硬限制）指明用户最多能使用多少用量，一旦超过就解除用户对磁盘的使用权（无法新增文件）。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;grace time
+    &lt;p&gt;grace time&lt;br /&gt;
   grace time（宽限时间）表示一个倒数时间，当用户的使用量处于soft和hard设置的值之间时，就会启动倒计时，如果超过了这个倒计时用户的磁盘使用量还处于soft和hard之间的话，用户的磁盘使用权就会锁住（无法新增文件）。&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -417,11 +560,11 @@ root@ubuntu:~#mount | grep home
 /dev/sda4 on /home type ext4 (rw,relatime,quota,usrquota,grpquota,data=ordered)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;有几点要注意
-1. 只有root能够使用这个功能。
-2. 此处用 &lt;code&gt;/home&lt;/code&gt; 目录做实验是因为/home恰好是挂载点。
-3. usrquota是对单个用户做限制，grpquota是对一个组做限制。
-4. 输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。
+&lt;p&gt;有几点要注意&lt;br /&gt;
+1. 只有root能够使用这个功能。&lt;br /&gt;
+2. 此处用 &lt;code&gt;/home&lt;/code&gt; 目录做实验是因为/home恰好是挂载点。&lt;br /&gt;
+3. usrquota是对单个用户做限制，grpquota是对一个组做限制。&lt;br /&gt;
+4. 输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。&lt;br /&gt;
 5. 输出的信息其实存储在 &lt;code&gt;/etc/mtab&lt;/code&gt; 文件中。之前 &lt;code&gt;mount -o remount,usrquota,grpquota /home&lt;/code&gt; 其实是对文件系统进行了设置，这个设置会被保存在 &lt;code&gt;/etc/mtab&lt;/code&gt;文件中&lt;/p&gt;
 
 &lt;p&gt;以上的命令只在此次开机中有效，如果想让系统在每次开机中都能够支持quota，则需要在/etc/fstab中添加如下语句&lt;/p&gt;
@@ -476,13 +619,13 @@ Filesystem	blocks	    soft	hard    inodes      soft hard
 /dev/sda4	60331452	0	    0	    1029831     0    0
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;分为7列，具体说明：
-1. 具体的限制值是针对哪一个文件系统
-2. 当前用户已经使用的磁盘容量
-3. 当前用户使用磁盘容量的软限制值
-4. 当前用户使用磁盘容量的硬限制值
-5. 当前用户创建的文件数量
-6. 当前用户穿件文件数量的软限制值
+&lt;p&gt;分为7列，具体说明：&lt;br /&gt;
+1. 具体的限制值是针对哪一个文件系统&lt;br /&gt;
+2. 当前用户已经使用的磁盘容量&lt;br /&gt;
+3. 当前用户使用磁盘容量的软限制值&lt;br /&gt;
+4. 当前用户使用磁盘容量的硬限制值&lt;br /&gt;
+5. 当前用户创建的文件数量&lt;br /&gt;
+6. 当前用户穿件文件数量的软限制值&lt;br /&gt;
 7. 当前用户创建文件数量的硬限制值&lt;/p&gt;
 
 &lt;h1 id=&quot;quota-3&quot;&gt;生成Quota报表&lt;/h1&gt;
@@ -752,101 +895,101 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
 
 &lt;p&gt;mkdir：新建一个新的目录。&lt;/p&gt;
 
-&lt;p&gt;rmdir：删除一个空的目录。
+&lt;p&gt;rmdir：删除一个空的目录。&lt;br /&gt;
 其中，mkdir每次只能创建一级目录。比如：mkdir test 将会创建一个test目录。如果想要创建多级目录，类似与dir1/dir2/dir3，就必须加上-p参数，如下：&lt;/p&gt;
 
-&lt;p&gt;# mkdir -p dir1/dir2/dir3
+&lt;p&gt;# mkdir -p dir1/dir2/dir3&lt;br /&gt;
 创建目录的同时还可以加上 -m 参数来指定目录的权限（关于权限以后会有详细讲解）。&lt;/p&gt;
 
-&lt;p&gt;# mkdir -m 711 test
- # ls -l
-drwx–x–x 2 root root 4096 9月 27 10:32 test
+&lt;p&gt;# mkdir -m 711 test&lt;br /&gt;
+ # ls -l&lt;br /&gt;
+drwx–x–x 2 root root 4096 9月 27 10:32 test&lt;br /&gt;
 关于rmdir也差不多，每次只能删除一级目录且该目录必须为空。要删除多级目录就要加上参数 -p。如果要删除目录和目录里面所有的东西（包括文件），那么可以采用 rm -r &lt;目录名称&gt;。&lt;/目录名称&gt;&lt;/p&gt;
 
 &lt;p&gt;查看文件与目录的命令：&lt;/p&gt;
 
-&lt;p&gt;ls:用于查看文件或目录的详细信息。
-几个常用的参数说明：
--a : 显示目录下全部的文件
--d : 只查看目录本身，而无需列举出目录内的文件数据。
--h : 将文件的容量用GB，MB，KB等方式列出（方便理解）。
--i : 列出inode号码。
--l : 列出文件的属性和权限信息。
+&lt;p&gt;ls:用于查看文件或目录的详细信息。&lt;br /&gt;
+几个常用的参数说明：&lt;br /&gt;
+-a : 显示目录下全部的文件&lt;br /&gt;
+-d : 只查看目录本身，而无需列举出目录内的文件数据。&lt;br /&gt;
+-h : 将文件的容量用GB，MB，KB等方式列出（方便理解）。&lt;br /&gt;
+-i : 列出inode号码。&lt;br /&gt;
+-l : 列出文件的属性和权限信息。&lt;br /&gt;
 –time=&lt;值&gt; : 输出相应的时间。如果值等于atime，输出该文件上一次被访问的时间，如果值等于ctime，输出该文件上一次权限被修改的时间。
 --full-time : 以年、月、日、时、分的格式输出时间。
 复制文件的命令：&lt;/值&gt;&lt;/p&gt;
 
-&lt;p&gt;cp: 复制文件
-用法：cp source（源文件） destination（目标文件）//将source复制到destination里面
-相关参数：
--p: 连同权限的属性一起复制过去。
--s: 生成一个文件，使得该文件是源文件的快捷方式。
+&lt;p&gt;cp: 复制文件&lt;br /&gt;
+用法：cp source（源文件） destination（目标文件）//将source复制到destination里面&lt;br /&gt;
+相关参数：&lt;br /&gt;
+-p: 连同权限的属性一起复制过去。&lt;br /&gt;
+-s: 生成一个文件，使得该文件是源文件的快捷方式。&lt;br /&gt;
 删除文件的命令：&lt;/p&gt;
 
-&lt;p&gt;rm: 删除文件
-用法: rm source（被删除的文件名）
-相关参数:
--r: 如果被删除的目录中有文件，那么一并删除该目录和里面的文件。如果不加上-r参数，那么rm只能删除单一文件或空目录。
+&lt;p&gt;rm: 删除文件&lt;br /&gt;
+用法: rm source（被删除的文件名）&lt;br /&gt;
+相关参数:&lt;br /&gt;
+-r: 如果被删除的目录中有文件，那么一并删除该目录和里面的文件。如果不加上-r参数，那么rm只能删除单一文件或空目录。&lt;br /&gt;
 移动文件的命令：&lt;/p&gt;
 
-&lt;p&gt;mv: 移动文件
-用法: mv source （源文件） destination （目的地）
-相关参数:
--u: 若目的地文件已经存在，且源文件较新，才会移动并覆盖目的地文件。
--i: 若目的地文件已经存在，就会询问是否覆盖目的地文件。
+&lt;p&gt;mv: 移动文件&lt;br /&gt;
+用法: mv source （源文件） destination （目的地）&lt;br /&gt;
+相关参数:&lt;br /&gt;
+-u: 若目的地文件已经存在，且源文件较新，才会移动并覆盖目的地文件。&lt;br /&gt;
+-i: 若目的地文件已经存在，就会询问是否覆盖目的地文件。&lt;br /&gt;
 获取文件的完整名字:&lt;/p&gt;
 
-&lt;p&gt;basename: 获取完整名字
-用法：basename path （获取路径下的文件名称）
-示例: 
- # basename /bin/mv
-mv
+&lt;p&gt;basename: 获取完整名字&lt;br /&gt;
+用法：basename path （获取路径下的文件名称）&lt;br /&gt;
+示例: &lt;br /&gt;
+ # basename /bin/mv&lt;br /&gt;
+mv&lt;br /&gt;
 获取文件的目录名称:&lt;/p&gt;
 
-&lt;p&gt;dirname:
-用法: 和basename类似。
-示例:
- # dirname /bin/mv
-/bin
+&lt;p&gt;dirname:&lt;br /&gt;
+用法: 和basename类似。&lt;br /&gt;
+示例:&lt;br /&gt;
+ # dirname /bin/mv&lt;br /&gt;
+/bin&lt;br /&gt;
 文件内容查询命令:&lt;/p&gt;
 
-&lt;p&gt;cat:
-用法： cat 文件路径
-相关参数： 
+&lt;p&gt;cat:&lt;br /&gt;
+用法： cat 文件路径&lt;br /&gt;
+相关参数： &lt;br /&gt;
 -n：打印行号。&lt;/p&gt;
 
-&lt;p&gt;tac：
+&lt;p&gt;tac：&lt;br /&gt;
 用法： 类似与cat，只不过将文件内容反向输出。&lt;/p&gt;
 
-&lt;p&gt;more：
-用法： 类似与cat。但是不会一口气将文件内容在屏幕上输出，而是一页一页的查看。
-相关操作
-Enter： 查看下一行。
+&lt;p&gt;more：&lt;br /&gt;
+用法： 类似与cat。但是不会一口气将文件内容在屏幕上输出，而是一页一页的查看。&lt;br /&gt;
+相关操作&lt;br /&gt;
+Enter： 查看下一行。&lt;br /&gt;
 Space空格键： 查看下一页。&lt;/p&gt;
 
-&lt;p&gt;less： 类似与cat，效果和more一样，不过可以通过page down和page up向下或者向下翻页。
-相关操作： 
-page Down： 向下翻页。
+&lt;p&gt;less： 类似与cat，效果和more一样，不过可以通过page down和page up向下或者向下翻页。&lt;br /&gt;
+相关操作： &lt;br /&gt;
+page Down： 向下翻页。&lt;br /&gt;
 page Up： 向上翻页。&lt;/p&gt;
 
-&lt;p&gt;head：
-用法： 类似与cat，但是只会取出前n行数据，具体的n又参数制定。
-参数： 
+&lt;p&gt;head：&lt;br /&gt;
+用法： 类似与cat，但是只会取出前n行数据，具体的n又参数制定。&lt;br /&gt;
+参数： &lt;br /&gt;
 -n &lt;数字&gt;： 代表去取前n行数据。&lt;/数字&gt;&lt;/p&gt;
 
-&lt;p&gt;tail： 
+&lt;p&gt;tail： &lt;br /&gt;
 用法： 同head，只不过取得是文件末尾n行数据。&lt;/p&gt;
 
-&lt;p&gt;od：
-用法： 以特定的方式来读取文件，方式是 cd [-t TYPE] 文件路径，具体看下面。
-相关参数： 
--t： 以某种方式读取文件内容，-t后面也会接上参数，他有如下参数： 
-    a： 默认字符来输出。
-    c： 利用ASCII来输出。
-    d[size]： 利用十进制输出，每个数字占用size个bytes。
-    o[size]： 利用八进制输出，其他同d。
-    f[size]： 摸底，其他同d。
-    x[size]： 利用十六进制输出，其他同d。
+&lt;p&gt;od：&lt;br /&gt;
+用法： 以特定的方式来读取文件，方式是 cd [-t TYPE] 文件路径，具体看下面。&lt;br /&gt;
+相关参数： &lt;br /&gt;
+-t： 以某种方式读取文件内容，-t后面也会接上参数，他有如下参数： &lt;br /&gt;
+    a： 默认字符来输出。&lt;br /&gt;
+    c： 利用ASCII来输出。&lt;br /&gt;
+    d[size]： 利用十进制输出，每个数字占用size个bytes。&lt;br /&gt;
+    o[size]： 利用八进制输出，其他同d。&lt;br /&gt;
+    f[size]： 摸底，其他同d。&lt;br /&gt;
+    x[size]： 利用十六进制输出，其他同d。&lt;br /&gt;
 修改/创建文件命令touch&lt;/p&gt;
 
 &lt;p&gt;先介绍和文件相关的几个时间概念：&lt;/p&gt;
@@ -863,30 +1006,30 @@ page Up： 向上翻页。&lt;/p&gt;
 
 &lt;p&gt;新建一个空文件：&lt;/p&gt;
 
-&lt;p&gt;# touch test
- # ls -l test
--rw-r–r– 1 root root 0 9月 29 19:28 test
-/×此时test文件的三个时间就会更新为当前的时间×/
+&lt;p&gt;# touch test&lt;br /&gt;
+ # ls -l test&lt;br /&gt;
+-rw-r–r– 1 root root 0 9月 29 19:28 test&lt;br /&gt;
+/×此时test文件的三个时间就会更新为当前的时间×/&lt;br /&gt;
 修改文件的时间&lt;/p&gt;
 
-&lt;p&gt;# touch -t 0710250213 test
- # ll test; ll –time=atime test; ll –time=ctime test
--rw-rw-r– 1 root root 0 10月 25 2007 test
--rw-rw-r– 1 root root 0 10月 25 2007 test
--rw-rw-r– 1 root root 0 9月 29 20:29 test
-/&lt;em&gt;如果没有添加–time参数，则默认输出mtime&lt;/em&gt;/
+&lt;p&gt;# touch -t 0710250213 test&lt;br /&gt;
+ # ll test; ll –time=atime test; ll –time=ctime test&lt;br /&gt;
+-rw-rw-r– 1 root root 0 10月 25 2007 test&lt;br /&gt;
+-rw-rw-r– 1 root root 0 10月 25 2007 test&lt;br /&gt;
+-rw-rw-r– 1 root root 0 9月 29 20:29 test&lt;br /&gt;
+/&lt;em&gt;如果没有添加–time参数，则默认输出mtime&lt;/em&gt;/&lt;br /&gt;
 touch创建目录时默认的权限&lt;/p&gt;
 
 &lt;p&gt;先谈一谈 umask&lt;/p&gt;
 
 &lt;p&gt;在终端内输入如下语句，打印unmask的值。&lt;/p&gt;
 
-&lt;p&gt;# umask
-0022
+&lt;p&gt;# umask&lt;br /&gt;
+0022&lt;br /&gt;
 在分别打印文件所有者、组员、其他人的默认权限&lt;/p&gt;
 
-&lt;p&gt;# umask -S
-u=rwx,g=rx,o=rx
+&lt;p&gt;# umask -S&lt;br /&gt;
+u=rwx,g=rx,o=rx&lt;br /&gt;
 做一下解释，当用户创建一个文件时，这个文件的权限时怎么确定的。&lt;/p&gt;
 
 &lt;p&gt;首先来看创建文件，文件默认没有可执行权限（x），只有（r）（w）权限，所以默认权限为-rw-rw-rw-，化成数字就是666。那么最终权限的确定就是由这个数字666减去umask的后三位，也就是022，得到644，变换成字符表示就这样的：-rw-r–r–。&lt;/p&gt;
@@ -895,11 +1038,11 @@ u=rwx,g=rx,o=rx
 
 &lt;p&gt;所以说创建文件或者文件夹时的默认权限和unmask有关，修改默认的权限就是修改umask，修改方法如下：&lt;/p&gt;
 
-&lt;p&gt;# umask 044 //修改来unmask，然后来看看默认权限是否改变
- # touch test
- # mkdir test2
--rw–w–w- 1 root root 0 9月 29 21:14 test
-drwx-wx-wx 2 root root 4096 9月 29 21:14 test1
+&lt;p&gt;# umask 044 //修改来unmask，然后来看看默认权限是否改变&lt;br /&gt;
+ # touch test&lt;br /&gt;
+ # mkdir test2&lt;br /&gt;
+-rw–w–w- 1 root root 0 9月 29 21:14 test&lt;br /&gt;
+drwx-wx-wx 2 root root 4096 9月 29 21:14 test1&lt;br /&gt;
 （对于权限不理解的，可以看看我写的关于权限的文章。）&lt;/p&gt;
 
 &lt;p&gt;文件的隐藏属性&lt;/p&gt;
@@ -908,56 +1051,56 @@ drwx-wx-wx 2 root root 4096 9月 29 21:14 test1
 
 &lt;p&gt;那么对这些隐藏属性进行操作的命令就是：&lt;/p&gt;
 
-&lt;p&gt;chattr：修改文件隐藏属性。 
+&lt;p&gt;chattr：修改文件隐藏属性。 &lt;br /&gt;
 lsattr：列举出文件的隐藏属性。&lt;/p&gt;
 
 &lt;p&gt;举个例子：&lt;/p&gt;
 
-&lt;p&gt;# chattr +i test
+&lt;p&gt;# chattr +i test&lt;br /&gt;
 这个命令使得test这个文件加上来不可被其他人修改、删除的属性。&lt;/p&gt;
 
 &lt;p&gt;再来一个：&lt;/p&gt;
 
-&lt;p&gt;# chattr -i test
+&lt;p&gt;# chattr -i test&lt;br /&gt;
 这样就使得test文件剔除了i属性，也就是说test这个文件可以被其他人修改或删除了。&lt;/p&gt;
 
 &lt;p&gt;下面是相关的属性列表：&lt;/p&gt;
 
-&lt;p&gt;+：增加一个属性。
--：剔除一个属性。
-a：让文件只能被添加数据，而不能被删除或修改数据，只有root能够设置该属性。
-i：任何人都不能对该。文件做任何修改（添加、删除等）
+&lt;p&gt;+：增加一个属性。&lt;br /&gt;
+-：剔除一个属性。&lt;br /&gt;
+a：让文件只能被添加数据，而不能被删除或修改数据，只有root能够设置该属性。&lt;br /&gt;
+i：任何人都不能对该。文件做任何修改（添加、删除等）&lt;br /&gt;
 其他的自行man。&lt;/p&gt;
 
 &lt;p&gt;查找可执行文件(.sh)的路径&lt;/p&gt;
 
 &lt;p&gt;which：查找某一个可执行文件的完整路径。它的原理时是搜索PATH路径下的后缀为（.sh）的文件。&lt;/p&gt;
 
-&lt;p&gt;参数：
--a：将可以找到的所有可执行命令路径全部列出。
-示例：
- # which ls
- # /bin/ls
+&lt;p&gt;参数：&lt;br /&gt;
+-a：将可以找到的所有可执行命令路径全部列出。&lt;br /&gt;
+示例：&lt;br /&gt;
+ # which ls&lt;br /&gt;
+ # /bin/ls&lt;br /&gt;
 查找普通文件的路径&lt;/p&gt;
 
 &lt;p&gt;whereis：该命令用于查找一般的文件，查找的原理是利用数据库来查找数据，并没有查询整个磁盘。再说find命令，它才是通过整个磁盘来查询文件的。&lt;/p&gt;
 
 &lt;p&gt;所以说有的命令文件没有被加入PATH，但却被存储进数据库里面，所以whereis有时候会找到which找不到的文件。&lt;/p&gt;
 
-&lt;p&gt;参数：
--b：只找二进制的文件。
--m：找到man文件路径下的文件。
--s：只找source源文件。
--u：查找不是上面三个选项的其他特殊文件。
+&lt;p&gt;参数：&lt;br /&gt;
+-b：只找二进制的文件。&lt;br /&gt;
+-m：找到man文件路径下的文件。&lt;br /&gt;
+-s：只找source源文件。&lt;br /&gt;
+-u：查找不是上面三个选项的其他特殊文件。&lt;br /&gt;
 locate：locate是这样用的，只要文件名/路径名包含你要查找的字符串，那么就会将文件名/路径名显示出来。（locate也是通过查询数据库来输出结果）&lt;/p&gt;
 
-&lt;p&gt;参数：
--i：忽略大小写的差异。
--r：在后面介入正则表达式。
-示例：
- # locate ls
- # …….
-//包含ls字符串的文件名/路径名太多，所以用…代替
+&lt;p&gt;参数：&lt;br /&gt;
+-i：忽略大小写的差异。&lt;br /&gt;
+-r：在后面介入正则表达式。&lt;br /&gt;
+示例：&lt;br /&gt;
+ # locate ls&lt;br /&gt;
+ # …….&lt;br /&gt;
+//包含ls字符串的文件名/路径名太多，所以用…代替&lt;br /&gt;
 find：直接在整个磁盘搜索相关文件名。&lt;/p&gt;
 
 &lt;p&gt;有好几种用法，且听我一一道来。&lt;/p&gt;
@@ -984,33 +1127,33 @@ find：直接在整个磁盘搜索相关文件名。&lt;/p&gt;
 
 &lt;p&gt;用法3：将路径下符合指定的文件名、文件类型、文件权限的的文件列出来。&lt;/p&gt;
 
-&lt;p&gt;-name filename：列出符合文件名是filename的文件。
--size +size：列出文件大小大于size的文件。
--size -size：类出文件大小小于size的文件。
-    这个size有几个单位：
-    c：代表byte。 
-    k：代表KB
-    所以1000k代表的是1MB。
--type type：类出文件类型是type的文件。具体的type有如下几个：
-    f：一般文件。
-    b，c：设备文件。 
-    d：目录。 
-    l：连接文件。 
-    s：socket文件。 
-    p：FIFO文件。 
--perm mode：列出文件权限是mode的文件。这个mode是一个数字，其余的可以参考Linux文件的权限。
--perm -mode：只要文件的权限包含了mode所指示的权限，则列出它。
+&lt;p&gt;-name filename：列出符合文件名是filename的文件。&lt;br /&gt;
+-size +size：列出文件大小大于size的文件。&lt;br /&gt;
+-size -size：类出文件大小小于size的文件。&lt;br /&gt;
+    这个size有几个单位：&lt;br /&gt;
+    c：代表byte。 &lt;br /&gt;
+    k：代表KB&lt;br /&gt;
+    所以1000k代表的是1MB。&lt;br /&gt;
+-type type：类出文件类型是type的文件。具体的type有如下几个：&lt;br /&gt;
+    f：一般文件。&lt;br /&gt;
+    b，c：设备文件。 &lt;br /&gt;
+    d：目录。 &lt;br /&gt;
+    l：连接文件。 &lt;br /&gt;
+    s：socket文件。 &lt;br /&gt;
+    p：FIFO文件。 &lt;br /&gt;
+-perm mode：列出文件权限是mode的文件。这个mode是一个数字，其余的可以参考Linux文件的权限。&lt;br /&gt;
+-perm -mode：只要文件的权限包含了mode所指示的权限，则列出它。&lt;br /&gt;
 -perm +mode：只要文件的权限包含了mode所指示的权限中任意一个，则列出这个文件。&lt;/p&gt;
 
-&lt;p&gt;用法4：可以在find的前三种用法的基础上，在末尾添加而外的处理命令。
-参数：
+&lt;p&gt;用法4：可以在find的前三种用法的基础上，在末尾添加而外的处理命令。&lt;br /&gt;
+参数：&lt;br /&gt;
 -exec COMMAND命令：对find查找的结果用COMMAND命令进行额外的处理。&lt;/p&gt;
 
-&lt;p&gt;用例：
- # find / -mtime +4 -exec ls -al {} \;
+&lt;p&gt;用例：&lt;br /&gt;
+ # find / -mtime +4 -exec ls -al {} \;&lt;br /&gt;
 //对find查找出来的结果进行ls -al命令的处理。&lt;/p&gt;
 
-&lt;p&gt;-exec命令的具体说明：
+&lt;p&gt;-exec命令的具体说明：&lt;br /&gt;
 其实-exec的具体格式是这样的-exec COMMAND {} ;&lt;/p&gt;
 
 &lt;p&gt;1.其中{}存放着find命令找出来的结果，所以COMMAND {}的含义是对find命令找出来的结果执行COMMAND命令。&lt;/p&gt;
