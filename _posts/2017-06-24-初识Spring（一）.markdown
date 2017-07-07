@@ -16,7 +16,7 @@ Spring采用的几种基本策略
 ==
 * 基于对象的轻量级和最小侵入性
 非侵入性编程，通俗点说就是某一个类在使用了框架和不使用框架的情况下都能够发挥相同的作用。用Struts2框架举个例子。
-{% highlight java %}
+{% highlight ruby %}
 public class HelloAction extends ActionSupport {
 	public String execute() {
 		return "Hello world!";
@@ -30,7 +30,7 @@ public class HelloAction extends ActionSupport {
 * 通过依赖注入（Dependency injection）和面向接口实现松耦合
 程序中的对象和对象之间必然是有关联的。如果一个对象A需要使用B的某些功能，就可以称A对B产生了依赖。见如下代码
 
-{% highlight java %}
+{% highlight ruby %}
 public class Kid {
 	private Ball ball;
 
@@ -56,7 +56,7 @@ public class Ball {
 
 在看看下面两个修改过后的代码。
 
-{% highlight java %}
+{% highlight ruby %}
 public class Kid {
         private Ball ball;
 
@@ -71,7 +71,7 @@ public interface Ball {
 }
 {% endhighlight %}
 
-{% highlight java %}
+{% highlight ruby %}
 public class Kid {
 	private Ball ball;
 
@@ -108,7 +108,7 @@ Bean和Bean容器
 
 容器里面的对象是有生命周期的，Bean 容器管理着 Bean 的生命周期。Bean 容器会在每个 Bean 的不同生命周期阶段调用不同的生命周期方法（和Android中的Activity一模一样），下面举一个例子：
 
-{% highlight java %}
+{% highlight ruby %}
 public class MyBean implements BeanNameAware {
 	/**
 	* 如果MyBean处于设置BeanName的生命周期阶段，并且MyBean实现了
