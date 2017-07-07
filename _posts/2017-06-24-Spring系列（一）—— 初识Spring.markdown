@@ -1,9 +1,10 @@
 ---
 layout: post
-title:    "初识Spring（一）"
+title:    "Spring系列（一）—— 初识Spring"
 date:    2017-06-24 23:26:34 +0800
 categories:    Spring
 comments: true
+tag: Spring
 ---
 
 * content
