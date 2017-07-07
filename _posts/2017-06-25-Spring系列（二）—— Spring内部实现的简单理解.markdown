@@ -27,7 +27,7 @@ tag: Spring
 
 例子依旧沿用 Spring 系列的上一篇[博客](https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/)的例子：
 
-```
+{% highlight ruby %}
 /**
 * 在上一篇的例子上做了修改，改成了使用 Spring 框架的形式
 */
@@ -49,7 +49,8 @@ public class Kid {
 public interface Ball {
 	void play();
 }
-```
+{% endhighlight %}
+
 在上一篇博客中，我留下了一个疑问，Kid 里面的 Ball 是需要被外界注入的，那么到底是谁注入的？（反正不是程序员自己）这就涉及到 Spring 的自动扫描功能了！
 
 假设我在配置文件中配置 Spring 使用自动扫描功能（具体如何配置的目前不管，先了解原理），Spring 就会将程序员指定的包路径下面的所有的类全部扫描一遍，读取里面的信息。如果 Spring 读取 Kid 类时，发现有一个属性字段 ball 被加上了 @Autowire 注解，那么就会在 **Spring容器** 里面查找是否有类型是 Ball 的一个 **Bean** 的实现，如果有，就会把这个 Bean 赋值给 Kid 的 ball 字段。从而实现了 Spring 的 **DI** 功能。
