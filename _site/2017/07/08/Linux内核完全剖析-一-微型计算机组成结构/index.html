@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>我失去了什么？ - StormPhoenix的博客</title>
+	<title>Linux内核完全剖析（一）—— 微型计算机组成结构 - StormPhoenix的博客</title>
 
 	<link rel="shortcut icon" href="/styles/images/favicon.jpg">
 	<link rel="icon" href="/styles/images/favicon.jpg">
@@ -13,10 +13,10 @@
 	<link rel="stylesheet" href="/styles/css/index.css">
 	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/styles/css/syntax.css">
-	<link rel="canonical" href="/2017/06/22/%E6%88%91%E5%A4%B1%E5%8E%BB%E4%BA%86%E4%BB%80%E4%B9%88/">
+	<link rel="canonical" href="/2017/07/08/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/">
 	<link rel="alternate" type="application/rss+xml" title="StormPhoenix的博客" href="/feed.xml">
 	
-	<meta name="keywords" content="我失去了什么？, StormPhoenix的博客, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+	<meta name="keywords" content="Linux内核完全剖析（一）—— 微型计算机组成结构, StormPhoenix的博客, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
 	<meta name="description" content="王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
 
 	<script src="/styles/js/jquery.min.js"></script>
@@ -94,8 +94,8 @@
   <div class="container">
   	
   		<!--
-		    <h1>我失去了什么？</h1>
-		    <p>Post on Jun 22, 2017 by <a href="/about">StormPhoenix</a></p>
+		    <h1>Linux内核完全剖析（一）—— 微型计算机组成结构</h1>
+		    <p>Post on Jul 08, 2017 by <a href="/about">StormPhoenix</a></p>
 		-->
 		    <h1>为了生命中的美好，不妥协直到变老.</h1>
     
@@ -106,8 +106,8 @@
 <div class="banner">
   <div class="container">
   	
-    	<a href="/categories/#反思-ref">反思</a>	/
-    	<a href="/tag/#-ref"></a>
+    	<a href="/categories/#Linux内核剖析-ref">Linux内核剖析</a>	/
+    	<a href="/tag/#Linux内核-ref">Linux内核</a>
     
   </div>
 </div>
@@ -254,55 +254,72 @@
       <div class="panel docs-content">
         <div class="wrapper">
             <header class="post-header">
-              <h1 class="post-title">我失去了什么？</h1>
+              <h1 class="post-title">Linux内核完全剖析（一）—— 微型计算机组成结构</h1>
               <!--
-                <p class="post-meta">Jun 22, 2017</p>
+                <p class="post-meta">Jul 8, 2017</p>
               -->
-              <div class="meta">Posted on <span class="postdate">Jun 22, 2017</span> By <a target="_blank" href="http://stormphoenix.github.com">StormPhoenix</a></div>
+              <div class="meta">Posted on <span class="postdate">Jul 08, 2017</span> By <a target="_blank" href="http://stormphoenix.github.com">StormPhoenix</a></div>
               <br />
             </header>
             <article class="post-content">
-              
-<p>学会反思，要反思什么东西呢？因为这些年来，我丢失了许多东西。对的，历史，哲学，人文、物理、地理之类的。这些东西我好像都丢失了，很痛惜。为什么呢？为什么为丢失这些东西而痛惜呢？</p>
+              <ul id="markdown-toc">
+  <li><a href="#i0" id="markdown-toc-i0">I/0端口寻址</a></li>
+  <li><a href="#io" id="markdown-toc-io">I/O访问控制</a></li>
+  <li><a href="#section" id="markdown-toc-section">主存储器（内存）</a></li>
+  <li><a href="#cmos" id="markdown-toc-cmos">CMOS存储器</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">异步串行通信和同步串行通信的区别</a></li>
+</ul>
 
-<p>回想起当年大一初进华农的时候，真的是怀着一腔热血，只求散发生命的光和热，用行为去感染周围的人，给他们带去正能量。我想学历史，是因为我爱这个国家的文化，爱人类的文化；我想学哲学，是因为我喜欢思考的感觉，这能够让我看清很多事情的本质；我想学人文，因为我喜欢听人类的故事，感受人性；我想学物理，因为我喜欢科学，喜欢探索真理；我想学地理，因为我喜欢那种知识广博的感觉。我想学，我想用自己所学的充实自己，成为一个完整的人。我想学，我想把自己的知识贡献给我深爱的这片土地。</p>
+<p>重新看了Linux内核完全剖析的第二章，记录几个关键的概念。</p>
 
-<p>那时候，我能够做到每天做到每天6点起来跑步，认认真真上课，我从图书馆借了好多书… …现在回想起来，那时候的我就是最好的我，那段时光是最美好的时光。</p>
+<h1 id="i0">I/0端口寻址</h1>
+<p>CPU为了访问I/O接口控制器上的数据，首先需要知道它们的地址。这种地址就是I/O端口地址。I/O端口的编址分为两种：统一编址和独立编址。</p>
 
-<p>我怀念那段时光。可是，我也不知道什么时候，这一切都改变了。</p>
+<ul>
+  <li>统一端口编址<br />
+  把I/O控制器的端口地址归入存储器的寻址空间，这种方式也叫存储器映射编址。CPU访问一个I/O控制器就好比访问一个内存地址空间。</li>
+  <li>I/O端口独立编址<br />
+  I/O控制器的端口地址作为一个独立的地址空间，称之为I/O地址空间。每一个端口都和一个I/O地址对应，访问I/O地址的时候需要专门的I/O指令。</li>
+</ul>
 
-<p>大一下学期，我加入了沸点工作室，加入了Android组，在课余时间弄Android开发。正是在这个时间点，我的人生发生了改变，我发现做应用是如此的美妙，因为我发现之前写的简单枯燥的代码竟然可以在手机上做出如此美妙的效果。恩恩，我的确沉迷了。</p>
+<h1 id="io">I/O访问控制</h1>
+<ul>
+  <li>
+    <p>程序循环查询<br />
+  程序读取I/O端口数据时，是由CPU循环对I/O控制器的状态进行判断，判断是否可以读取数据。这种方式特别耗费CPU时间片。</p>
+  </li>
+  <li>
+    <p>终端处理方式<br />
+  I/O控制器有数据时，通过终端向CPU发起请求。CPU响应中断暂停当前执行的程序，转而去处理I/O控制器，处理完毕后再返回处理暂停执行的程序。</p>
+  </li>
+  <li>
+    <p>DMA传输方式<br />
+  DMA —— Direct Memory Access —— 用于I/O设备和系统内存进行的批量数据传输，此过程不需要CPU的参与，操作效率很高</p>
+  </li>
+</ul>
 
-<p>我沉迷进了计算机，可是我所沉迷的，只是一种很浅层次的东西，我失去了了解计算机本质的机会。因为太沉迷，我把我年轻时的那些豪言壮语和梦想，全部抛弃了，恩恩，我的梦想也抛弃了。</p>
+<h1 id="section">主存储器（内存）</h1>
+<p>主要讨论主存储器（内存）中的数据分布。</p>
 
-<p>我这个人，就是那种一旦喜欢上一种东西，就会拼尽全力，把全部的热情投入进去。可是这也是我的缺点。因为太投入，就会忘记去看看这个世界，忘记了还有同样美好的事物值得我去追求。因为太投入，我缺少了对自身行为的反思。</p>
+<p>早期的PC系统的主存储器大小很小，CPU只有20根地址线，内存最大只有1024KB（1MB）。目前的计算机内存变大了（此处讨论4G大小），为了以前PC在软件上兼容，内存在1MB以下的物理地址空间的使用分配上依然和以前一样。只不过由于BIOS处于CPU能够寻址空间的最高端，原本1MB处的BIOS的位置被用作BIOS的影子（shadow）区域，运行时4GB处的BIOS的代码会被复制到这个地方。</p>
 
-<p>我把很多东西都丢了。</p>
+<p><img src="/assets/internal_storage_struct.jpg" alt="内存管理" /></p>
 
-<p>如果我能够在很早以前对自身进行反思，不断的吸取经验改变自己的话，那么现在的我会是什么样子呢？</p>
+<p>计算机启动初始化的时候，4G空间中的640KB~1MB和4GB处的最后64KB以外的空间用作系统的内存。</p>
 
-<p>我会有一个好的GPA，最终能够保研，去做自己一直梦寐以求的科学研究，回报世界。</p>
+<p>在Linux 0.1中，0~640KB用作系统内核代码和数据区域。640KB ~ 1MB用于I/0设备端口的映射，其中640KB~1MB空间用作BIOS影子区域和I/0端口映射的地址。BIOS影子区域位于最后的64KB处，运行时会将4GB地址最高端的BIOS复制到这个地方。4GB处的64KB用作存储实际的BIOS代码。1MB~16MB用作系统内核分配的主内存区。</p>
 
-<p>我会读很多的书，走很多的路，活的更加充实。</p>
+<p>具体运行的时候，CPU会设置CS寄存器为0xF000，这样段基址就是0xFFFF0000，同时段长度被设置为64KB，也就是4GB空间的最后64KB处，也就是BIOS所在的地方，然后设置IP寄存器为0XFFF0，这样CS:IP指针就指向了0xFFFFFFF0处。BIOS在这个地方设置了一个跳转指令，跳到BIOS的某一个地方去执行。因为段长度是64KB，为了访问整个4GB空间，CPU会使用32位访问方式将数据段寄存器的访问范围设置为4GB。</p>
 
-<p>我会更多的关注社会，看问题更加透彻。</p>
+<p>然后BIOS经过了一系列的硬件初始化工作之后，就会把BIOS复制到1MB空间处，也就是前文所说的BIOS影子区域，然后跳到这个地方开始运行。最后BIOS会从设备中将操作系统引导程序加载到0x7c00处的地方（31KB）开始执行系统引导程序。</p>
 
-<p>我会交到一些不同的朋友，有着共同改变世界的梦想。</p>
+<h1 id="cmos">CMOS存储器</h1>
 
-<p>我会更加理解我所热爱的计算机科学的本质。</p>
+<p>CMOS存储器用来存储计算机的实时时钟信息和相关硬件配置信息，其地址空间位于主存地址空间之外，访问时需要使用I/O指令。</p>
 
-<p>我会带好整个班级，更加有爱。</p>
+<h1 id="section-1">异步串行通信和同步串行通信的区别</h1>
 
-<p>我会让沸点Android组成长的更快、更强。</p>
-
-<p>我会更多的关心我的亲人，多和他们聊天。</p>
-
-<p>恩恩，这是我梦想中的自己。</p>
-
-<p>这些年来，虽然失去了很多，但是也得到了一些真心朋友。唐平、健健、农哥，做你们的组长是我的幸运。倪子君，有你做朋友，我很开心。吴宇伦，你这个学霸，我好羡慕你。唐睿晨，相互嘲讽了这么久，你也是我人生的一部分。</p>
-
-<p>恩，有你们真好。从今天开始，不停的反思，只为了成为更好的一个人。<br />
-哪怕只是为了你们。</p>
+<p>串行通信就是计算机和计算机/设备之间的信息交互，信息的和格式可以拿计算机网络中学过的帧来类比。异步和同步的区别就是传输数据时的帧的长度不一样。其中异步通信时传输是以一个字符或者一个通信单位作为一帧，而同步通信在传输时是以多个字符或字节流作为一个帧。</p>
 
 
             </article>

@@ -5,9 +5,82 @@
     <description>为了生命中的美好，不妥协直到变老.</description>
     <link>http://stormphoenix.github.com/</link>
     <atom:link href="http://stormphoenix.github.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 07 Jul 2017 20:22:52 +0800</pubDate>
-    <lastBuildDate>Fri, 07 Jul 2017 20:22:52 +0800</lastBuildDate>
+    <pubDate>Sat, 08 Jul 2017 21:43:24 +0800</pubDate>
+    <lastBuildDate>Sat, 08 Jul 2017 21:43:24 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Linux内核完全剖析（一）—— 微型计算机组成结构</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#i0&quot; id=&quot;markdown-toc-i0&quot;&gt;I/0端口寻址&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#io&quot; id=&quot;markdown-toc-io&quot;&gt;I/O访问控制&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;主存储器（内存）&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cmos&quot; id=&quot;markdown-toc-cmos&quot;&gt;CMOS存储器&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;异步串行通信和同步串行通信的区别&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;重新看了Linux内核完全剖析的第二章，记录几个关键的概念。&lt;/p&gt;
+
+&lt;h1 id=&quot;i0&quot;&gt;I/0端口寻址&lt;/h1&gt;
+&lt;p&gt;CPU为了访问I/O接口控制器上的数据，首先需要知道它们的地址。这种地址就是I/O端口地址。I/O端口的编址分为两种：统一编址和独立编址。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;统一端口编址&lt;br /&gt;
+  把I/O控制器的端口地址归入存储器的寻址空间，这种方式也叫存储器映射编址。CPU访问一个I/O控制器就好比访问一个内存地址空间。&lt;/li&gt;
+  &lt;li&gt;I/O端口独立编址&lt;br /&gt;
+  I/O控制器的端口地址作为一个独立的地址空间，称之为I/O地址空间。每一个端口都和一个I/O地址对应，访问I/O地址的时候需要专门的I/O指令。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;io&quot;&gt;I/O访问控制&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;程序循环查询&lt;br /&gt;
+  程序读取I/O端口数据时，是由CPU循环对I/O控制器的状态进行判断，判断是否可以读取数据。这种方式特别耗费CPU时间片。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;终端处理方式&lt;br /&gt;
+  I/O控制器有数据时，通过终端向CPU发起请求。CPU响应中断暂停当前执行的程序，转而去处理I/O控制器，处理完毕后再返回处理暂停执行的程序。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;DMA传输方式&lt;br /&gt;
+  DMA —— Direct Memory Access —— 用于I/O设备和系统内存进行的批量数据传输，此过程不需要CPU的参与，操作效率很高&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;主存储器（内存）&lt;/h1&gt;
+&lt;p&gt;主要讨论主存储器（内存）中的数据分布。&lt;/p&gt;
+
+&lt;p&gt;早期的PC系统的主存储器大小很小，CPU只有20根地址线，内存最大只有1024KB（1MB）。目前的计算机内存变大了（此处讨论4G大小），为了以前PC在软件上兼容，内存在1MB以下的物理地址空间的使用分配上依然和以前一样。只不过由于BIOS处于CPU能够寻址空间的最高端，原本1MB处的BIOS的位置被用作BIOS的影子（shadow）区域，运行时4GB处的BIOS的代码会被复制到这个地方。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/internal_storage_struct.jpg&quot; alt=&quot;内存管理&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;计算机启动初始化的时候，4G空间中的640KB~1MB和4GB处的最后64KB以外的空间用作系统的内存。&lt;/p&gt;
+
+&lt;p&gt;在Linux 0.1中，0~640KB用作系统内核代码和数据区域。640KB ~ 1MB用于I/0设备端口的映射，其中640KB~1MB空间用作BIOS影子区域和I/0端口映射的地址。BIOS影子区域位于最后的64KB处，运行时会将4GB地址最高端的BIOS复制到这个地方。4GB处的64KB用作存储实际的BIOS代码。1MB~16MB用作系统内核分配的主内存区。&lt;/p&gt;
+
+&lt;p&gt;具体运行的时候，CPU会设置CS寄存器为0xF000，这样段基址就是0xFFFF0000，同时段长度被设置为64KB，也就是4GB空间的最后64KB处，也就是BIOS所在的地方，然后设置IP寄存器为0XFFF0，这样CS:IP指针就指向了0xFFFFFFF0处。BIOS在这个地方设置了一个跳转指令，跳到BIOS的某一个地方去执行。因为段长度是64KB，为了访问整个4GB空间，CPU会使用32位访问方式将数据段寄存器的访问范围设置为4GB。&lt;/p&gt;
+
+&lt;p&gt;然后BIOS经过了一系列的硬件初始化工作之后，就会把BIOS复制到1MB空间处，也就是前文所说的BIOS影子区域，然后跳到这个地方开始运行。最后BIOS会从设备中将操作系统引导程序加载到0x7c00处的地方（31KB）开始执行系统引导程序。&lt;/p&gt;
+
+&lt;h1 id=&quot;cmos&quot;&gt;CMOS存储器&lt;/h1&gt;
+
+&lt;p&gt;CMOS存储器用来存储计算机的实时时钟信息和相关硬件配置信息，其地址空间位于主存地址空间之外，访问时需要使用I/O指令。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;异步串行通信和同步串行通信的区别&lt;/h1&gt;
+
+&lt;p&gt;串行通信就是计算机和计算机/设备之间的信息交互，信息的和格式可以拿计算机网络中学过的帧来类比。异步和同步的区别就是传输数据时的帧的长度不一样。其中异步通信时传输是以一个字符或者一个通信单位作为一帧，而同步通信在传输时是以多个字符或字节流作为一个帧。&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 08 Jul 2017 21:04:41 +0800</pubDate>
+        <link>http://stormphoenix.github.com/2017/07/08/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/</link>
+        <guid isPermaLink="true">http://stormphoenix.github.com/2017/07/08/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/</guid>
+        
+        <category>Linux内核</category>
+        
+        
+        <category>Linux内核剖析</category>
+        
+      </item>
     
       <item>
         <title>Spring系列（二）—— Spring内部实现的简单理解</title>
@@ -32,7 +105,7 @@
 
 &lt;p&gt;例子依旧沿用 Spring 系列的上一篇&lt;a href=&quot;https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/&quot;&gt;博客&lt;/a&gt;的例子：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;/**
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
 * 在上一篇的例子上做了修改，改成了使用 Spring 框架的形式
 */
 public class Kid {
@@ -52,8 +125,8 @@ public class Kid {
 
 public interface Ball {
 	void play();
-}
-&lt;/code&gt;&lt;/pre&gt;
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
 &lt;p&gt;在上一篇博客中，我留下了一个疑问，Kid 里面的 Ball 是需要被外界注入的，那么到底是谁注入的？（反正不是程序员自己）这就涉及到 Spring 的自动扫描功能了！&lt;/p&gt;
 
 &lt;p&gt;假设我在配置文件中配置 Spring 使用自动扫描功能（具体如何配置的目前不管，先了解原理），Spring 就会将程序员指定的包路径下面的所有的类全部扫描一遍，读取里面的信息。如果 Spring 读取 Kid 类时，发现有一个属性字段 ball 被加上了 @Autowire 注解，那么就会在 &lt;strong&gt;Spring容器&lt;/strong&gt; 里面查找是否有类型是 Ball 的一个 &lt;strong&gt;Bean&lt;/strong&gt; 的实现，如果有，就会把这个 Bean 赋值给 Kid 的 ball 字段。从而实现了 Spring 的 &lt;strong&gt;DI&lt;/strong&gt; 功能。&lt;/p&gt;
