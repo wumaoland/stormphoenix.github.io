@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>使用Quota - StormPhoenix的博客</title>
+	<title>使用Quota - 起飞的凤凰</title>
 
 	<link rel="shortcut icon" href="/styles/images/favicon.jpg">
 	<link rel="icon" href="/styles/images/favicon.jpg">
@@ -14,9 +14,9 @@
 	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/styles/css/syntax.css">
 	<link rel="canonical" href="/2017/06/12/%E4%BD%BF%E7%94%A8Quota/">
-	<link rel="alternate" type="application/rss+xml" title="StormPhoenix的博客" href="/feed.xml">
+	<link rel="alternate" type="application/rss+xml" title="起飞的凤凰" href="/feed.xml">
 	
-	<meta name="keywords" content="使用Quota, StormPhoenix的博客, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+	<meta name="keywords" content="使用Quota, 起飞的凤凰, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
 	<meta name="description" content="王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
 
 	<script src="/styles/js/jquery.min.js"></script>
@@ -95,7 +95,7 @@
   	
   		<!--
 		    <h1>使用Quota</h1>
-		    <p>Post on Jun 12, 2017 by <a href="/about">StormPhoenix</a></p>
+		    <p>Post on Jun 12, 2017 by <a href="/about">起飞的凤凰</a></p>
 		-->
 		    <h1>为了生命中的美好，不妥协直到变老.</h1>
     
@@ -271,7 +271,7 @@
               <!--
                 <p class="post-meta">Jun 12, 2017</p>
               -->
-              <div class="meta">Posted on <span class="postdate">Jun 12, 2017</span> By <a target="_blank" href="http://stormphoenix.github.com">StormPhoenix</a></div>
+              <div class="meta">Posted on <span class="postdate">Jun 12, 2017</span> By <a target="_blank" href="http://localhost:4000">起飞的凤凰</a></div>
               <br />
             </header>
             <article class="post-content">
@@ -301,15 +301,15 @@
 
 <ul>
   <li>
-    <p>容量限制<br />
+    <p>容量限制
   容量限制包括block限制和inode限制。通过设置block值的大小可以限制用户能够使用的最大磁盘容量，而设置inode值的大小限制了用户能够创建的最大文件数量</p>
   </li>
   <li>
-    <p>soft/hard<br />
+    <p>soft/hard
   soft限制（软限制）指明了用使用量超过多少时向用户发出警告，hard限制（硬限制）指明用户最多能使用多少用量，一旦超过就解除用户对磁盘的使用权（无法新增文件）。</p>
   </li>
   <li>
-    <p>grace time<br />
+    <p>grace time
   grace time（宽限时间）表示一个倒数时间，当用户的使用量处于soft和hard设置的值之间时，就会启动倒计时，如果超过了这个倒计时用户的磁盘使用量还处于soft和hard之间的话，用户的磁盘使用权就会锁住（无法新增文件）。</p>
   </li>
 </ul>
@@ -322,11 +322,11 @@ root@ubuntu:~#mount | grep home
 /dev/sda4 on /home type ext4 (rw,relatime,quota,usrquota,grpquota,data=ordered)
 </code></pre>
 
-<p>有几点要注意<br />
-1. 只有root能够使用这个功能。<br />
-2. 此处用 <code>/home</code> 目录做实验是因为/home恰好是挂载点。<br />
-3. usrquota是对单个用户做限制，grpquota是对一个组做限制。<br />
-4. 输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。<br />
+<p>有几点要注意
+1. 只有root能够使用这个功能。
+2. 此处用 <code>/home</code> 目录做实验是因为/home恰好是挂载点。
+3. usrquota是对单个用户做限制，grpquota是对一个组做限制。
+4. 输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。
 5. 输出的信息其实存储在 <code>/etc/mtab</code> 文件中。之前 <code>mount -o remount,usrquota,grpquota /home</code> 其实是对文件系统进行了设置，这个设置会被保存在 <code>/etc/mtab</code>文件中</p>
 
 <p>以上的命令只在此次开机中有效，如果想让系统在每次开机中都能够支持quota，则需要在/etc/fstab中添加如下语句</p>
@@ -381,13 +381,13 @@ Filesystem	blocks	    soft	hard    inodes      soft hard
 /dev/sda4	60331452	0	    0	    1029831     0    0
 </code></pre>
 
-<p>分为7列，具体说明：<br />
-1. 具体的限制值是针对哪一个文件系统<br />
-2. 当前用户已经使用的磁盘容量<br />
-3. 当前用户使用磁盘容量的软限制值<br />
-4. 当前用户使用磁盘容量的硬限制值<br />
-5. 当前用户创建的文件数量<br />
-6. 当前用户穿件文件数量的软限制值<br />
+<p>分为7列，具体说明：
+1. 具体的限制值是针对哪一个文件系统
+2. 当前用户已经使用的磁盘容量
+3. 当前用户使用磁盘容量的软限制值
+4. 当前用户使用磁盘容量的硬限制值
+5. 当前用户创建的文件数量
+6. 当前用户穿件文件数量的软限制值
 7. 当前用户创建文件数量的硬限制值</p>
 
 <h1 id="quota-3">生成Quota报表</h1>
@@ -464,7 +464,7 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
     
     <footer class="footer" role="contentinfo">
 	<div class="container">
-		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>StormPhoenix</code></a>.</p>
+		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>起飞的凤凰</code></a>.</p>
 		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">StormPhoenix</a></p>
 	</div>
 </footer>

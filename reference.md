@@ -9,12 +9,16 @@ permalink: /reference/
 
 当然我在扯淡
 =====================
-他有些话挺有道理
+王垠的说的话要区分对待~
 [当然我在扯淡](http://www.yinwang.org/)
 
 纯洁的微笑
 =====================
 [Spring的学习](http://www.ityouknow.com/)
+
+思考方法
+====================
+[思考方法](http://mindhacks.cn/)
 
 走向架构师之路
 =====================
@@ -28,6 +32,14 @@ HTTP协议详解
 =====================
 这个人的博客对java底层的东西研究比较深入。
 [http://blog.csdn.net/ghsau/article/details/20395681](http://blog.csdn.net/ghsau/article/details/20395681)
+
+编译器、编程语言相关
+====================
+[http://www.cppblog.com/vczh/](http://www.cppblog.com/vczh/)
+
+Java虚拟机方面
+====================
+[http://rednaxelafx.iteye.com](http://rednaxelafx.iteye.com)
 
 [一线码农]
 =====================

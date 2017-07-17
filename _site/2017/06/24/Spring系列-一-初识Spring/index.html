@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Spring系列（一）—— 初识Spring - StormPhoenix的博客</title>
+	<title>Spring系列（一）—— 初识Spring - 起飞的凤凰</title>
 
 	<link rel="shortcut icon" href="/styles/images/favicon.jpg">
 	<link rel="icon" href="/styles/images/favicon.jpg">
@@ -14,9 +14,9 @@
 	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/styles/css/syntax.css">
 	<link rel="canonical" href="/2017/06/24/Spring%E7%B3%BB%E5%88%97-%E4%B8%80-%E5%88%9D%E8%AF%86Spring/">
-	<link rel="alternate" type="application/rss+xml" title="StormPhoenix的博客" href="/feed.xml">
+	<link rel="alternate" type="application/rss+xml" title="起飞的凤凰" href="/feed.xml">
 	
-	<meta name="keywords" content="Spring系列（一）—— 初识Spring, StormPhoenix的博客, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+	<meta name="keywords" content="Spring系列（一）—— 初识Spring, 起飞的凤凰, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
 	<meta name="description" content="王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
 
 	<script src="/styles/js/jquery.min.js"></script>
@@ -95,7 +95,7 @@
   	
   		<!--
 		    <h1>Spring系列（一）—— 初识Spring</h1>
-		    <p>Post on Jun 24, 2017 by <a href="/about">StormPhoenix</a></p>
+		    <p>Post on Jun 24, 2017 by <a href="/about">起飞的凤凰</a></p>
 		-->
 		    <h1>为了生命中的美好，不妥协直到变老.</h1>
     
@@ -271,7 +271,7 @@
               <!--
                 <p class="post-meta">Jun 24, 2017</p>
               -->
-              <div class="meta">Posted on <span class="postdate">Jun 24, 2017</span> By <a target="_blank" href="http://stormphoenix.github.com">StormPhoenix</a></div>
+              <div class="meta">Posted on <span class="postdate">Jun 24, 2017</span> By <a target="_blank" href="http://localhost:4000">起飞的凤凰</a></div>
               <br />
             </header>
             <article class="post-content">
@@ -285,7 +285,7 @@
 
 <h1 id="spring">Spring采用的几种基本策略</h1>
 <ul>
-  <li>基于对象的轻量级和最小侵入性<br />
+  <li>基于对象的轻量级和最小侵入性
 非侵入性编程，通俗点说就是某一个类在使用了框架和不使用框架的情况下都能够发挥相同的作用。用Struts2框架举个例子。</li>
 </ul>
 
@@ -295,12 +295,12 @@
 	}
 }</code></pre></figure>
 
-<p>在这个例子中如果想让<code>HelloAction</code>能够正常的工作，必须要继承<code>ActionSupport</code>，这就意味着<code>HelloAction</code>和Struts2框架死死的绑定在了一起。这就是侵入式，从字面意思理解就是Struts2“侵入了“<code>HelloAction</code>这个对象。这样带来了两个问题：<br />
-	1. 如果<code>HelloAction</code>的功能需要被另一个模块重用，那么目标模块就不得不导入Struts框架，否则<code>HelloAction</code>就无法工作，这样就加大了项目的代码冗余。<br />
+<p>在这个例子中如果想让<code>HelloAction</code>能够正常的工作，必须要继承<code>ActionSupport</code>，这就意味着<code>HelloAction</code>和Struts2框架死死的绑定在了一起。这就是侵入式，从字面意思理解就是Struts2“侵入了“<code>HelloAction</code>这个对象。这样带来了两个问题：
+	1. 如果<code>HelloAction</code>的功能需要被另一个模块重用，那么目标模块就不得不导入Struts框架，否则<code>HelloAction</code>就无法工作，这样就加大了项目的代码冗余。
 	2. 倘若决定不采用Struts2框架，那么这个<code>HelloAction</code>将无法发挥它的正常功能，内部的逻辑代码必须要重写。所以，以上两点就降低了代码的可重用度。</p>
 
 <ul>
-  <li>通过依赖注入（Dependency injection）和面向接口实现松耦合<br />
+  <li>通过依赖注入（Dependency injection）和面向接口实现松耦合
 程序中的对象和对象之间必然是有关联的。如果一个对象A需要使用B的某些功能，就可以称A对B产生了依赖。见如下代码</li>
 </ul>
 
@@ -364,11 +364,11 @@ public interface Ball {
 
 <ul>
   <li>
-    <p>基于切面（aspect-oriented programming）和惯例进行声明式编程<br />
+    <p>基于切面（aspect-oriented programming）和惯例进行声明式编程
 在一个应用中可能有许多地方都使用了相同的功能，这样导致的问题就是——代码冗余。同一个功能的代码重复的分布在系统的各个地方，如果需要对功能进行修改，就不得不在许多个功能调用点对代码进行修改。而AOP的作用，就是将这些地方的功能抽取出来形成一个独立的<strong>组件</strong>，在需要的地方对组件进行调用。形象化的说，调用<strong>组件</strong>的地方称之为<strong>切点</strong>，所谓组件的调用就是将某个组件插入到某个<strong>切点</strong>之中。不过令人惊喜的是，用Spring实现AOP甚至都不需要在切点编写调用方法！只要在配置文件声明切点的位置和相应的组件就行了。</p>
   </li>
   <li>
-    <p>通过切面和模板减少样板式代码<br />
+    <p>通过切面和模板减少样板式代码
 我见过最多的样板代码就是JDBC操作。Spring 提供了许多这样的模板，让开发人员只需要关注应用的逻辑。</p>
   </li>
 </ul>
@@ -390,9 +390,9 @@ public interface Ball {
 	}
 }</code></pre></figure>
 
-<p>Bean 容器是通过 bean 工厂 / 应用上下文（ApplicationContext）来创建所有的 bean 对象的，bean 工厂了解的不多，主要讲解应用上下文。<br />
-* AnnotationConfigApplicationContext<br />
-* ClassPathXmlApplicationContext<br />
+<p>Bean 容器是通过 bean 工厂 / 应用上下文（ApplicationContext）来创建所有的 bean 对象的，bean 工厂了解的不多，主要讲解应用上下文。
+* AnnotationConfigApplicationContext
+* ClassPathXmlApplicationContext
 * 其他 … …</p>
 
 <p>上面列出了两个常用的应用上下文类。如果你在main方法中创建了相应的 Application Context，它就会自动加载相关的配置文件，从配置文件中读取它需要创建哪些 bean，并初始化它们。不同的 ApplicationContext 的区别在于加载的配置文件的不同。其中 AnnotationConfigApplicationContext 通过读取 Java 注解来创建 Bean ，而 ClassPathXmlApplicationContext 则是通过读取 xml 文件来读取。</p>
@@ -452,7 +452,7 @@ public interface Ball {
     
     <footer class="footer" role="contentinfo">
 	<div class="container">
-		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>StormPhoenix</code></a>.</p>
+		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>起飞的凤凰</code></a>.</p>
 		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">StormPhoenix</a></p>
 	</div>
 </footer>
