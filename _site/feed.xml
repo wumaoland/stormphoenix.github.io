@@ -5,9 +5,437 @@
     <description>为了生命中的美好，不妥协直到变老.</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 17 Jul 2017 23:34:52 +0800</pubDate>
-    <lastBuildDate>Mon, 17 Jul 2017 23:34:52 +0800</lastBuildDate>
+    <pubDate>Mon, 24 Jul 2017 21:58:15 +0800</pubDate>
+    <lastBuildDate>Mon, 24 Jul 2017 21:58:15 +0800</lastBuildDate>
     <generator>Jekyll v3.5.0</generator>
+    
+      <item>
+        <title>Spring系列（三）—— 创建Bean之间的依赖</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;前言&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;预备知识&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#springbean&quot; id=&quot;markdown-toc-springbean&quot;&gt;利用Spring配置Bean之间的依赖&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;混合配置&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot; id=&quot;markdown-toc-section-3&quot;&gt;一些注意事项&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;在面向对象程序设计中，程序是由一个个的对象组成的，不同的对象负责不同的工作。程序要实现某一个功能，通常是由多个对象协同工作来实现的。&lt;/p&gt;
+
+&lt;p&gt;对象和对象之间的协同，意味着对象和对象之间的依赖。这一点可以参考之前写的&lt;a href=&quot;https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/&quot;&gt;博客&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;所谓的Java Bean，我简单的理解成Java对象。创建对象之间的依赖就是创建Bean之间的依赖。&lt;/p&gt;
+
+&lt;p&gt;下面举一个例子讲解一下。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;public class Foo {
+	private Boo boo;
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;这个例子里面，类Foo的属性boo引用了类Boo，这就是Foo依赖于Boo。&lt;/p&gt;
+
+&lt;p&gt;那么问题在于，Foo如何初始化这个Boo呢？&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;// 实现1
+public class Foo {
+	...
+	public Foo() {
+		this.boo = new Boo();
+	}
+	...
+}
+
+// 实现2
+public class Foo {
+	...
+	public Foo(Boo boo) {
+		this.boo = boo;
+	}
+	...
+}
+
+// 实现3
+public class Foo {
+	...
+	public void setBoo(Boo boo) {
+		this.boo = boo;
+	}
+	...
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;实现一有如下两个问题：
+* 创建Boo对象不是Foo应该负责的功能。（违反了单一职责原则，一个类只要专注于实现自己的功能就好了，不要管其他。在这里，Foo的并不负责如何创建Boo对象）
+* 假设由于某种原因，导致Boo的构造函数变化了，那么Foo对象也要跟着变化。（变化的和不变化的要分开，在这里，Boo的构造函数是可能会变化的，但Foo对Boo的依赖形式是不变的，所以Foo是不能靠创建Boo来实现对Boo对象的依赖）&lt;/p&gt;
+
+&lt;p&gt;实现二和实现三则避免了上述问题。那么麻烦的地方在于，在哪里调用这个Foo构造器或者setter方法？当然，可以通过工厂的方法将Boo注入。不过在这里，当然是用Spring。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;预备知识&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Component。意思是&lt;code&gt;组件&lt;/code&gt;，一个简单的概念。可以认为一个Bean就是一个组件。建立对象之间的依赖关系可以理解为将 Bean 和 Bean 组装在一起。&lt;/li&gt;
+  &lt;li&gt;Autowire。自动装配。Spring的自动装配功能，可以自动将不同的Component组装在一起，构成组件和组件之间的依赖。&lt;/li&gt;
+  &lt;li&gt;阅读过&lt;a href=&quot;https://stormphoenix.github.io/2017/06/25/Spring系列-二-Spring内部实现的简单理解&quot;&gt;Spring 系列（二）&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;springbean&quot;&gt;利用Spring配置Bean之间的依赖&lt;/h1&gt;
+
+&lt;p&gt;先看一个很简单的例子：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
+* 车辆
+*/ 
+public interface Car {
+	void drive();
+}
+
+/**
+* 车轮
+*/
+public interface Wheel {
+	void role();
+}
+
+/**
+* 橡胶轮胎，Wheel 的一个实现
+*/
+public class RubberWheel implements Wheel {
+	void role() {
+		// do something 
+	}
+}
+
+/**
+* 奔驰车， Car 接口的一个实现
+*/
+public class Bench implements Car {
+	private Wheel wheel;
+
+	void drive() {
+		wheel.role();
+	}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;这里 Bench Bean依赖于 Wheel，所以 Wheel 是要被注入到 Bench 的。在第一篇&lt;a href=&quot;https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/&quot;&gt;博客&lt;/a&gt;中提到了 Spring 可以帮我们做&lt;code&gt;注入&lt;/code&gt;这件事情，那就用这个例子来说明 Spring 是怎么做的吧。&lt;/p&gt;
+
+&lt;p&gt;创建Bean之间依赖的方式分为两大类：Java方式；XML配置文件方式。其中Java方式又划分成两种：Java注解方式；Java代码方式。依次讲解。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Java注解方式&lt;/strong&gt;
+思路：这种方式是和&lt;code&gt;自动扫描&lt;/code&gt;功能搭配起来的。首先&lt;code&gt;Spring容器&lt;/code&gt;会加载&lt;code&gt;Spring 配置类&lt;/code&gt;，然后发现&lt;code&gt;Spring 配置类&lt;/code&gt;设置成自动扫描模式，于是&lt;code&gt;Spring 容器&lt;/code&gt;会自动扫描配置类所在的整个包里面的Java类，查看是否有Java类被加上了&lt;code&gt;@Component&lt;/code&gt;注解，如果加上了，就认为这个类是&lt;code&gt;Spring 容器&lt;/code&gt;中的一个组件，然后把这个组件初始化。在初始化这个组件的过程中，如果发现有属性字段被&lt;code&gt;@Autowire&lt;/code&gt;注解修饰，就认为这个字段是这个组件依赖的另外一个组件，就在&lt;code&gt;Spring 容器&lt;/code&gt;中查找是否以及初始化了这个被依赖的组件，如果初始化了，就把这个组件赋值给&lt;code&gt;@Autowire&lt;/code&gt;修饰的字段。从而实现了 Spring 的依赖注入功能。下面利用例子来解释。(&lt;code&gt;Spring容器&lt;/code&gt;这个概念可以参考&lt;a href=&quot;https://stormphoenix.github.io/2017/06/25/Spring系列-二-Spring内部实现的简单理解&quot;&gt;Spring 系列（二）&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
+* 车辆
+*/ 
+public interface Car {
+	void drive();
+}
+
+/**
+* 车轮
+*/
+public interface Wheel {
+	void role();
+}
+
+/**
+* 橡胶轮胎，Wheel 的一个实现
+*
+* 这里用了 @Component 注解，代表 RubberWheel 是 Spring 容器中的
+* 一个 Bean 。Spring 容器在自动扫描的时候会自动初始化这个 Bean 。
+*/
+@Component
+public class RubberWheel implements Wheel {
+	void role() {
+		System.out.println(&amp;quot;RubberWheel is rolling&amp;quot;)
+	}
+}
+
+/**
+* 奔驰车， Car 接口的一个实现
+*
+* 同 Wheel 的用法。
+*/
+@Component
+public class Bench implements Car {
+    /**
+    * Spring 发现 wheel 字段被 @Autowire 修饰，就会从 Spring 容器
+    * 中查找是否有实例化了 Wheel 这个 Bean。如果有，那么这个 Wheel 
+    * 就会被赋值到这个字段。
+    * 
+    * 在这个例子中， Wheel 的实现只有 RubberWheel 这个类，并且这个
+    * 类被 @Component 所修饰，所以 RubberWheel 的实例会被赋值给这
+    * 个字段。
+    */ 
+    @Autowire
+	private Wheel wheel;
+
+	void drive() {
+		wheel.role();
+	}
+}
+
+/**
+* 之前提到的配置类。
+*
+* @Configurable 。被这个类修饰表明这个类是一个配置类，Spring 会从这
+* 个类中加载需要的信息。
+*
+* @ComponentScan 。一个 Java 配置类如果有这个注解修饰，表明 Spring
+* 不需要从这个配置类中加载信息，而是自己扫描这个配置类所在的整个包来搜
+* 寻信息。如果之前的 Bench 类和 RubberWheel 类与 JavaConfig 同处
+* 于一个包下，那么这两个类就会被 Spring 实例化。
+*/
+@Configurable
+@ComponentScan
+public class JavaConfig {
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // 创建 Spring 容器，并加载 JavaConfig 配置类
+        // 这个 ApplicationContext 就是 Spring 容器，
+        // 而 AnnotationConfigApplicationContext 是
+        // 它的一种实现，用于加载 Java配置类
+		ApplicationContext context = new AnnotationConfigApplicationContext(JavaConfig.class);
+		// 等上面的代码执行完毕，那么 RubberWheel 和 Bench 两个类就
+		// 被实例化了。下面通过 Spring 容器来获取，实例化的这两个类。
+
+        // 获取奔驰车
+        // 这里的疑问就是，传入的参数是 Car.class 对象，为什么获得
+        // 的是 Bench 类型的对象。原因是 Bench 是 Car 实现，并且
+        // 是唯一的一个实现。如果 Car 有多个实现，并且都被 Spring 
+        // 容器初始化，那么这段代码就会抛出异常，因为 Spring 不知道
+        // 要返回哪一个实现。
+        Bench benchCar = context.getBean(Car.class);
+        // 调用方法
+        benchCar.drive();
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;所有的说明已经写入了代码注释之中。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Java代码方式&lt;/strong&gt;
+Java注解方式 … … 不也是 Java代码么 … …，而且 Java代码方式也用到了注解，不过两者还是有区别的，区别在于自动扫描 : )
+思路：依然是 &lt;code&gt;Spring 容器&lt;/code&gt;加载 &lt;code&gt;Java 配置类&lt;/code&gt;，不过此时 &lt;code&gt;Java配置类&lt;/code&gt;没有被设置成自动扫描，所有的信息都要从这个配置类中获取。一个类是否属于&lt;code&gt;Spring 容器&lt;/code&gt;、是否需要初始化完全由配置类决定 … … 所以，&lt;code&gt;@Component&lt;/code&gt;注解在这种方式下是没有作用的。其他的地方和&lt;code&gt;Java注解方式&lt;/code&gt;一样。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
+* 车辆
+*/ 
+public interface Car {
+	void drive();
+}
+
+/**
+* 车轮
+*/
+public interface Wheel {
+	void role();
+}
+
+/**
+* 橡胶轮胎，Wheel 的一个实现
+*
+* 这里去掉了 @Component 注解。也就意味着 RubberWheel 是否是
+* Spring 容器中的组件完全由Java配置类中的信息决定。
+*/
+public class RubberWheel implements Wheel {
+	void role() {
+		System.out.println(&amp;quot;RubberWheel is rolling&amp;quot;)
+	}
+}
+
+/**
+* 奔驰车， Car 接口的一个实现
+*
+* 同 Wheel 的用法。
+*/
+public class Bench implements Car {
+    /**
+    * Spring 发现 wheel 字段被 @Autowire 修饰，就会从 Spring 容器
+    * 中查找是否有实例化了 Wheel 这个 Bean。如果有，那么这个 Wheel 
+    * 就会被赋值到这个字段。
+    * 
+    * 在这个例子中， Wheel 的实现只有 RubberWheel 这个类，并且这个
+    * 类被 @Component 所修饰，所以 RubberWheel 的实例会被赋值给这
+    * 个字段。
+    */ 
+    @Autowire
+	private Wheel wheel;
+
+	void drive() {
+		wheel.role();
+	}
+}
+
+/**
+*
+* @Configurable 。被这个类修饰表明这个类是一个配置类，Spring 会从这
+* 个类中加载需要的信息。
+*/
+@Configurable
+public class JavaConfig {
+    /**
+    * 当一个方法被 @Bean 修饰的时候，它的返回值就会作为
+    * Spring 容器中的一个组件。所以说 @Bean 实现的效果
+    * 和用 @Component 注解实现是一样。 不过他们还是有区别
+	*
+	* 用 @Component 修饰的类是由 Spring 容器初始化的，而
+	* 初始化参数默认是无参数，也就意味着用 Java注解方式实例
+	* 化的类的构造函数是无参数的。
+    *
+    * 很明显，如果用 @Bean ，那么具体的构造方式是由自己确定
+    * 的... ...虽然这个地方也是使用无参数的构造方法 :)
+    */
+    @Bean
+	public Car getCar() {
+		return new Bench();
+	}
+
+	@Bean
+	public Wheel getWheel() {
+		return new RubberWheel();
+	}
+}
+
+public class Main {
+    public static void main(String[] args) {
+	    // 同上
+		ApplicationContext context = new AnnotationConfigApplicationContext(JavaConfig.class);
+        // 同上
+        Bench benchCar = context.getBean(Car.class);
+        // 调用方法
+        benchCar.drive();
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;详细说明见注释&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;XML配置方式&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+
+    &amp;lt;!-- 这里实例化一个 RubberWheel， 这里 rubberWheel 是它的id，用来被其他位置引用 --&amp;gt;
+    &amp;lt;bean id=&amp;quot;rubberWheel&amp;quot; class=&amp;quot;com.stormphoenix.demo.RubberWheel&amp;quot;/&amp;gt;
+
+    &amp;lt;!-- 实例化奔驰车，这里的属性wheel是bench的字段名字，引用了 rubberWheel id，效果就是把RubberWheel注入到这个类 --&amp;gt;
+    &amp;lt;bean id=&amp;quot;bench&amp;quot; class=&amp;quot;com.stormphoenix.demo.Bench&amp;quot;&amp;gt;
+        &amp;lt;property name=&amp;quot;wheel&amp;quot; ref=&amp;quot;rubberWheel&amp;quot;&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/bean&amp;gt;
+
+// 导入的步骤和之前的 Main 一样，不同之处在于 Spring容器，XML配置采
+// 用的是ClassPathXmlApplicationContext&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;混合配置&lt;/h1&gt;
+&lt;p&gt;不同人的对配置方式的偏好不一样，所以一个项目中几种不同的配置方式共存是很正常的。同时，一个配置类或者XML配置文件如果包含的内容太多，就需要拆分成好几个配置项目，否则就显得臃肿。&lt;/p&gt;
+
+&lt;p&gt;也就意味着，一个项目有好几种配置方式，一种配置方式有好几个配置类或配置文件。如果存在这样的情况，就需要把不同的配置合并成一个，方便 Spring容器加载。如果不合并的化，那么 Spring 容器一个一个加载是很麻烦的。&lt;/p&gt;
+
+&lt;p&gt;下面简单说明。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Java配置与XML配置合并
+在 Java 配置类里面，利用 @ImportResource 注解导入 XML 配置&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
+* @ImportResource 里面的值的固定格式是
+* classpath:xxx.xml，其中xxx就是XML配置
+* 文件的名称。
+* 
+* 导入后，JavaConfig中的信息就和XML配置文件
+* 中的信息合并了。只要 Spring容器加载了 JavaConfig
+* 配置类，就自然而然的加载了 XML配置文件的信息。
+*/
+@Configurable
+@ImportResource(&amp;quot;classpath:xxx.xml&amp;quot;)
+public class JavaConfig {
+	// do something
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Java配置类和Java配置类合并
+利用 @Import 导入另外一个配置类&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
+* OtherConfig.class 是另外一个配置类，可以在任何包路径下，
+* 其他的同上。
+*/
+@Configurable
+@Import(OtherConfig.class)
+public class JavaConfig {
+	// do something
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;XML配置文件与Java配置类合并&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&amp;lt;!-- XXX 是 Java配置类的名称 --&amp;gt;
+&amp;lt;!-- 当 ClassPathXmlApplicationContext 容器加载了XML文件时，XXX配置类中的信息也一样会被加载。 --&amp;gt;
+&amp;lt;bean class=&amp;quot;XXX&amp;quot; /&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;XML配置文件与XML配置文件合并&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&amp;lt;!-- 道理同上 --&amp;gt;
+&amp;lt;import resource=&amp;quot;xxx.xml&amp;quot; /&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;section-3&quot;&gt;一些注意事项&lt;/h1&gt;
+&lt;p&gt;时间有限，不可能讲把具体细节讲的面面俱到，所以这个博客只记录原理性的东西。所以要真正的使用这个框架，看博客坑定不够，必须看相关书籍。&lt;/p&gt;
+
+&lt;p&gt;下面记录一些额外的知识点。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Java注解方式中的自动扫描，其默认扫描的地方是配置类所在的包。不过这个地方可以自己配置。可以看源码注释。下面列举几种：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;// 指定多个包路径
+@ComponentScan(basePackages = {&amp;quot;xxx&amp;quot;, &amp;quot;yyy&amp;quot;})
+
+// 制定多个类，扫描类所在的包
+@ComponentScan(basePackageClasses = {&amp;quot;XXX.class&amp;quot;, &amp;quot;YYY.class&amp;quot;})&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;XML配置文件功能没有讲全，其实还有很多标签用来配置bean的细节。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;@Autowire 不仅仅可以添加在属性字段上，还可以添加到SETTER方法、构造方法上。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;@Bean 注解可以给 Bean 设置ID&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;// 返回的 bean 的 id 是 beanId
+@Bean(&amp;quot;beanId&amp;quot;)
+// an method&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;@Bean 注解的方法返回的 Bean 默认情况下是单例。&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Mon, 24 Jul 2017 00:00:41 +0800</pubDate>
+        <link>http://localhost:4000/2017/07/24/Spring%E7%B3%BB%E5%88%97-%E4%B8%89-%E5%88%9B%E5%BB%BABean%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BE%9D%E8%B5%96/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/07/24/Spring%E7%B3%BB%E5%88%97-%E4%B8%89-%E5%88%9B%E5%BB%BABean%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BE%9D%E8%B5%96/</guid>
+        
+        
+        <category>Spring</category>
+        
+      </item>
     
       <item>
         <title>从“模式匹配”谈起</title>
@@ -1102,295 +1530,6 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
         <pubDate>Sat, 10 Jun 2017 13:05:30 +0800</pubDate>
         <link>http://localhost:4000/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86/</link>
         <guid isPermaLink="true">http://localhost:4000/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86/</guid>
-        
-        <category>Linux</category>
-        
-        
-        <category>Linux</category>
-        
-      </item>
-    
-      <item>
-        <title>Linux文件操作</title>
-        <description>
-&lt;p&gt;记录一下几天前学习的Linux文件和目录操作的知识。&lt;/p&gt;
-
-&lt;p&gt;cd： 切换目录&lt;/p&gt;
-
-&lt;p&gt;pwd：显示当前目录的路径，-p参数用于显示当前的路径，而不是显示连接路径&lt;/p&gt;
-
-&lt;p&gt;mkdir：新建一个新的目录。&lt;/p&gt;
-
-&lt;p&gt;rmdir：删除一个空的目录。
-其中，mkdir每次只能创建一级目录。比如：mkdir test 将会创建一个test目录。如果想要创建多级目录，类似与dir1/dir2/dir3，就必须加上-p参数，如下：&lt;/p&gt;
-
-&lt;p&gt;# mkdir -p dir1/dir2/dir3
-创建目录的同时还可以加上 -m 参数来指定目录的权限（关于权限以后会有详细讲解）。&lt;/p&gt;
-
-&lt;p&gt;# mkdir -m 711 test
- # ls -l
-drwx–x–x 2 root root 4096 9月 27 10:32 test
-关于rmdir也差不多，每次只能删除一级目录且该目录必须为空。要删除多级目录就要加上参数 -p。如果要删除目录和目录里面所有的东西（包括文件），那么可以采用 rm -r &lt;目录名称&gt;。&lt;/目录名称&gt;&lt;/p&gt;
-
-&lt;p&gt;查看文件与目录的命令：&lt;/p&gt;
-
-&lt;p&gt;ls:用于查看文件或目录的详细信息。
-几个常用的参数说明：
--a : 显示目录下全部的文件
--d : 只查看目录本身，而无需列举出目录内的文件数据。
--h : 将文件的容量用GB，MB，KB等方式列出（方便理解）。
--i : 列出inode号码。
--l : 列出文件的属性和权限信息。
-–time=&lt;值&gt; : 输出相应的时间。如果值等于atime，输出该文件上一次被访问的时间，如果值等于ctime，输出该文件上一次权限被修改的时间。
---full-time : 以年、月、日、时、分的格式输出时间。
-复制文件的命令：&lt;/值&gt;&lt;/p&gt;
-
-&lt;p&gt;cp: 复制文件
-用法：cp source（源文件） destination（目标文件）//将source复制到destination里面
-相关参数：
--p: 连同权限的属性一起复制过去。
--s: 生成一个文件，使得该文件是源文件的快捷方式。
-删除文件的命令：&lt;/p&gt;
-
-&lt;p&gt;rm: 删除文件
-用法: rm source（被删除的文件名）
-相关参数:
--r: 如果被删除的目录中有文件，那么一并删除该目录和里面的文件。如果不加上-r参数，那么rm只能删除单一文件或空目录。
-移动文件的命令：&lt;/p&gt;
-
-&lt;p&gt;mv: 移动文件
-用法: mv source （源文件） destination （目的地）
-相关参数:
--u: 若目的地文件已经存在，且源文件较新，才会移动并覆盖目的地文件。
--i: 若目的地文件已经存在，就会询问是否覆盖目的地文件。
-获取文件的完整名字:&lt;/p&gt;
-
-&lt;p&gt;basename: 获取完整名字
-用法：basename path （获取路径下的文件名称）
-示例: 
- # basename /bin/mv
-mv
-获取文件的目录名称:&lt;/p&gt;
-
-&lt;p&gt;dirname:
-用法: 和basename类似。
-示例:
- # dirname /bin/mv
-/bin
-文件内容查询命令:&lt;/p&gt;
-
-&lt;p&gt;cat:
-用法： cat 文件路径
-相关参数： 
--n：打印行号。&lt;/p&gt;
-
-&lt;p&gt;tac：
-用法： 类似与cat，只不过将文件内容反向输出。&lt;/p&gt;
-
-&lt;p&gt;more：
-用法： 类似与cat。但是不会一口气将文件内容在屏幕上输出，而是一页一页的查看。
-相关操作
-Enter： 查看下一行。
-Space空格键： 查看下一页。&lt;/p&gt;
-
-&lt;p&gt;less： 类似与cat，效果和more一样，不过可以通过page down和page up向下或者向下翻页。
-相关操作： 
-page Down： 向下翻页。
-page Up： 向上翻页。&lt;/p&gt;
-
-&lt;p&gt;head：
-用法： 类似与cat，但是只会取出前n行数据，具体的n又参数制定。
-参数： 
--n &lt;数字&gt;： 代表去取前n行数据。&lt;/数字&gt;&lt;/p&gt;
-
-&lt;p&gt;tail： 
-用法： 同head，只不过取得是文件末尾n行数据。&lt;/p&gt;
-
-&lt;p&gt;od：
-用法： 以特定的方式来读取文件，方式是 cd [-t TYPE] 文件路径，具体看下面。
-相关参数： 
--t： 以某种方式读取文件内容，-t后面也会接上参数，他有如下参数： 
-    a： 默认字符来输出。
-    c： 利用ASCII来输出。
-    d[size]： 利用十进制输出，每个数字占用size个bytes。
-    o[size]： 利用八进制输出，其他同d。
-    f[size]： 摸底，其他同d。
-    x[size]： 利用十六进制输出，其他同d。
-修改/创建文件命令touch&lt;/p&gt;
-
-&lt;p&gt;先介绍和文件相关的几个时间概念：&lt;/p&gt;
-
-&lt;p&gt;modification time （mtime）：当文件内容改变时，mtime会被修改成文件内容变动时的时间。&lt;/p&gt;
-
-&lt;p&gt;status time （ctime）：当文件的权限和属性变动时，ctime会被修改成属性变动的时间。&lt;/p&gt;
-
-&lt;p&gt;access time （atime）：当文件被人访问时，atime会被修改成别人当时访问的时间。&lt;/p&gt;
-
-&lt;p&gt;touch使用的格式： touch [参数] 文件名。&lt;/p&gt;
-
-&lt;p&gt;具体如下&lt;/p&gt;
-
-&lt;p&gt;新建一个空文件：&lt;/p&gt;
-
-&lt;p&gt;# touch test
- # ls -l test
--rw-r–r– 1 root root 0 9月 29 19:28 test
-/×此时test文件的三个时间就会更新为当前的时间×/
-修改文件的时间&lt;/p&gt;
-
-&lt;p&gt;# touch -t 0710250213 test
- # ll test; ll –time=atime test; ll –time=ctime test
--rw-rw-r– 1 root root 0 10月 25 2007 test
--rw-rw-r– 1 root root 0 10月 25 2007 test
--rw-rw-r– 1 root root 0 9月 29 20:29 test
-/&lt;em&gt;如果没有添加–time参数，则默认输出mtime&lt;/em&gt;/
-touch创建目录时默认的权限&lt;/p&gt;
-
-&lt;p&gt;先谈一谈 umask&lt;/p&gt;
-
-&lt;p&gt;在终端内输入如下语句，打印unmask的值。&lt;/p&gt;
-
-&lt;p&gt;# umask
-0022
-在分别打印文件所有者、组员、其他人的默认权限&lt;/p&gt;
-
-&lt;p&gt;# umask -S
-u=rwx,g=rx,o=rx
-做一下解释，当用户创建一个文件时，这个文件的权限时怎么确定的。&lt;/p&gt;
-
-&lt;p&gt;首先来看创建文件，文件默认没有可执行权限（x），只有（r）（w）权限，所以默认权限为-rw-rw-rw-，化成数字就是666。那么最终权限的确定就是由这个数字666减去umask的后三位，也就是022，得到644，变换成字符表示就这样的：-rw-r–r–。&lt;/p&gt;
-
-&lt;p&gt;再来看创建文件夹。由于（x）权限与是否可以进入此文件夹有关，所以文件夹的（x）权限默认开放，也就是drwxrwxrwx，化成数字777。然后777减去umask的后三位，得到755，也就是drwxr-xr-x。&lt;/p&gt;
-
-&lt;p&gt;所以说创建文件或者文件夹时的默认权限和unmask有关，修改默认的权限就是修改umask，修改方法如下：&lt;/p&gt;
-
-&lt;p&gt;# umask 044 //修改来unmask，然后来看看默认权限是否改变
- # touch test
- # mkdir test2
--rw–w–w- 1 root root 0 9月 29 21:14 test
-drwx-wx-wx 2 root root 4096 9月 29 21:14 test1
-（对于权限不理解的，可以看看我写的关于权限的文章。）&lt;/p&gt;
-
-&lt;p&gt;文件的隐藏属性&lt;/p&gt;
-
-&lt;p&gt;文件的隐藏属性主要时和文件安全相关系的，比如某些属性可以使得文件无法被删除，有些使得文件只能被添加数据等。&lt;/p&gt;
-
-&lt;p&gt;那么对这些隐藏属性进行操作的命令就是：&lt;/p&gt;
-
-&lt;p&gt;chattr：修改文件隐藏属性。 
-lsattr：列举出文件的隐藏属性。&lt;/p&gt;
-
-&lt;p&gt;举个例子：&lt;/p&gt;
-
-&lt;p&gt;# chattr +i test
-这个命令使得test这个文件加上来不可被其他人修改、删除的属性。&lt;/p&gt;
-
-&lt;p&gt;再来一个：&lt;/p&gt;
-
-&lt;p&gt;# chattr -i test
-这样就使得test文件剔除了i属性，也就是说test这个文件可以被其他人修改或删除了。&lt;/p&gt;
-
-&lt;p&gt;下面是相关的属性列表：&lt;/p&gt;
-
-&lt;p&gt;+：增加一个属性。
--：剔除一个属性。
-a：让文件只能被添加数据，而不能被删除或修改数据，只有root能够设置该属性。
-i：任何人都不能对该。文件做任何修改（添加、删除等）
-其他的自行man。&lt;/p&gt;
-
-&lt;p&gt;查找可执行文件(.sh)的路径&lt;/p&gt;
-
-&lt;p&gt;which：查找某一个可执行文件的完整路径。它的原理时是搜索PATH路径下的后缀为（.sh）的文件。&lt;/p&gt;
-
-&lt;p&gt;参数：
--a：将可以找到的所有可执行命令路径全部列出。
-示例：
- # which ls
- # /bin/ls
-查找普通文件的路径&lt;/p&gt;
-
-&lt;p&gt;whereis：该命令用于查找一般的文件，查找的原理是利用数据库来查找数据，并没有查询整个磁盘。再说find命令，它才是通过整个磁盘来查询文件的。&lt;/p&gt;
-
-&lt;p&gt;所以说有的命令文件没有被加入PATH，但却被存储进数据库里面，所以whereis有时候会找到which找不到的文件。&lt;/p&gt;
-
-&lt;p&gt;参数：
--b：只找二进制的文件。
--m：找到man文件路径下的文件。
--s：只找source源文件。
--u：查找不是上面三个选项的其他特殊文件。
-locate：locate是这样用的，只要文件名/路径名包含你要查找的字符串，那么就会将文件名/路径名显示出来。（locate也是通过查询数据库来输出结果）&lt;/p&gt;
-
-&lt;p&gt;参数：
--i：忽略大小写的差异。
--r：在后面介入正则表达式。
-示例：
- # locate ls
- # …….
-//包含ls字符串的文件名/路径名太多，所以用…代替
-find：直接在整个磁盘搜索相关文件名。&lt;/p&gt;
-
-&lt;p&gt;有好几种用法，且听我一一道来。&lt;/p&gt;
-
-&lt;p&gt;用法1：将路径下所有符合时间条件的文件全部列出来。&lt;/p&gt;
-
-&lt;p&gt;find &lt;在什么路径下搜索&gt; &lt;按照什么条件搜索&gt; &lt;搜索条件的取值&gt;
-相关搜索条件：&lt;按照什么条件搜索&gt; &lt;搜索条件的取值&gt;
--mtime +n：搜索在n天之前（不包含第n天）修改过的文件。
--mtime n：搜索在n天之前的一天之内被更改的文件。
--mtime -n：搜索在n天之内（包含n天）被更改过的文件。
--newer file :file是一个文件，这个条件的含义是搜索比这个file更加新的文件。&lt;/搜索条件的取值&gt;&lt;/按照什么条件搜索&gt;&lt;/搜索条件的取值&gt;&lt;/按照什么条件搜索&gt;&lt;/在什么路径下搜索&gt;&lt;/p&gt;
-
-&lt;p&gt;用法2：将路径下所有符合文件所有者、所有组和其他人权限的文件列出来。&lt;/p&gt;
-
-&lt;p&gt;find &lt;在什么路径下搜索&gt; &lt;搜索条件&gt; &lt;搜索条件的取值&gt;
-相关搜索条件：
--uid n：n代表用户帐号的ID，只要文件的所有者的id是这个n，则列出这个文件。
--gid n：n代表用户组的ID，只要文件的所有组的id是这个n，则列出这个文件。
--user name：那么是用户的名字，只要文件所有者是这个名字，则列出这个文件。
--group name：同上，这不过这个name是文件所有组的名字。
--nouser：列出文件所有者不存在的文件。
--nogroup：列出所有文件所有组不存在的文件。&lt;/搜索条件的取值&gt;&lt;/搜索条件&gt;&lt;/在什么路径下搜索&gt;&lt;/p&gt;
-
-&lt;p&gt;用法3：将路径下符合指定的文件名、文件类型、文件权限的的文件列出来。&lt;/p&gt;
-
-&lt;p&gt;-name filename：列出符合文件名是filename的文件。
--size +size：列出文件大小大于size的文件。
--size -size：类出文件大小小于size的文件。
-    这个size有几个单位：
-    c：代表byte。 
-    k：代表KB
-    所以1000k代表的是1MB。
--type type：类出文件类型是type的文件。具体的type有如下几个：
-    f：一般文件。
-    b，c：设备文件。 
-    d：目录。 
-    l：连接文件。 
-    s：socket文件。 
-    p：FIFO文件。 
--perm mode：列出文件权限是mode的文件。这个mode是一个数字，其余的可以参考Linux文件的权限。
--perm -mode：只要文件的权限包含了mode所指示的权限，则列出它。
--perm +mode：只要文件的权限包含了mode所指示的权限中任意一个，则列出这个文件。&lt;/p&gt;
-
-&lt;p&gt;用法4：可以在find的前三种用法的基础上，在末尾添加而外的处理命令。
-参数：
--exec COMMAND命令：对find查找的结果用COMMAND命令进行额外的处理。&lt;/p&gt;
-
-&lt;p&gt;用例：
- # find / -mtime +4 -exec ls -al {} \;
-//对find查找出来的结果进行ls -al命令的处理。&lt;/p&gt;
-
-&lt;p&gt;-exec命令的具体说明：
-其实-exec的具体格式是这样的-exec COMMAND {} ;&lt;/p&gt;
-
-&lt;p&gt;1.其中{}存放着find命令找出来的结果，所以COMMAND {}的含义是对find命令找出来的结果执行COMMAND命令。&lt;/p&gt;
-
-&lt;p&gt;2.那么“-exec”和“;”分别代表着分割符号，-exec是起始符号，“;”代表结束符号，那么位于这两者之间的就是需要执行的额外命令。&lt;/p&gt;
-
-&lt;p&gt;3.“;”是命令的分割符号，有它自己特殊的意义，所以在这个地方要进行字符的转义，于是用“\;”代替“;”。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 10 Jun 2017 12:09:39 +0800</pubDate>
-        <link>http://localhost:4000/2017/06/10/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/06/10/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</guid>
         
         <category>Linux</category>
         
