@@ -5,9 +5,217 @@
     <description>为了生命中的美好，不妥协直到变老.</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 24 Jul 2017 21:58:15 +0800</pubDate>
-    <lastBuildDate>Mon, 24 Jul 2017 21:58:15 +0800</lastBuildDate>
+    <pubDate>Tue, 25 Jul 2017 22:53:22 +0800</pubDate>
+    <lastBuildDate>Tue, 25 Jul 2017 22:53:22 +0800</lastBuildDate>
     <generator>Jekyll v3.5.0</generator>
+    
+      <item>
+        <title>Spring系列（四）—— Bean的高级装配</title>
+        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;预备知识&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;问题的提出&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#bean&quot; id=&quot;markdown-toc-bean&quot;&gt;Bean的条件化装配&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;完毕&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;预备知识&lt;/h1&gt;
+&lt;p&gt;学习过Bean的基本装配知识即可。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;问题的提出&lt;/h1&gt;
+
+&lt;p&gt;上一篇博客的代码能够完全运行正确 : )。有一个地方不知道你们有没注意到，那就是 Wheel 的接口的实现只有一个 RubberWheel，所以不论是 Java注解利用自动扫描，还是用 Java代码方式实现装配，程序都能够正确判断要装配哪一个 Wheel，那么问题：如果 Wheel 有多个实现，那么 Spring是怎么判断的？见如下例子：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;@Component
+public class RubberWheel implements Wheel {
+	void role() {
+		// do something 
+	}
+}
+
+@Component
+public class SquareWheel implements Wheel {
+	void role() {
+		// do something 
+	}
+}
+
+@Component
+public class Bench implements Car {
+    /**
+    * :( 自动扫描的时候，发现 SquareWheel 和 RubberWheel 都
+    * 实现了 Wheel 这个接口，我要装配哪一个呢？？
+    */
+    @Autowire
+	private Wheel wheel;
+
+	void drive() {
+		wheel.role();
+	}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;如果程序运行起来，会抛出&lt;code&gt;org.springframework.beans.factory.NoUniqueBeanDefinitionException&lt;/code&gt;异常，因为 Wheel 不知道要装配 &lt;code&gt;RubberWheel&lt;/code&gt; 还是 &lt;code&gt;SquareWheel&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;如果用 Java代码方式也是存在这种问题的。比如：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
+* 这里生成了两个 Wheel，Bench 在装配的时候要选哪一个？
+*/
+@Configurable
+public class JavaConfig {
+    @Bean
+    public Wheel getRubberWheel() {
+        return new RubberWheel();
+    }
+
+    public Wheel getSquareWheel() {
+		return new SquareWheel();
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;bean&quot;&gt;Bean的条件化装配&lt;/h1&gt;
+
+&lt;p&gt;用一个简单的 if - else 说明：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;if (路面很平坦) {
+    选用 RubberWheel 来装配
+} else if (路面不平) {
+    选用 SquareWheel 来装配
+}
+
+// 根据不同的情况来装配不同的 Bean，接下来就要用代码来模拟不同的情况
+// 让 Spring 根据情况来装配。&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Spring 条件化装配&lt;/strong&gt;
+这种方式是利用 &lt;code&gt;@Conditional&lt;/code&gt; 注解，实现根据不同的条件来装配 Bean的功能。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;@Configurable
+public class JavaConfig {
+    /**
+    * @Conditional 内的参数，必须要实现 Condition 这个接口
+    * 这个接口会返回一个 bool 值，于是
+    * bool 值为true：装配时选择这个 Bean
+    * bool 值为true：装配时候不选择这个 Bean
+    */
+    @Bean
+    @Conditional(RoadFlatConditional.class)
+    public Wheel getRubberWheel() {
+        return new RubberWheel();
+    }
+
+    // 其他的省略
+}
+
+// 看看是怎么实现的
+public class RoadFlatConditional implements Condition {
+    /**
+    * 最重要的是传入的两个参数。你可以通过这两个参数程序运行的两大信息：
+    * 1、系统的环境变量
+    * 2、检查带有 @Bean 注解的方法上还有说明其他注解
+    */
+	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        // do something
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;matches 方法的实现完全看个人，这里给一个样例：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;// 如果系统带有 flat 变量，那么方法返回 true，否则 false
+public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+	Environment environment = context.getEnvironment();
+    return environment.containsProperty(&amp;quot;flat&amp;quot;);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;这个环境变量有几种设置方法：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;作为 DispatcherServlet 的初始化参数
+作为 Web 引用的上下文参数
+作为 JNDI 条目 （这个我不懂）
+作为环境变量
+作为 JVM 系统属性&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;我用的一个方法是在虚拟机启动的时候把 &lt;code&gt;flat&lt;/code&gt; 设置成了环境变量。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;利用Profile&lt;/strong&gt;
+把 Profile 理解成一个环境，这个环境包含了一套 Bean。你现在有很多个 Profile，在运行时你来制定用哪一个Profile。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;/**
+* 程序运行的时候，可以通过查看当前运行时的参数，确定
+* 当前的 Profile 是 flat 还是 uneven，如果是 flat profile，
+* 就返回 RubberWheel；如果是 uneven profile，则返回 SquareWheel。
+*/
+@Configurable
+public class JavaConfig4 {
+    @Bean
+    @Profile(&amp;quot;flat&amp;quot;)
+    public Wheel getRubberWheel() {
+        return new RubberWheel()
+    }
+
+    @Bean
+    @Profile(&amp;quot;uneven&amp;quot;)
+    public Wheel getSquareWheel()) {
+        return new SquareWheel();
+    }&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;额外提一些。注释中说程序运行时查看的参数，具体是如下两个参数：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;spring.profiles.active 
+spring.profiles.default&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;运行时查看 &lt;code&gt;spring.profiles.active&lt;/code&gt; 的值，根据这个值设置 profile，如果这个值没有设置，就查看 &lt;code&gt;spring.profiles.default&lt;/code&gt;来设置值。&lt;/p&gt;
+
+&lt;p&gt;至于如何设置的嘛，和上文一样，简单不解释。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;使用限定符注解&lt;/strong&gt;
+这样理解：有好多个实现相同接口的 Bean，我们要给这些 Bean 添加上一些不同的特征，到时候用的时候，可以根据我需要的特征挑选 Bean。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;而所谓的添加特征，就是在 Bean 上添加 &lt;code&gt;@Qualifier&lt;/code&gt;。添加上一个 &lt;code&gt;@Qualifier&lt;/code&gt;注解，就代表给 Bean 添加一个特征。&lt;/p&gt;
+
+&lt;p&gt;这次我们用 &lt;code&gt;@Component&lt;/code&gt; 的形式做例子&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;@Component
+@Qualifier(&amp;quot;sweet&amp;quot;)
+public class Apple implements Fruit { // ... }
+
+@Component
+@Qualifier(&amp;quot;water&amp;quot;)
+public class Watermelon implements Fruit { // ... }
+
+/**
+* 由于 &amp;#39;苹果&amp;#39; 和 &amp;#39;西瓜&amp;#39; 都实现了 Fruit 接口，
+* 但是这里添加了 @Qualifier(&amp;quot;sweet&amp;quot;) 这个&amp;#39;甜味&amp;#39;特征，
+* 所以 Apple 会被装配到这个地方。
+*/
+@Autowire
+@Qualifier(&amp;quot;sweet&amp;quot;)
+public void setFruit(Fruit fruit) {
+	// do something
+}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;完毕&lt;/h1&gt;
+&lt;p&gt;其他的就自己探索吧！还有一个 &lt;code&gt;@Primary&lt;/code&gt;注解，被这个注解上的 Bean 会被有限装配。&lt;/p&gt;
+
+&lt;p&gt;完毕！&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 25 Jul 2017 22:11:24 +0800</pubDate>
+        <link>http://localhost:4000/2017/07/25/Spring%E7%B3%BB%E5%88%97-%E5%9B%9B-Bean%E7%9A%84%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/07/25/Spring%E7%B3%BB%E5%88%97-%E5%9B%9B-Bean%E7%9A%84%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D/</guid>
+        
+        
+        <category>Spring</category>
+        
+      </item>
     
       <item>
         <title>Spring系列（三）—— 创建Bean之间的依赖</title>
@@ -1377,159 +1585,6 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
         <pubDate>Sat, 10 Jun 2017 16:07:39 +0800</pubDate>
         <link>http://localhost:4000/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
         <guid isPermaLink="true">http://localhost:4000/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
-        
-        <category>Linux</category>
-        
-        
-        <category>Linux</category>
-        
-      </item>
-    
-      <item>
-        <title>Linux账号管理</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#uidgid&quot; id=&quot;markdown-toc-uidgid&quot;&gt;&lt;strong&gt;用户标识符UID与GID&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot; id=&quot;markdown-toc-section&quot;&gt;&lt;strong&gt;相关文件结构&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot; id=&quot;markdown-toc-section-1&quot;&gt;&lt;strong&gt;有效用户组和初始用户组&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot; id=&quot;markdown-toc-section-2&quot;&gt;&lt;strong&gt;账号管理&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;uidgid&quot;&gt;&lt;strong&gt;用户标识符UID与GID&lt;/strong&gt;&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;uid：用户的的id，用一个数字标志。&lt;/li&gt;
-  &lt;li&gt;gid：用户所在组的id，用一个数值标志。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;&lt;strong&gt;相关文件结构&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;/etc/passwd文件结构&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;保存了系统中所有账号的信息，每一行都代表一个账号。账号的种类分为两个：&lt;code&gt;系统账号&lt;/code&gt;和&lt;code&gt;用户账号&lt;/code&gt;。其中系统账号是系统正常运行必须的。&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:x:0:0:root:/root:/bin/bash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;实例中的一行包括7列，用冒号“：”间隔分别说明：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;1. 账号名称 
-
-2. 账号密码，为了账号的安全性，账号的密码被保存在了/etc/shadow文件中，所以此处的密码变成了x
-
-3. UID
-
-4. GID
-
-5. 用户信息说明，无重要用途
-
-6. 主文件夹
-
-7. Shell用户登录系统后取得的默认的shell
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;/etc/shadow文件结构&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:$6$qE8d/k2K$NpCCL0kCsQdpAO5pC4QD91YAKpTS8w6.qdhl/fgZurM/2npI2bvEYY.LDNtll/Jnqlq1GH.AH3Z8hGiKJgIfy.:17111:0:99999:7:::&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;提前说明三个概念：&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;密码过期&lt;/strong&gt;：指超过了密码必须被修改的截止时间依然没有修改密码。在此情况下，用户依然可以使用此账号，但是账号登录的时候，系统会强制要求用户必须重新设置密码才能继续使用。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;密码失效&lt;/strong&gt;：指的是密码过期超过了一定的天数，用户就无法使用此密码登录了。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;账号失效&lt;/strong&gt;：账号无法使用了&lt;/p&gt;
-
-&lt;p&gt;实例中的一行包括9列：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;1.账号名称
-
-2.账号密码，不过已经被加密过了。由于固定的编码系统产生的密码长度必须一致，所以这个字段的长度改变之后，密码就会失效
-
-3.最近更改密码的日期，这个时间是以1970年1月1日为1而累加得到的
-
-4.密码被修改后必须过几天才能再修改
-
-5.密码被更改后必须在多少天内再被修改
-
-6.在密码过期前的多少天之内提醒用户密码快到期了
-
-7.密码过期后的宽限时间，如果超过了这个时间，会发生密码失效
-
-8.账号在过了规定的日期就会无法使用，这个时间的设置同3
-
-9.保留字段
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;/etc/group文件结构&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:x:0:root&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;实例中的一行包括4列：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;1.用户组名字
-
-2.用户组密码，给用户组管理员使用
-
-3.GID
-
-4.用户组支持的用户
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;/etc/gshadow文件结构&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;root:x:0:root&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;实例中的一行包括4列：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;1.用户组名字。
-
-2.密码列，同/etc/shadow。不过如果密码列上面是!的话，代表此用户组没有管理员。
-
-3.用户组管理员账号。
-
-4.用户组成员，成员之间用逗号分隔开
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;&lt;strong&gt;有效用户组和初始用户组&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;在/etc/passwd文件中，第四列就是用户的初始用户组组号GID，表示用户一登录系统就会取得该用户组的权限。而有效用户组是什么呢？当你登录shell，输入groups命令将会返回你所加入的所有用户组，其中第一个显示的用户组就是有效用户组。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;当用户新建一个文件的时候，文件所属的用户组是创建者当前的有效用户组。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;newgrp命令可以切换当前用户的有效用户组，不过这个命令将会重新启动一个shell。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;&lt;strong&gt;账号管理&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;useradd 添加一个用户&lt;/li&gt;
-  &lt;li&gt;passwd 修改用户的密码&lt;/li&gt;
-  &lt;li&gt;chage 修改密码的时间设置&lt;/li&gt;
-  &lt;li&gt;usermod 修改用户的信息&lt;/li&gt;
-  &lt;li&gt;finger 查看当前登录用户的详细信息&lt;/li&gt;
-  &lt;li&gt;chfn 修改个人信息&lt;/li&gt;
-  &lt;li&gt;id 查看用户的uid和gid&lt;/li&gt;
-  &lt;li&gt;groupadd 添加组&lt;/li&gt;
-  &lt;li&gt;groupmod 修改group的相关参数&lt;/li&gt;
-  &lt;li&gt;groupdel 删除用户组&lt;/li&gt;
-  &lt;li&gt;gpasswd 用户组管理员功能&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Sat, 10 Jun 2017 13:05:30 +0800</pubDate>
-        <link>http://localhost:4000/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86/</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/06/10/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86/</guid>
         
         <category>Linux</category>
         

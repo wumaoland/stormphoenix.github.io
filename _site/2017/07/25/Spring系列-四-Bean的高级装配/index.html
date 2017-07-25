@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Spring系列（四）—— Bean的高级装配 - 起飞的凤凰</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.jpg">
+	<link rel="icon" href="/styles/images/favicon.jpg">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2017/07/25/Spring%E7%B3%BB%E5%88%97-%E5%9B%9B-Bean%E7%9A%84%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D/">
+	<link rel="alternate" type="application/rss+xml" title="起飞的凤凰" href="/feed.xml">
+	
+	<meta name="keywords" content="Spring系列（四）—— Bean的高级装配, 起飞的凤凰, 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+	<meta name="description" content="王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?94be4b0f9fc5d94cc0d0415ea6761ae9";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">    
+        <li>
+          <a href="/">主页</a>
+        </li>
+        <li>
+          <a href="/categories/">大类</a>
+        </li>
+        <li>
+          <a href="/tag">小类</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li>
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/stormphoenix/">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="http://github.com/stormphoenix/">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+			<!--            <li><a rel="nofollow" href="http://www.hifreud.com/domains/">域名管理</a></li> -->
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <li><a href="/feed.xml">RSS订阅</a></li>
+            <li class="divider"></li>
+            <li><a rel="nofollow" target="_blank" href="https://github.com/stormphoenix/stormphoenix.github.io/">本项目</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>Spring系列（四）—— Bean的高级装配</h1>
+		    <p>Post on Jul 25, 2017 by <a href="/about">起飞的凤凰</a></p>
+		-->
+		    <h1>为了生命中的美好，不妥协直到变老.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#Spring-ref">Spring</a>	/
+    	<a href="/tag/#-ref"></a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_July">July</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_June">June</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">Spring系列（四）—— Bean的高级装配</h1>
+              <!--
+                <p class="post-meta">Jul 25, 2017</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Jul 25, 2017</span> By <a target="_blank" href="http://localhost:4000">起飞的凤凰</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">预备知识</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">问题的提出</a></li>
+  <li><a href="#bean" id="markdown-toc-bean">Bean的条件化装配</a></li>
+  <li><a href="#section-2" id="markdown-toc-section-2">完毕</a></li>
+</ul>
+
+<h1 id="section">预备知识</h1>
+<p>学习过Bean的基本装配知识即可。</p>
+
+<h1 id="section-1">问题的提出</h1>
+
+<p>上一篇博客的代码能够完全运行正确 : )。有一个地方不知道你们有没注意到，那就是 Wheel 的接口的实现只有一个 RubberWheel，所以不论是 Java注解利用自动扫描，还是用 Java代码方式实现装配，程序都能够正确判断要装配哪一个 Wheel，那么问题：如果 Wheel 有多个实现，那么 Spring是怎么判断的？见如下例子：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">@Component
+public class RubberWheel implements Wheel {
+	void role() {
+		// do something 
+	}
+}
+
+@Component
+public class SquareWheel implements Wheel {
+	void role() {
+		// do something 
+	}
+}
+
+@Component
+public class Bench implements Car {
+    /**
+    * :( 自动扫描的时候，发现 SquareWheel 和 RubberWheel 都
+    * 实现了 Wheel 这个接口，我要装配哪一个呢？？
+    */
+    @Autowire
+	private Wheel wheel;
+
+	void drive() {
+		wheel.role();
+	}
+}</code></pre></figure>
+
+<p>如果程序运行起来，会抛出<code>org.springframework.beans.factory.NoUniqueBeanDefinitionException</code>异常，因为 Wheel 不知道要装配 <code>RubberWheel</code> 还是 <code>SquareWheel</code>。</p>
+
+<p>如果用 Java代码方式也是存在这种问题的。比如：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">/**
+* 这里生成了两个 Wheel，Bench 在装配的时候要选哪一个？
+*/
+@Configurable
+public class JavaConfig {
+    @Bean
+    public Wheel getRubberWheel() {
+        return new RubberWheel();
+    }
+
+    public Wheel getSquareWheel() {
+		return new SquareWheel();
+    }
+}</code></pre></figure>
+
+<h1 id="bean">Bean的条件化装配</h1>
+
+<p>用一个简单的 if - else 说明：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">if (路面很平坦) {
+    选用 RubberWheel 来装配
+} else if (路面不平) {
+    选用 SquareWheel 来装配
+}
+
+// 根据不同的情况来装配不同的 Bean，接下来就要用代码来模拟不同的情况
+// 让 Spring 根据情况来装配。</code></pre></figure>
+
+<ul>
+  <li><strong>Spring 条件化装配</strong>
+这种方式是利用 <code>@Conditional</code> 注解，实现根据不同的条件来装配 Bean的功能。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">@Configurable
+public class JavaConfig {
+    /**
+    * @Conditional 内的参数，必须要实现 Condition 这个接口
+    * 这个接口会返回一个 bool 值，于是
+    * bool 值为true：装配时选择这个 Bean
+    * bool 值为true：装配时候不选择这个 Bean
+    */
+    @Bean
+    @Conditional(RoadFlatConditional.class)
+    public Wheel getRubberWheel() {
+        return new RubberWheel();
+    }
+
+    // 其他的省略
+}
+
+// 看看是怎么实现的
+public class RoadFlatConditional implements Condition {
+    /**
+    * 最重要的是传入的两个参数。你可以通过这两个参数程序运行的两大信息：
+    * 1、系统的环境变量
+    * 2、检查带有 @Bean 注解的方法上还有说明其他注解
+    */
+	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        // do something
+    }
+}</code></pre></figure>
+
+<p>matches 方法的实现完全看个人，这里给一个样例：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">// 如果系统带有 flat 变量，那么方法返回 true，否则 false
+public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+	Environment environment = context.getEnvironment();
+    return environment.containsProperty(&quot;flat&quot;);
+}</code></pre></figure>
+
+<p>这个环境变量有几种设置方法：</p>
+
+<blockquote>
+  <p>作为 DispatcherServlet 的初始化参数
+作为 Web 引用的上下文参数
+作为 JNDI 条目 （这个我不懂）
+作为环境变量
+作为 JVM 系统属性</p>
+</blockquote>
+
+<p>我用的一个方法是在虚拟机启动的时候把 <code>flat</code> 设置成了环境变量。</p>
+
+<ul>
+  <li><strong>利用Profile</strong>
+把 Profile 理解成一个环境，这个环境包含了一套 Bean。你现在有很多个 Profile，在运行时你来制定用哪一个Profile。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">/**
+* 程序运行的时候，可以通过查看当前运行时的参数，确定
+* 当前的 Profile 是 flat 还是 uneven，如果是 flat profile，
+* 就返回 RubberWheel；如果是 uneven profile，则返回 SquareWheel。
+*/
+@Configurable
+public class JavaConfig4 {
+    @Bean
+    @Profile(&quot;flat&quot;)
+    public Wheel getRubberWheel() {
+        return new RubberWheel()
+    }
+
+    @Bean
+    @Profile(&quot;uneven&quot;)
+    public Wheel getSquareWheel()) {
+        return new SquareWheel();
+    }</code></pre></figure>
+
+<p>额外提一些。注释中说程序运行时查看的参数，具体是如下两个参数：</p>
+
+<blockquote>
+  <p>spring.profiles.active 
+spring.profiles.default</p>
+</blockquote>
+
+<p>运行时查看 <code>spring.profiles.active</code> 的值，根据这个值设置 profile，如果这个值没有设置，就查看 <code>spring.profiles.default</code>来设置值。</p>
+
+<p>至于如何设置的嘛，和上文一样，简单不解释。</p>
+
+<ul>
+  <li><strong>使用限定符注解</strong>
+这样理解：有好多个实现相同接口的 Bean，我们要给这些 Bean 添加上一些不同的特征，到时候用的时候，可以根据我需要的特征挑选 Bean。</li>
+</ul>
+
+<p>而所谓的添加特征，就是在 Bean 上添加 <code>@Qualifier</code>。添加上一个 <code>@Qualifier</code>注解，就代表给 Bean 添加一个特征。</p>
+
+<p>这次我们用 <code>@Component</code> 的形式做例子</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">@Component
+@Qualifier(&quot;sweet&quot;)
+public class Apple implements Fruit { // ... }
+
+@Component
+@Qualifier(&quot;water&quot;)
+public class Watermelon implements Fruit { // ... }
+
+/**
+* 由于 &#39;苹果&#39; 和 &#39;西瓜&#39; 都实现了 Fruit 接口，
+* 但是这里添加了 @Qualifier(&quot;sweet&quot;) 这个&#39;甜味&#39;特征，
+* 所以 Apple 会被装配到这个地方。
+*/
+@Autowire
+@Qualifier(&quot;sweet&quot;)
+public void setFruit(Fruit fruit) {
+	// do something
+}</code></pre></figure>
+
+<h1 id="section-2">完毕</h1>
+<p>其他的就自己探索吧！还有一个 <code>@Primary</code>注解，被这个注解上的 Bean 会被有限装配。</p>
+
+<p>完毕！</p>
+
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+            
+
+
+  <div id="disqus_thread"></div>
+<script>
+
+/**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+   var disqus_config = function () {
+   this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+   this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+   };
+   */
+(function() { // DON'T EDIT BELOW THIS LINE
+ var d = document, s = d.createElement('script');
+ s.src = 'https://stormphoenixde-bo-ke.disqus.com/embed.js';
+ s.setAttribute('data-timestamp', +new Date());
+ (d.head || d.body).appendChild(s);
+ })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                                
+
+
+
+
+ 
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href="http://github.com/stormphoenix/"><code>起飞的凤凰</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">StormPhoenix</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  </body>
+</html>
