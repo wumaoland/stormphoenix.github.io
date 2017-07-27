@@ -305,6 +305,7 @@
   <li><a href="#section" id="markdown-toc-section">预备知识</a></li>
   <li><a href="#section-1" id="markdown-toc-section-1">问题的提出</a></li>
   <li><a href="#bean" id="markdown-toc-bean">Bean的条件化装配</a></li>
+  <li><a href="#bean-" id="markdown-toc-bean-">Bean 的作用域</a></li>
   <li><a href="#section-2" id="markdown-toc-section-2">完毕</a></li>
 </ul>
 
@@ -491,6 +492,89 @@ public class Watermelon implements Fruit { // ... }
 public void setFruit(Fruit fruit) {
 	// do something
 }</code></pre></figure>
+
+<h1 id="bean-">Bean 的作用域</h1>
+<p>你用<code>@Bean</code>创建了一个 Bean 是吧？这里值得注意的一个小问题就是 Bean 的作用域，就是 Bean 起作用的范围。以它默认的作用域<code>singleton</code>来说明，<code>singleton</code>指 Bean 的作用域是 Spring 应用的所有位置，这个 Bean 是单例的，应用中对这个 Bean 的引用都是同一个 Bean。</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">/**
+    * 看这里，默认情况下 Wheel 这个 Bean 的作用域是 singleton，
+    * 意味着应用中对这个 wheel 的引用都是同一个 wheel、整个应用中
+    * 这存在这一个 wheel。
+    * 
+    * 你可能会疑问这里明明采用了 new 关键字，应该是每次调用这个方法
+    * 时都会创建一个 Wheel 的实例才对？
+    * 
+    * 实际情况是 Spring 会对这个方法的每次调用进行拦截。第一次拦截时，
+    * 会 new 出这个 Wheel，以后再次拦截的时候就发现已经创建这个 Bean
+    * 了，所以会把之前创建的 Wheel 返回。从而实现了 singleton。
+    */
+    @Bean
+    public Wheel getSquareWheel()) {
+        return new SquareWheel();
+    }</code></pre></figure>
+
+<p>另外三个作用域是</p>
+
+<ul>
+  <li>Prototype 每次需要使用 <code>@Bean</code>注解时，都会创建一个 Bean</li>
+  <li>Session 在 Web 应用中，为每次会话创建一个 Bean</li>
+  <li>Request 在 Web 应用中，为每次请求创建一个 Bean</li>
+</ul>
+
+<p>解释一下 Web 应用中的 Session 作用域这例子：比如用户上网购物行为属于一个会话，购买的物品都要放入购物车（shopcart），如果要用一个 Bean 表示这个 shopcart ，那么这个 Bean 就必须要声明为 Session 作用域。</p>
+
+<p>其他的作用域都有各自的类似场景。</p>
+
+<p>声明 Bean 的作用域的方法如下</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">/**
+    * 加上 @Scope 注解用来改变 Bean 的作用域，
+    * ConfigurableBeanFactory.SCOPE_PROTOTYPE 参数代表
+    * Prototype 作用域
+    */
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public Wheel getSquareWheel()) {
+        return new SquareWheel();
+    }
+
+    // 或者在 XML 文件里面声明
+    &lt;bean id=&quot;rubberWheel&quot; class=&quot;com.stormphoenix.RubberWheel&quot;
+          scope=&quot;prototype&quot;/&gt;</code></pre></figure>
+
+<p>关于 <code>@Scope</code> 的 <code>proxyMode</code> 属性需要说明一下。如下</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">@Component
+public class Bench implements Car {
+    @Autowire
+    Wheel wheel; 
+}
+
+public class JavaConfig {
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_SESSION,
+           proxyMode = ScopedProxyMode.INTERFACES)
+    public Wheel getWheel() {
+        return new RubberWheel();
+    }
+}</code></pre></figure>
+
+<p>解释上述代码：
+首先 Bench 的作用域是 <code>singleton</code>，Wheel 的作用域是 <code>session</code>，所以看出问题来吧了 : )</p>
+
+<p>Bench 是一个，而 Wheel 有好多个（每发生一次会话就会创建一个），那么到底要装配哪一个 Wheel 到 Bench 里面呢？</p>
+
+<p>首先要确定几点：
+1. 被 <code>@Autowire</code> 注解的属性肯定只会装配一次。
+2. Wheel 的作用域是 <code>session</code> ，肯定有很多个 Wheel 对象。
+3. Bench 作用域是 <code>singleton</code> ，肯定只有一个 Bench 对象。
+4. 一个解决方案是：给 Bench 注入一个对象，这个对象可以根据运行时不同的环境调用不同的 Wheel 对象的功能。</p>
+
+<p>要解决这个问题就是利用 <code>@Scope</code> 的 <code>proxyMode</code> 参数，这个参数的值是 INTERFACES，表明当 Wheel 被装配的时候不装配 Wheel 对象本身，而装配<code>一个实现了 Wheel 对象功能的代理</code>。所以注入到 Bench 的 Wheel 根本就不是我们创建了 Wheel，而是一个<code>代理</code>，这个代理可以根据不同的会话环境，来调用对应的 Wheel 对象的功能。</p>
+
+<p>其实懂了代理这个含义，上述代码就很好理解。请搜索一下设计模式中的代理模式！然后学习下 Java 中的代理！</p>
+
+<p>最后 <code>proxyMode</code> 参数有除了 INTERFACES 之外的几个值，了解就好。</p>
 
 <h1 id="section-2">完毕</h1>
 <p>其他的就自己探索吧！还有一个 <code>@Primary</code>注解，被这个注解上的 Bean 会被有限装配。</p>

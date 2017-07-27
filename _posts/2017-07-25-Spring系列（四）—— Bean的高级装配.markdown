@@ -194,6 +194,94 @@ public void setFruit(Fruit fruit) {
 }
 {% endhighlight %}
 
+Bean 的作用域
+==
+你用`@Bean`创建了一个 Bean 是吧？这里值得注意的一个小问题就是 Bean 的作用域，就是 Bean 起作用的范围。以它默认的作用域`singleton`来说明，`singleton`指 Bean 的作用域是 Spring 应用的所有位置，这个 Bean 是单例的，应用中对这个 Bean 的引用都是同一个 Bean。
+
+{% highlight ruby %}
+    /**
+    * 看这里，默认情况下 Wheel 这个 Bean 的作用域是 singleton，
+    * 意味着应用中对这个 wheel 的引用都是同一个 wheel、整个应用中
+    * 这存在这一个 wheel。
+    * 
+    * 你可能会疑问这里明明采用了 new 关键字，应该是每次调用这个方法
+    * 时都会创建一个 Wheel 的实例才对？
+    * 
+    * 实际情况是 Spring 会对这个方法的每次调用进行拦截。第一次拦截时，
+    * 会 new 出这个 Wheel，以后再次拦截的时候就发现已经创建这个 Bean
+    * 了，所以会把之前创建的 Wheel 返回。从而实现了 singleton。
+    */
+    @Bean
+    public Wheel getSquareWheel()) {
+        return new SquareWheel();
+    }
+    
+{% endhighlight %}
+
+另外三个作用域是
+
+* Prototype 每次需要使用 `@Bean`注解时，都会创建一个 Bean
+* Session 在 Web 应用中，为每次会话创建一个 Bean
+* Request 在 Web 应用中，为每次请求创建一个 Bean
+
+解释一下 Web 应用中的 Session 作用域这例子：比如用户上网购物行为属于一个会话，购买的物品都要放入购物车（shopcart），如果要用一个 Bean 表示这个 shopcart ，那么这个 Bean 就必须要声明为 Session 作用域。
+
+其他的作用域都有各自的类似场景。
+
+声明 Bean 的作用域的方法如下
+{% highlight ruby %}
+    /**
+    * 加上 @Scope 注解用来改变 Bean 的作用域，
+    * ConfigurableBeanFactory.SCOPE_PROTOTYPE 参数代表
+    * Prototype 作用域
+    */
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public Wheel getSquareWheel()) {
+        return new SquareWheel();
+    }
+
+    // 或者在 XML 文件里面声明
+    <bean id="rubberWheel" class="com.stormphoenix.RubberWheel"
+          scope="prototype"/>
+{% endhighlight %}
+
+关于 `@Scope` 的 `proxyMode` 属性需要说明一下。如下
+
+{% highlight ruby %}
+@Component
+public class Bench implements Car {
+    @Autowire
+    Wheel wheel; 
+}
+
+public class JavaConfig {
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_SESSION,
+           proxyMode = ScopedProxyMode.INTERFACES)
+    public Wheel getWheel() {
+        return new RubberWheel();
+    }
+}
+{% endhighlight %}
+
+解释上述代码：
+首先 Bench 的作用域是 `singleton`，Wheel 的作用域是 `session`，所以看出问题来吧了 : )
+
+Bench 是一个，而 Wheel 有好多个（每发生一次会话就会创建一个），那么到底要装配哪一个 Wheel 到 Bench 里面呢？
+
+首先要确定几点：
+1. 被 `@Autowire` 注解的属性肯定只会装配一次。
+2. Wheel 的作用域是 `session` ，肯定有很多个 Wheel 对象。
+3. Bench 作用域是 `singleton` ，肯定只有一个 Bench 对象。
+4. 一个解决方案是：给 Bench 注入一个对象，这个对象可以根据运行时不同的环境调用不同的 Wheel 对象的功能。
+
+要解决这个问题就是利用 `@Scope` 的 `proxyMode` 参数，这个参数的值是 INTERFACES，表明当 Wheel 被装配的时候不装配 Wheel 对象本身，而装配`一个实现了 Wheel 对象功能的代理`。所以注入到 Bench 的 Wheel 根本就不是我们创建了 Wheel，而是一个`代理`，这个代理可以根据不同的会话环境，来调用对应的 Wheel 对象的功能。
+
+其实懂了代理这个含义，上述代码就很好理解。请搜索一下设计模式中的代理模式！然后学习下 Java 中的代理！
+
+最后 `proxyMode` 参数有除了 INTERFACES 之外的几个值，了解就好。
+
 完毕
 ==
 其他的就自己探索吧！还有一个 `@Primary`注解，被这个注解上的 Bean 会被有限装配。
