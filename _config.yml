@@ -1,18 +1,20 @@
 # Site settings
 # name: StormPhoenix的博客
-name: 起飞的凤凰
+# name: 起飞的凤凰
+name: Code Fire
 email: hzau.cs.wangcheng@gmail.com
-author: 起飞的凤凰 
-url: http://stormphoenix.github.com
+author: StormPhoenix 
+url: http://stormphoenix.github.io
 resume_site: http://github.com/stormphoenix/
 github: https://github.com/stormphoenix/
 baseurl: ""
-description: 为了生命中的美好，不妥协直到变老.
+# description: 为了生命中的美好，不妥协直到变老.
+description: 代码如剑，心灵如火
 meta_description: 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
-motto: 为了生命中的美好，不妥协直到变老.
+motto: 代码如剑，心灵如火
 banner: 学而不思则罔，思而不学则殆。
 
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 
 #permalink: /:categories/:year/:month/:day/:title/
 permalink: /:year/:month/:day/:title/
