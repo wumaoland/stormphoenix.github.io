@@ -9,7 +9,8 @@ resume_site: http://github.com/stormphoenix/
 github: https://github.com/stormphoenix/
 baseurl: ""
 # description: 为了生命中的美好，不妥协直到变老.
-description: 代码如剑，心灵如火
+# description: 代码如剑，心灵如火
+description: 大鹏一日同风起，扶摇直上九万里
 meta_description: 王成;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
 motto: 代码如剑，心灵如火
 banner: 学而不思则罔，思而不学则殆。

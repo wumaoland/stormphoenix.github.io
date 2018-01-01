@@ -5,9 +5,26 @@
     <description>代码如剑，心灵如火</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 31 Aug 2017 23:45:59 +0800</pubDate>
-    <lastBuildDate>Thu, 31 Aug 2017 23:45:59 +0800</lastBuildDate>
+    <pubDate>Sun, 31 Dec 2017 15:53:51 +0800</pubDate>
+    <lastBuildDate>Sun, 31 Dec 2017 15:53:51 +0800</lastBuildDate>
     <generator>Jekyll v3.5.0</generator>
+    
+      <item>
+        <title>和某位程序员的对话</title>
+        <description>
+&lt;p&gt;我本来是想和他探讨一下诗词的 :)&lt;/p&gt;
+
+&lt;p&gt;结果 … …
+&lt;img src=&quot;/assets/talk_with_a_programer.png&quot; alt=&quot;和某位程序员的对话&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 05 Nov 2017 11:51:21 +0800</pubDate>
+        <link>http://localhost:4000/2017/11/05/%E5%92%8C%E6%9F%90%E4%BD%8D%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E5%AF%B9%E8%AF%9D/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/11/05/%E5%92%8C%E6%9F%90%E4%BD%8D%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E5%AF%B9%E8%AF%9D/</guid>
+        
+        
+        <category>随笔</category>
+        
+      </item>
     
       <item>
         <title>Spring系列（四）—— Bean的高级装配</title>
@@ -1606,69 +1623,6 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
         <pubDate>Mon, 12 Jun 2017 22:49:35 +0800</pubDate>
         <link>http://localhost:4000/2017/06/12/%E4%BD%BF%E7%94%A8Quota/</link>
         <guid isPermaLink="true">http://localhost:4000/2017/06/12/%E4%BD%BF%E7%94%A8Quota/</guid>
-        
-        <category>Linux</category>
-        
-        
-        <category>Linux</category>
-        
-      </item>
-    
-      <item>
-        <title>ACL的使用</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#acl&quot; id=&quot;markdown-toc-acl&quot;&gt;启动ACL支持&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#acl-1&quot; id=&quot;markdown-toc-acl-1&quot;&gt;设置ACL&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。&lt;/p&gt;
-
-&lt;h1 id=&quot;acl&quot;&gt;启动ACL支持&lt;/h1&gt;
-
-&lt;p&gt;ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 19-31-56.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;从图中可以看到有sda2和sda4两个磁盘分区挂载了文件系统。以&lt;code&gt;sda2&lt;/code&gt;为例子，用&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;dumpe2fs -h /dev/sda2 | grep acl&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;命令去查询这个文件系统是否支持acl。只要有如下的acl出现，就证明系统启动了ACL支持。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 19-43-52.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;acl-1&quot;&gt;设置ACL&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code&gt;setfacl&lt;/code&gt; 用于设置针对某一个文件或某一个用户的acl属性。&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;-m : 选项用于给文件添加某一个acl属性。例如：setfacl -m u:用户名称:权限 文件名字。&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;-b：删除文件的所有acl属性。&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 17-05-52.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;getfacl&lt;/code&gt; 查看某一个文件的acl属性。例如：getfacl testfile。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/Screenshot from 2017-06-10 16-27-38.png&quot; alt=&quot;图片&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;mask&lt;/code&gt;说明。使用&lt;code&gt;getfacl&lt;/code&gt;命令的时候，会看到&lt;code&gt;mask&lt;/code&gt;这个字段。&lt;code&gt;mask&lt;/code&gt;代表在设置acl的时候，用户和用户组的权限范围不得超过&lt;code&gt;mask&lt;/code&gt;的设置值。例如如果user1针对文件test的acl属性是rwx，但是test的&lt;code&gt;mask&lt;/code&gt;字段设置为r–，由于user1的权限范围不超过mask设置的值，所以user1针对test文件只具有r–的权限。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Sat, 10 Jun 2017 16:07:39 +0800</pubDate>
-        <link>http://localhost:4000/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/06/10/ACL%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
         
         <category>Linux</category>
         
