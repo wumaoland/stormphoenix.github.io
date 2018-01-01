@@ -1,7 +1,7 @@
 # Site settings
-# name: StormPhoenix的博客
+name: StormPhoenix的博客
 # name: 起飞的凤凰
-name: Code Fire
+# name: Code Fire
 email: hzau.cs.wangcheng@gmail.com
 author: StormPhoenix 
 url: http://stormphoenix.github.io
