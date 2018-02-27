@@ -1,0 +1,16 @@
+---
+layout: post
+title:    博文的自愿付费方式
+date:    2016-12-31 20:13:36 +0800
+categories:   blog
+description: 喜欢我的文章的人，可以自愿付费购买。你可以使用以下方式付款.
+comments: true
+---
+
+喜欢我的文章的人，可以自愿付费购买。你可以使用以下方式付款：
+
+ 1. 支付宝：
+ <img src="../images/ali-pay.jpg" width = "200" height = "200" alt="ali-pay"/>
+ 2. 微信：
+ <img src="../images/wechat-pay.png" width = "200" height = "200" alt="wechat-pay"/>
+ 　

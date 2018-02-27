@@ -1,0 +1,6 @@
+permalink: /:title
+
+title: StormPhoenix
+url: http://stormphoenix.github.io
+feed: /atom.xml
+author_info: <a href="http://stormphoenix.github.io">StormPhoenix</a>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Spring系列（四） | StormPhoenix</title>
+    <meta name="author" content="StormPhoenix" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="StormPhoenix's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <link rel="stylesheet" href="/css/style.css"/>
+  </head>
+
+    <body class="body-post">
+  <div class="post-wrapper">
+    <h1 class="post-title"><a href="/Spring%E7%B3%BB%E5%88%97-%E5%9B%9B-Bean%E7%9A%84%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D" title="Spring系列（四）">Spring系列（四）</a></h1>
+    <p class="post-date">2017-07-25</p>
+
+    <h1 id="section">预备知识</h1>
+<p>学习过Bean的基本装配知识即可。</p>
+
+<h1 id="section-1">问题的提出</h1>
+
+<p>上一篇博客的代码能够完全运行正确 : )。有一个地方不知道你们有没注意到，那就是 Wheel 的接口的实现只有一个 RubberWheel，所以不论是 Java注解利用自动扫描，还是用 Java代码方式实现装配，程序都能够正确判断要装配哪一个 Wheel，那么问题：如果 Wheel 有多个实现，那么 Spring是怎么判断的？见如下例子：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RubberWheel</span> <span class="kd">implements</span> <span class="n">Wheel</span> <span class="o">{</span>
+	<span class="kt">void</span> <span class="n">role</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// do something</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SquareWheel</span> <span class="kd">implements</span> <span class="n">Wheel</span> <span class="o">{</span>
+	<span class="kt">void</span> <span class="n">role</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// do something</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bench</span> <span class="kd">implements</span> <span class="n">Car</span> <span class="o">{</span>
+	<span class="cm">/**
+	* :( 自动扫描的时候，发现 SquareWheel 和 RubberWheel 都
+	* 实现了 Wheel 这个接口，我要装配哪一个呢？？
+	*/</span>
+  <span class="nd">@Autowire</span>
+	<span class="kd">private</span> <span class="n">Wheel</span> <span class="n">wheel</span><span class="o">;</span>
+	<span class="kt">void</span> <span class="n">drive</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">wheel</span><span class="o">.</span><span class="na">role</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>如果程序运行起来，会抛出<code class="highlighter-rouge">org.springframework.beans.factory.NoUniqueBeanDefinitionException</code>异常，因为 Wheel 不知道要装配 <code class="highlighter-rouge">RubberWheel</code> 还是 <code class="highlighter-rouge">SquareWheel</code>。</p>
+
+<p>如果用 Java代码方式也是存在这种问题的。比如：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**
+* 这里生成了两个 Wheel，Bench 在装配的时候要选哪一个？
+*/</span>
+<span class="nd">@Configurable</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JavaConfig</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">Wheel</span> <span class="n">getRubberWheel</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">RubberWheel</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Wheel</span> <span class="n">getSquareWheel</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="n">SquareWheel</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="bean">Bean的条件化装配</h1>
+
+<p>用一个简单的 if - else 说明：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">if</span> <span class="p">(</span><span class="err">路面很平坦</span><span class="p">)</span> <span class="p">{</span>
+    <span class="err">选用</span> <span class="no">RubberWheel</span> <span class="err">来装配</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="err">路面不平</span><span class="p">)</span> <span class="p">{</span>
+    <span class="err">选用</span> <span class="no">SquareWheel</span> <span class="err">来装配</span>
+<span class="p">}</span>
+
+<span class="sr">//</span> <span class="err">根据不同的情况来装配不同的</span> <span class="no">Bean</span><span class="err">，接下来就要用代码来模拟不同的情况</span>
+<span class="sr">//</span> <span class="err">让</span> <span class="no">Spring</span> <span class="err">根据情况来装配。</span></code></pre></figure>
+
+<ul>
+  <li><strong>Spring 条件化装配</strong>
+这种方式是利用 <code class="highlighter-rouge">@Conditional</code> 注解，实现根据不同的条件来装配 Bean的功能。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@Configurable</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">JavaConfig</span> <span class="p">{</span>
+    <span class="sr">/**
+    * @Conditional 内的参数，必须要实现 Condition 这个接口
+    * 这个接口会返回一个 bool 值，于是
+    * bool 值为true：装配时选择这个 Bean
+    * bool 值为true：装配时候不选择这个 Bean
+    */</span>
+    <span class="vi">@Bean</span>
+    <span class="vi">@Conditional</span><span class="p">(</span><span class="no">RoadFlatConditional</span><span class="p">.</span><span class="nf">class</span><span class="p">)</span>
+    <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getRubberWheel</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kp">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="sr">//</span> <span class="err">其他的省略</span>
+<span class="p">}</span>
+
+<span class="sr">//</span> <span class="err">看看是怎么实现的</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">RoadFlatConditional</span> <span class="n">implements</span> <span class="no">Condition</span> <span class="p">{</span>
+    <span class="sr">/**
+    * 最重要的是传入的两个参数。你可以通过这两个参数程序运行的两大信息：
+    * 1、系统的环境变量
+    * 2、检查带有 @Bean 注解的方法上还有说明其他注解
+    */</span>
+	<span class="kp">public</span> <span class="n">boolean</span> <span class="n">matches</span><span class="p">(</span><span class="no">ConditionContext</span> <span class="n">context</span><span class="p">,</span> <span class="no">AnnotatedTypeMetadata</span> <span class="n">metadata</span><span class="p">)</span> <span class="p">{</span>
+        <span class="sr">//</span> <span class="k">do</span> <span class="n">something</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>matches 方法的实现完全看个人，这里给一个样例：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">//</span> <span class="err">如果系统带有</span> <span class="n">flat</span> <span class="err">变量，那么方法返回</span> <span class="kp">true</span><span class="err">，否则</span> <span class="kp">false</span>
+<span class="kp">public</span> <span class="n">boolean</span> <span class="n">matches</span><span class="p">(</span><span class="no">ConditionContext</span> <span class="n">context</span><span class="p">,</span> <span class="no">AnnotatedTypeMetadata</span> <span class="n">metadata</span><span class="p">)</span> <span class="p">{</span>
+	<span class="no">Environment</span> <span class="n">environment</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="nf">getEnvironment</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">environment</span><span class="p">.</span><span class="nf">containsProperty</span><span class="p">(</span><span class="s2">"flat"</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>这个环境变量有几种设置方法：</p>
+
+<blockquote>
+  <p>作为 DispatcherServlet 的初始化参数
+作为 Web 引用的上下文参数
+作为 JNDI 条目 （这个我不懂）
+作为环境变量
+作为 JVM 系统属性</p>
+</blockquote>
+
+<p>我用的一个方法是在虚拟机启动的时候把 <code class="highlighter-rouge">flat</code> 设置成了环境变量。</p>
+
+<ul>
+  <li><strong>利用Profile</strong>
+把 Profile 理解成一个环境，这个环境包含了一套 Bean。你现在有很多个 Profile，在运行时你来制定用哪一个Profile。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">/**
+* 程序运行的时候，可以通过查看当前运行时的参数，确定
+* 当前的 Profile 是 flat 还是 uneven，如果是 flat profile，
+* 就返回 RubberWheel；如果是 uneven profile，则返回 SquareWheel。
+*/</span>
+<span class="vi">@Configurable</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">JavaConfig4</span> <span class="p">{</span>
+    <span class="vi">@Bean</span>
+    <span class="vi">@Profile</span><span class="p">(</span><span class="s2">"flat"</span><span class="p">)</span>
+    <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getRubberWheel</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kp">new</span> <span class="no">RubberWheel</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="vi">@Bean</span>
+    <span class="vi">@Profile</span><span class="p">(</span><span class="s2">"uneven"</span><span class="p">)</span>
+    <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getSquareWheel</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kp">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
+    <span class="p">}</span></code></pre></figure>
+
+<p>额外提一些。注释中说程序运行时查看的参数，具体是如下两个参数：</p>
+
+<blockquote>
+  <p>spring.profiles.active
+spring.profiles.default</p>
+</blockquote>
+
+<p>运行时查看 <code class="highlighter-rouge">spring.profiles.active</code> 的值，根据这个值设置 profile，如果这个值没有设置，就查看 <code class="highlighter-rouge">spring.profiles.default</code>来设置值。</p>
+
+<p>至于如何设置的嘛，和上文一样，简单不解释。</p>
+
+<ul>
+  <li><strong>使用限定符注解</strong>
+这样理解：有好多个实现相同接口的 Bean，我们要给这些 Bean 添加上一些不同的特征，到时候用的时候，可以根据我需要的特征挑选 Bean。</li>
+</ul>
+
+<p>而所谓的添加特征，就是在 Bean 上添加 <code class="highlighter-rouge">@Qualifier</code>。添加上一个 <code class="highlighter-rouge">@Qualifier</code>注解，就代表给 Bean 添加一个特征。</p>
+
+<p>这次我们用 <code class="highlighter-rouge">@Component</code> 的形式做例子</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@Component</span>
+<span class="vi">@Qualifier</span><span class="p">(</span><span class="s2">"sweet"</span><span class="p">)</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">Apple</span> <span class="n">implements</span> <span class="no">Fruit</span> <span class="p">{</span> <span class="sr">//</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="p">}</span>
+
+<span class="vi">@Component</span>
+<span class="vi">@Qualifier</span><span class="p">(</span><span class="s2">"water"</span><span class="p">)</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">Watermelon</span> <span class="n">implements</span> <span class="no">Fruit</span> <span class="p">{</span> <span class="sr">//</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="p">}</span>
+
+<span class="sr">/**
+* 由于 '苹果' 和 '西瓜' 都实现了 Fruit 接口，
+* 但是这里添加了 @Qualifier("sweet") 这个'甜味'特征，
+* 所以 Apple 会被装配到这个地方。
+*/</span>
+<span class="vi">@Autowire</span>
+<span class="vi">@Qualifier</span><span class="p">(</span><span class="s2">"sweet"</span><span class="p">)</span>
+<span class="kp">public</span> <span class="n">void</span> <span class="n">setFruit</span><span class="p">(</span><span class="no">Fruit</span> <span class="n">fruit</span><span class="p">)</span> <span class="p">{</span>
+	<span class="sr">//</span> <span class="k">do</span> <span class="n">something</span>
+<span class="p">}</span></code></pre></figure>
+
+<h1 id="bean-">Bean 的作用域</h1>
+<p>你用<code class="highlighter-rouge">@Bean</code>创建了一个 Bean 是吧？这里值得注意的一个小问题就是 Bean 的作用域，就是 Bean 起作用的范围。以它默认的作用域<code class="highlighter-rouge">singleton</code>来说明，<code class="highlighter-rouge">singleton</code>指 Bean 的作用域是 Spring 应用的所有位置，这个 Bean 是单例的，应用中对这个 Bean 的引用都是同一个 Bean。</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">    <span class="sr">/**
+    * 看这里，默认情况下 Wheel 这个 Bean 的作用域是 singleton，
+    * 意味着应用中对这个 wheel 的引用都是同一个 wheel、整个应用中
+    * 这存在这一个 wheel。
+    *
+    * 你可能会疑问这里明明采用了 new 关键字，应该是每次调用这个方法
+    * 时都会创建一个 Wheel 的实例才对？
+    *
+    * 实际情况是 Spring 会对这个方法的每次调用进行拦截。第一次拦截时，
+    * 会 new 出这个 Wheel，以后再次拦截的时候就发现已经创建这个 Bean
+    * 了，所以会把之前创建的 Wheel 返回。从而实现了 singleton。
+    */</span>
+    <span class="vi">@Bean</span>
+    <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getSquareWheel</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kp">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
+    <span class="p">}</span></code></pre></figure>
+
+<p>另外三个作用域是</p>
+
+<ul>
+  <li>Prototype 每次需要使用 <code class="highlighter-rouge">@Bean</code>注解时，都会创建一个 Bean</li>
+  <li>Session 在 Web 应用中，为每次会话创建一个 Bean</li>
+  <li>Request 在 Web 应用中，为每次请求创建一个 Bean</li>
+</ul>
+
+<p>解释一下 Web 应用中的 Session 作用域这例子：比如用户上网购物行为属于一个会话，购买的物品都要放入购物车（shopcart），如果要用一个 Bean 表示这个 shopcart ，那么这个 Bean 就必须要声明为 Session 作用域。</p>
+
+<p>其他的作用域都有各自的类似场景。</p>
+
+<p>声明 Bean 的作用域的方法如下</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">    <span class="sr">/**
+    * 加上 @Scope 注解用来改变 Bean 的作用域，
+    * ConfigurableBeanFactory.SCOPE_PROTOTYPE 参数代表
+    * Prototype 作用域
+    */</span>
+    <span class="vi">@Bean</span>
+    <span class="vi">@Scope</span><span class="p">(</span><span class="no">ConfigurableBeanFactory</span><span class="o">.</span><span class="no">SCOPE_PROTOTYPE</span><span class="p">)</span>
+    <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getSquareWheel</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kp">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="sr">//</span> <span class="err">或者在</span> <span class="no">XML</span> <span class="err">文件里面声明</span>
+    <span class="o">&lt;</span><span class="n">bean</span> <span class="nb">id</span><span class="o">=</span><span class="s2">"rubberWheel"</span> <span class="k">class</span><span class="o">=</span><span class="s2">"com.stormphoenix.RubberWheel"</span>
+          <span class="n">scope</span><span class="o">=</span><span class="s2">"prototype"</span><span class="o">/&gt;</span></code></pre></figure>
+
+<p>关于 <code class="highlighter-rouge">@Scope</code> 的 <code class="highlighter-rouge">proxyMode</code> 属性需要说明一下。如下</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@Component</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">Bench</span> <span class="n">implements</span> <span class="no">Car</span> <span class="p">{</span>
+    <span class="vi">@Autowire</span>
+    <span class="no">Wheel</span> <span class="n">wheel</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">JavaConfig</span> <span class="p">{</span>
+    <span class="vi">@Bean</span>
+    <span class="vi">@Scope</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="no">WebApplicationContext</span><span class="o">.</span><span class="no">SCOPE_SESSION</span><span class="p">,</span>
+           <span class="n">proxyMode</span> <span class="o">=</span> <span class="no">ScopedProxyMode</span><span class="o">.</span><span class="no">INTERFACES</span><span class="p">)</span>
+    <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getWheel</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kp">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>解释上述代码：
+首先 Bench 的作用域是 <code class="highlighter-rouge">singleton</code>，Wheel 的作用域是 <code class="highlighter-rouge">session</code>，所以看出问题来吧了 : )</p>
+
+<p>Bench 是一个，而 Wheel 有好多个（每发生一次会话就会创建一个），那么到底要装配哪一个 Wheel 到 Bench 里面呢？</p>
+
+<p>首先要确定几点：
+1. 被 <code class="highlighter-rouge">@Autowire</code> 注解的属性肯定只会装配一次。
+2. Wheel 的作用域是 <code class="highlighter-rouge">session</code> ，肯定有很多个 Wheel 对象。
+3. Bench 作用域是 <code class="highlighter-rouge">singleton</code> ，肯定只有一个 Bench 对象。
+4. 一个解决方案是：给 Bench 注入一个对象，这个对象可以根据运行时不同的环境调用不同的 Wheel 对象的功能。</p>
+
+<p>要解决这个问题就是利用 <code class="highlighter-rouge">@Scope</code> 的 <code class="highlighter-rouge">proxyMode</code> 参数，这个参数的值是 INTERFACES，表明当 Wheel 被装配的时候不装配 Wheel 对象本身，而装配<code class="highlighter-rouge">一个实现了 Wheel 对象功能的代理</code>。所以注入到 Bench 的 Wheel 根本就不是我们创建了 Wheel，而是一个<code class="highlighter-rouge">代理</code>，这个代理可以根据不同的会话环境，来调用对应的 Wheel 对象的功能。</p>
+
+<p>其实懂了代理这个含义，上述代码就很好理解。请搜索一下设计模式中的代理模式！然后学习下 Java 中的代理！</p>
+
+<p>最后 <code class="highlighter-rouge">proxyMode</code> 参数有除了 INTERFACES 之外的几个值，了解就好。</p>
+
+<h1 id="section-2">完毕</h1>
+<p>其他的就自己探索吧！还有一个 <code class="highlighter-rouge">@Primary</code>注解，被这个注解上的 Bean 会被有限装配。</p>
+
+<p>完毕！</p>
+
+
+    <div id="disqus_container">
+  <div class="share-con">
+    <script type="text/javascript" charset="utf-8">
+      (function(){
+        var param = {
+          url: 'http://beiyuu.com/Spring%E7%B3%BB%E5%88%97-%E5%9B%9B-Bean%E7%9A%84%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D',
+          type: '6',
+          title: '《Spring系列（四）》' + '- Bean的高级装配',
+          ralateUid: '1855270953',
+          rnd:new Date().valueOf()
+        }
+        var temp = [];
+        for( var p in param ){
+          temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+        }
+        document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="86" height="16"></iframe>')
+      })()
+    </script>
+  </div>
+
+  <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+  <div id="disqus_thread"></div>
+</div>
+
+
+  </div>
+
+  <div class="about-wrapper">
+  <iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1" style="margin: 30px 0;"></iframe>
+
+  <div class="aboutme">
+    <h2><a href="/">所有文章</a></h2>
+    <ul>
+      
+      <li>
+        <a href="/you-do-not-understand-the-wonderful-world" class="title">你并不了解这个世界有多么精彩</a>
+      </li>
+      
+      <li>
+        <a href="/%E5%92%8C%E6%9F%90%E4%BD%8D%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E5%AF%B9%E8%AF%9D" class="title">和某位程序员的对话</a>
+      </li>
+      
+      <li>
+        <a href="/Spring%E7%B3%BB%E5%88%97-%E5%9B%9B-Bean%E7%9A%84%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D" class="title">Spring系列（四）</a>
+      </li>
+      
+      <li>
+        <a href="/Spring%E7%B3%BB%E5%88%97-%E4%B8%89-%E5%88%9B%E5%BB%BABean%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BE%9D%E8%B5%96" class="title">Spring系列（三）</a>
+      </li>
+      
+      <li>
+        <a href="/%E4%BB%8E-%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D-%E8%B0%88%E8%B5%B7" class="title">从“模式匹配”谈起</a>
+      </li>
+      
+      <li>
+        <a href="/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84" class="title">Linux内核完全剖析（一）</a>
+      </li>
+      
+      <li>
+        <a href="/Spring%E7%B3%BB%E5%88%97-%E4%BA%8C-Spring%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3" class="title">Spring系列（二）</a>
+      </li>
+      
+      <li>
+        <a href="/Spring%E7%B3%BB%E5%88%97-%E4%B8%80-%E5%88%9D%E8%AF%86Spring" class="title">Spring系列（一）</a>
+      </li>
+      
+      <li>
+        <a href="/%E6%88%91%E5%A4%B1%E5%8E%BB%E4%BA%86%E4%BB%80%E4%B9%88" class="title">我失去了什么？</a>
+      </li>
+      
+      <li>
+        <a href="/%E4%BD%BF%E7%94%A8Quota" class="title">使用Quota</a>
+      </li>
+      
+      <li>
+        <a href="/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86" class="title">Linux账号管理</a>
+      </li>
+      
+      <li>
+        <a href="/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C" class="title">Linux文件操作</a>
+      </li>
+      
+      <li>
+        <a href="/ACL%E7%9A%84%E4%BD%BF%E7%94%A8" class="title">ACL的使用</a>
+      </li>
+      
+      <li>
+        <a href="/pay-blog" class="title">博文的自愿付费方式</a>
+      </li>
+      
+      <li>
+        <a href="/carriage-return-line-feed-new-line-end-file" class="title">回车、换行、和文件末尾空行</a>
+      </li>
+      
+      <li>
+        <a href="/github-pages" class="title">使用Github Pages建独立博客</a>
+      </li>
+      
+      <li>
+        <a href="/why-blog" class="title">我为什么写博客？</a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+  <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+  <script src="/js/post.js" type="text/javascript"></script>
+</body>
+
+    
+</html>
