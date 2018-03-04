@@ -17,22 +17,22 @@
     <h1 class="post-title"><a href="/Spring%E7%B3%BB%E5%88%97-%E5%9B%9B-Bean%E7%9A%84%E9%AB%98%E7%BA%A7%E8%A3%85%E9%85%8D" title="Spring系列（四）">Spring系列（四）</a></h1>
     <p class="post-date">2017-07-25</p>
 
-    <h1 id="section">预备知识</h1>
+    <h1 id="预备知识">预备知识</h1>
 <p>学习过Bean的基本装配知识即可。</p>
 
-<h1 id="section-1">问题的提出</h1>
+<h1 id="问题的提出">问题的提出</h1>
 
 <p>上一篇博客的代码能够完全运行正确 : )。有一个地方不知道你们有没注意到，那就是 Wheel 的接口的实现只有一个 RubberWheel，所以不论是 Java注解利用自动扫描，还是用 Java代码方式实现装配，程序都能够正确判断要装配哪一个 Wheel，那么问题：如果 Wheel 有多个实现，那么 Spring是怎么判断的？见如下例子：</p>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">RubberWheel</span> <span class="kd">implements</span> <span class="n">Wheel</span> <span class="o">{</span>
-	<span class="kt">void</span> <span class="n">role</span><span class="o">()</span> <span class="o">{</span>
+	<span class="kt">void</span> <span class="nf">role</span><span class="o">()</span> <span class="o">{</span>
 		<span class="c1">// do something</span>
 	<span class="o">}</span>
 <span class="o">}</span>
 <span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SquareWheel</span> <span class="kd">implements</span> <span class="n">Wheel</span> <span class="o">{</span>
-	<span class="kt">void</span> <span class="n">role</span><span class="o">()</span> <span class="o">{</span>
+	<span class="kt">void</span> <span class="nf">role</span><span class="o">()</span> <span class="o">{</span>
 		<span class="c1">// do something</span>
 	<span class="o">}</span>
 <span class="o">}</span>
@@ -44,7 +44,7 @@
 	*/</span>
   <span class="nd">@Autowire</span>
 	<span class="kd">private</span> <span class="n">Wheel</span> <span class="n">wheel</span><span class="o">;</span>
-	<span class="kt">void</span> <span class="n">drive</span><span class="o">()</span> <span class="o">{</span>
+	<span class="kt">void</span> <span class="nf">drive</span><span class="o">()</span> <span class="o">{</span>
 		<span class="n">wheel</span><span class="o">.</span><span class="na">role</span><span class="o">();</span>
 	<span class="o">}</span>
 <span class="o">}</span></code></pre></figure>
@@ -59,16 +59,16 @@
 <span class="nd">@Configurable</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">JavaConfig</span> <span class="o">{</span>
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">Wheel</span> <span class="n">getRubberWheel</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">RubberWheel</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="n">Wheel</span> <span class="nf">getRubberWheel</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">RubberWheel</span><span class="o">();</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="n">Wheel</span> <span class="n">getSquareWheel</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="k">new</span> <span class="n">SquareWheel</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="n">Wheel</span> <span class="nf">getSquareWheel</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="nf">SquareWheel</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span></code></pre></figure>
 
-<h1 id="bean">Bean的条件化装配</h1>
+<h1 id="bean的条件化装配">Bean的条件化装配</h1>
 
 <p>用一个简单的 if - else 说明：</p>
 
@@ -198,7 +198,7 @@ spring.profiles.default</p>
 	<span class="sr">//</span> <span class="k">do</span> <span class="n">something</span>
 <span class="p">}</span></code></pre></figure>
 
-<h1 id="bean-">Bean 的作用域</h1>
+<h1 id="bean-的作用域">Bean 的作用域</h1>
 <p>你用<code class="highlighter-rouge">@Bean</code>创建了一个 Bean 是吧？这里值得注意的一个小问题就是 Bean 的作用域，就是 Bean 起作用的范围。以它默认的作用域<code class="highlighter-rouge">singleton</code>来说明，<code class="highlighter-rouge">singleton</code>指 Bean 的作用域是 Spring 应用的所有位置，这个 Bean 是单例的，应用中对这个 Bean 的引用都是同一个 Bean。</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">    <span class="sr">/**
@@ -269,11 +269,13 @@ spring.profiles.default</p>
 
 <p>Bench 是一个，而 Wheel 有好多个（每发生一次会话就会创建一个），那么到底要装配哪一个 Wheel 到 Bench 里面呢？</p>
 
-<p>首先要确定几点：
-1. 被 <code class="highlighter-rouge">@Autowire</code> 注解的属性肯定只会装配一次。
-2. Wheel 的作用域是 <code class="highlighter-rouge">session</code> ，肯定有很多个 Wheel 对象。
-3. Bench 作用域是 <code class="highlighter-rouge">singleton</code> ，肯定只有一个 Bench 对象。
-4. 一个解决方案是：给 Bench 注入一个对象，这个对象可以根据运行时不同的环境调用不同的 Wheel 对象的功能。</p>
+<p>首先要确定几点：</p>
+<ol>
+  <li>被 <code class="highlighter-rouge">@Autowire</code> 注解的属性肯定只会装配一次。</li>
+  <li>Wheel 的作用域是 <code class="highlighter-rouge">session</code> ，肯定有很多个 Wheel 对象。</li>
+  <li>Bench 作用域是 <code class="highlighter-rouge">singleton</code> ，肯定只有一个 Bench 对象。</li>
+  <li>一个解决方案是：给 Bench 注入一个对象，这个对象可以根据运行时不同的环境调用不同的 Wheel 对象的功能。</li>
+</ol>
 
 <p>要解决这个问题就是利用 <code class="highlighter-rouge">@Scope</code> 的 <code class="highlighter-rouge">proxyMode</code> 参数，这个参数的值是 INTERFACES，表明当 Wheel 被装配的时候不装配 Wheel 对象本身，而装配<code class="highlighter-rouge">一个实现了 Wheel 对象功能的代理</code>。所以注入到 Bench 的 Wheel 根本就不是我们创建了 Wheel，而是一个<code class="highlighter-rouge">代理</code>，这个代理可以根据不同的会话环境，来调用对应的 Wheel 对象的功能。</p>
 
@@ -281,7 +283,7 @@ spring.profiles.default</p>
 
 <p>最后 <code class="highlighter-rouge">proxyMode</code> 参数有除了 INTERFACES 之外的几个值，了解就好。</p>
 
-<h1 id="section-2">完毕</h1>
+<h1 id="完毕">完毕</h1>
 <p>其他的就自己探索吧！还有一个 <code class="highlighter-rouge">@Primary</code>注解，被这个注解上的 Bean 会被有限装配。</p>
 
 <p>完毕！</p>
@@ -322,6 +324,10 @@ spring.profiles.default</p>
     <ul>
       
       <li>
+        <a href="/anatomy-of-linux-kernel-2" class="title">Linux内核完全剖析（二）</a>
+      </li>
+      
+      <li>
         <a href="/you-do-not-understand-the-wonderful-world" class="title">你并不了解这个世界有多么精彩</a>
       </li>
       
@@ -338,7 +344,7 @@ spring.profiles.default</p>
       </li>
       
       <li>
-        <a href="/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84" class="title">Linux内核完全剖析（一）</a>
+        <a href="/anatomy-of-linux-kernel-1" class="title">Linux内核完全剖析（一）</a>
       </li>
       
       <li>

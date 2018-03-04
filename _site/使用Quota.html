@@ -19,7 +19,7 @@
 
     <p>Quota翻译成中文就是“限额”的意思，在Linux中Quota用来对用户（或用户组）的磁盘用量进行管理，这种管理在多用户的Linux系统上是很有必要的。假设有这样一种情况，好多个用户同时在主机上工作，其中一个用户无加限制的使用了很大的磁盘空间，这样就导致了其他用户可用的磁盘空间变小了，所以我们必须要对这个用户做一些磁盘容量的使用限制。</p>
 
-<h1 id="section">注意事项</h1>
+<h1 id="注意事项">注意事项</h1>
 <ul>
   <li>
     <p>Quota和ACL一样需要内核的支持，一样是针对整个文件系统而言的。所谓的针对整个文件系统，意思是假设你将<code class="highlighter-rouge">/dev/sda2</code>挂载了<code class="highlighter-rouge">/home</code>目录下并设置Quota，那么受影响的只是<code class="highlighter-rouge">/home</code>下面所有的目录，其他目录是不会受影响的。还有一点，Quota一般是默认打开的，如果没有那就需要手动打开Quota哟。</p>
@@ -29,7 +29,7 @@
   </li>
 </ul>
 
-<h1 id="section-1">相关名词概念</h1>
+<h1 id="相关名词概念">相关名词概念</h1>
 
 <ul>
   <li>
@@ -46,7 +46,7 @@
   </li>
 </ul>
 
-<h1 id="quota">设置文件系统支持Quota</h1>
+<h1 id="设置文件系统支持quota">设置文件系统支持Quota</h1>
 <p>一般ext2、ext3和ext4都是能够支持Quota的。我们可以通过如下命令设置立即支持Quota。</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#mount -o remount, usrquota,grpquota /home
@@ -55,12 +55,14 @@ root@ubuntu:~#mount | grep home
 </code></pre>
 </div>
 
-<p>有几点要注意
-1. 只有root能够使用这个功能。
-2. 此处用 <code class="highlighter-rouge">/home</code> 目录做实验是因为/home恰好是挂载点。
-3. usrquota是对单个用户做限制，grpquota是对一个组做限制。
-4. 输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。
-5. 输出的信息其实存储在 <code class="highlighter-rouge">/etc/mtab</code> 文件中。之前 <code class="highlighter-rouge">mount -o remount,usrquota,grpquota /home</code> 其实是对文件系统进行了设置，这个设置会被保存在 <code class="highlighter-rouge">/etc/mtab</code>文件中</p>
+<p>有几点要注意</p>
+<ol>
+  <li>只有root能够使用这个功能。</li>
+  <li>此处用 <code class="highlighter-rouge">/home</code> 目录做实验是因为/home恰好是挂载点。</li>
+  <li>usrquota是对单个用户做限制，grpquota是对一个组做限制。</li>
+  <li>输出中的括号如果含有usrquota和grpquota，则证明该文件系统已经支持了quota。</li>
+  <li>输出的信息其实存储在 <code class="highlighter-rouge">/etc/mtab</code> 文件中。之前 <code class="highlighter-rouge">mount -o remount,usrquota,grpquota /home</code> 其实是对文件系统进行了设置，这个设置会被保存在 <code class="highlighter-rouge">/etc/mtab</code>文件中</li>
+</ol>
 
 <p>以上的命令只在此次开机中有效，如果想让系统在每次开机中都能够支持quota，则需要在/etc/fstab中添加如下语句</p>
 
@@ -70,7 +72,7 @@ root@ubuntu:~#mount | grep home
 
 <p>在第四个字段的default后面加上usrquota，grpquota即可。</p>
 
-<h1 id="quota-1">创建Quota配置文件</h1>
+<h1 id="创建quota配置文件">创建Quota配置文件</h1>
 <p>有了文件系统支持quota还不够，还需要创建quota的配置文件，那么这个配置文件的作用就是用来保存不同的用户在此文件系统中已经使用的磁盘容量、容量使用限制等信息。</p>
 
 <p>那么quota具体是怎么工作的呢？在没有配置文件的时候，quota会扫描整个文件系统，查询每个用户（或用户组）拥有的文件总数和总大小，将查询到的信息记录到这个文件系统的根目录的配置文件之中。然后根据配置文件中对每个用户（或用户组）的限制信息来规定磁盘使用限制。</p>
@@ -87,7 +89,7 @@ root@ubuntu:~#mount | grep home
 
 <p>quotacheck命令先话一段时间扫描整个文件系统，执行完毕后会在/home目录下生成两个文件aquota.group和aquota.user两个文件，分别是针对用户组和用户的配置文件。</p>
 
-<h1 id="quota-2">使用Quota</h1>
+<h1 id="使用quota">使用Quota</h1>
 
 <p>开启Quota服务</p>
 
@@ -120,16 +122,18 @@ Filesystem	blocks	    soft	hard    inodes      soft hard
 </code></pre>
 </div>
 
-<p>分为7列，具体说明：
-1. 具体的限制值是针对哪一个文件系统
-2. 当前用户已经使用的磁盘容量
-3. 当前用户使用磁盘容量的软限制值
-4. 当前用户使用磁盘容量的硬限制值
-5. 当前用户创建的文件数量
-6. 当前用户穿件文件数量的软限制值
-7. 当前用户创建文件数量的硬限制值</p>
+<p>分为7列，具体说明：</p>
+<ol>
+  <li>具体的限制值是针对哪一个文件系统</li>
+  <li>当前用户已经使用的磁盘容量</li>
+  <li>当前用户使用磁盘容量的软限制值</li>
+  <li>当前用户使用磁盘容量的硬限制值</li>
+  <li>当前用户创建的文件数量</li>
+  <li>当前用户穿件文件数量的软限制值</li>
+  <li>当前用户创建文件数量的硬限制值</li>
+</ol>
 
-<h1 id="quota-3">生成Quota报表</h1>
+<h1 id="生成quota报表">生成Quota报表</h1>
 <p>简单的说就是查看用户或者用户组当前的使用量和限制量。</p>
 
 <p>查看某一个用户报表</p>
@@ -149,7 +153,7 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
 </code></pre>
 </div>
 
-<h1 id="section-2">其他</h1>
+<h1 id="其他">其他</h1>
 <p>介绍两个命令</p>
 
 <p><code class="highlighter-rouge">warnquota</code>用来对超出使用限制的用户发出警告，一般是用邮件发送。具体的发送信息是根据 <code class="highlighter-rouge">/etc/warnquota</code> 的内容设置的。<code class="highlighter-rouge">warnquota</code> 不会自动触发，需要手动启动，只要使用量处于soft和hard之间就会收到此警告（不过使用量到达了hard，就不会收到此消息了，因为用户的磁盘使用已经被剥夺，无法继续收信了）。</p>
@@ -196,6 +200,10 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
     <ul>
       
       <li>
+        <a href="/anatomy-of-linux-kernel-2" class="title">Linux内核完全剖析（二）</a>
+      </li>
+      
+      <li>
         <a href="/you-do-not-understand-the-wonderful-world" class="title">你并不了解这个世界有多么精彩</a>
       </li>
       
@@ -212,7 +220,7 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
       </li>
       
       <li>
-        <a href="/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84" class="title">Linux内核完全剖析（一）</a>
+        <a href="/anatomy-of-linux-kernel-1" class="title">Linux内核完全剖析（一）</a>
       </li>
       
       <li>

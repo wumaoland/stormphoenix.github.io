@@ -17,7 +17,7 @@
     <h1 class="post-title"><a href="/carriage-return-line-feed-new-line-end-file" title="回车、换行、和文件末尾空行">回车、换行、和文件末尾空行</a></h1>
     <p class="post-date">2016-05-18</p>
 
-    <h2 id="section">回车和换行</h2>
+    <h2 id="回车和换行">回车和换行</h2>
 
 <p>回车 (Carriage Return) 和换行 (Line Feed) 的区别，<a href="http://stackoverflow.com/questions/1761051/difference-between-n-and-r">这里</a>有一个历史原因可参考：</p>
 
@@ -66,7 +66,7 @@ hello2
   <li>Windows 下的文本文件在 Mac 下打开，Vim 中会在每行末尾显示一个 <code class="highlighter-rouge">^M</code>，(不是两个字符组成的)</li>
 </ul>
 
-<h2 id="section-1">文件末尾空行</h2>
+<h2 id="文件末尾空行">文件末尾空行</h2>
 
 <p><a href="https://zh.wikipedia.org/zh-sg/POSIX">POSIX</a>对行的<a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_206">定义</a>如下：</p>
 
@@ -119,7 +119,7 @@ print('hello')
 
 <p>不遵守标准带来的则是：在一些编辑器下面，比如 Sublime，他把<code class="highlighter-rouge">\n</code>的当做了行之间的分隔符，于是文件最后一行的<code class="highlighter-rouge">\n</code>就看上去成了一个新的空行，这就是错误解读标准造成的，拼接文件时也会产生不必要的麻烦，比如上例。</p>
 
-<h2 id="no-new-line-at-end-of-file">\ No new line at end of file</h2>
+<h2 id="-no-new-line-at-end-of-file">\ No new line at end of file</h2>
 
 <p>基于上面的原因，再去看 git diff 的<code class="highlighter-rouge">\ No new line at end of file</code>信息，就很好解释了。</p>
 
@@ -174,6 +174,10 @@ print('hello')
     <ul>
       
       <li>
+        <a href="/anatomy-of-linux-kernel-2" class="title">Linux内核完全剖析（二）</a>
+      </li>
+      
+      <li>
         <a href="/you-do-not-understand-the-wonderful-world" class="title">你并不了解这个世界有多么精彩</a>
       </li>
       
@@ -190,7 +194,7 @@ print('hello')
       </li>
       
       <li>
-        <a href="/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84" class="title">Linux内核完全剖析（一）</a>
+        <a href="/anatomy-of-linux-kernel-1" class="title">Linux内核完全剖析（一）</a>
       </li>
       
       <li>

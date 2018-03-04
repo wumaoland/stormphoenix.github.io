@@ -17,16 +17,18 @@
     <h1 class="post-title"><a href="/Spring%E7%B3%BB%E5%88%97-%E4%BA%8C-Spring%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3" title="Spring系列（二）">Spring系列（二）</a></h1>
     <p class="post-date">2017-06-25</p>
 
-    <h1 id="section">前言</h1>
+    <h1 id="前言">前言</h1>
 
-<p>看懂本文需要准备的知识：
-* Java反射
-* Java注解
-* 依赖注入（Dependency Injection，DI)
-* Spring 是如何使用注解的 （比如@Bean，@Component之类）
-* 阅读过上一篇<a href="https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/">博客</a></p>
+<p>看懂本文需要准备的知识：</p>
+<ul>
+  <li>Java反射</li>
+  <li>Java注解</li>
+  <li>依赖注入（Dependency Injection，DI)</li>
+  <li>Spring 是如何使用注解的 （比如@Bean，@Component之类）</li>
+  <li>阅读过上一篇<a href="https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/">博客</a></li>
+</ul>
 
-<h1 id="section-1">从自动扫描说起</h1>
+<h1 id="从自动扫描说起">从自动扫描说起</h1>
 
 <p>在 Spring 里面有一个我觉得比较厉害的功能——自动扫描。不了解的没有关系下面我举一个例子来说明一下。</p>
 
@@ -58,7 +60,7 @@
 
 <p>假设我在配置文件中配置 Spring 使用自动扫描功能（具体如何配置的目前不管，先了解原理），Spring 就会将程序员指定的包路径下面的所有的类全部扫描一遍，读取里面的信息。如果 Spring 读取 Kid 类时，发现有一个属性字段 ball 被加上了 @Autowire 注解，那么就会在 <strong>Spring容器</strong> 里面查找是否有类型是 Ball 的一个 <strong>Bean</strong> 的实现，如果有，就会把这个 Bean 赋值给 Kid 的 ball 字段。从而实现了 Spring 的 <strong>DI</strong> 功能。</p>
 
-<h1 id="section-2">如何实现的</h1>
+<h1 id="如何实现的">如何实现的</h1>
 <p>这个神奇的自动扫描、自动注入是如何实现的？我查找了一些资料，这里仅谈谈个人理解。</p>
 
 <p>首先，Spring 会读取配置，从配置中直到它要扫描的包，然后解析包里面的所有的类。那么关键就是如何解析了。解析的方法就是利用 <strong>Java 反射</strong>，是 <strong>Java 反射</strong>！</p>
@@ -109,6 +111,10 @@
     <ul>
       
       <li>
+        <a href="/anatomy-of-linux-kernel-2" class="title">Linux内核完全剖析（二）</a>
+      </li>
+      
+      <li>
         <a href="/you-do-not-understand-the-wonderful-world" class="title">你并不了解这个世界有多么精彩</a>
       </li>
       
@@ -125,7 +131,7 @@
       </li>
       
       <li>
-        <a href="/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84" class="title">Linux内核完全剖析（一）</a>
+        <a href="/anatomy-of-linux-kernel-1" class="title">Linux内核完全剖析（一）</a>
       </li>
       
       <li>

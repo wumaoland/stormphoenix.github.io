@@ -108,7 +108,7 @@
 
 <p>Spare Disk 在磁盘阵列中的地位属于预留的磁盘。它的功能是在某一个磁盘损坏的时候，系统可以自动将预留的磁盘加入磁盘阵列组，替代已经损坏的磁盘。</p>
 
-<h1 id="software-raid--hardware-raid">Software RAID 和 Hardware RAID</h1>
+<h1 id="software-raid-和-hardware-raid">Software RAID 和 Hardware RAID</h1>
 
 <h3 id="hardware-raid">Hardware RAID</h3>
 <p>是利用硬件实现的 RAID ，它的性能会更好，因为 <code class="highlighter-rouge">Hardware RAID</code> 专门的芯片处理 RAID，在进行数据传输时不会重复占用I/O总线，理论上性能会更好。不过缺点就是太贵。</p>
@@ -116,9 +116,9 @@
 <h3 id="software-raid">Software RAID</h3>
 <p>是利用软件来模拟硬件RAID的功能。模拟软件是 mdadm。在 <code class="highlighter-rouge">Hardware RAID</code> 中是以磁盘作为 RAID 的基本单位，不过用软件模拟的话，只需要对磁盘分区即可，磁盘分区或磁盘是 <code class="highlighter-rouge">Software RAID</code> 的基本单位。同时 <code class="highlighter-rouge">Software RAID</code> 是针对 RAID 硬件的仿真，所以在系统看来，<code class="highlighter-rouge">Software RAID	</code> 模拟的结果就是一个名为 <code class="highlighter-rouge">/dev/xxx</code> 的设备，需要进行挂载。下文将具体讲解如何在Ubuntu上设置 <code class="highlighter-rouge">Software RAID</code>。</p>
 
-<h1 id="software-raid-1">设置 Software RAID</h1>
+<h1 id="设置-software-raid">设置 Software RAID</h1>
 
-<h3 id="section">准备练习分区</h3>
+<h3 id="准备练习分区">准备练习分区</h3>
 
 <p>在磁盘中划分出几个分区用作练习，展示一下本人的分区</p>
 
@@ -157,7 +157,7 @@ tmpfs             393196       92    393104   1% /run/user/1001
 
 <p><code class="highlighter-rouge">fdisk -l</code> 命令查看本机上有多少分区，<code class="highlighter-rouge">df</code> 查看有哪些分区没有被挂载，这些些没有被挂载的分区用来做此次的实验。从上面可以看出 /dev/sda{5 - 9} 是此次的实验分区。</p>
 
-<h3 id="raid-1">创建 RAID</h3>
+<h3 id="创建-raid">创建 RAID</h3>
 
 <p>利用 <code class="highlighter-rouge">mdadm</code> 命令创建 RAID</p>
 
@@ -196,7 +196,7 @@ Number   Major   Minor   RaidDevice State
 
 <p>补充一下，还可以通过 <code class="highlighter-rouge">cat /proc/mdstat</code> 命令查看 RAID 设备信息。</p>
 
-<h3 id="raid-2">格式化并挂载 RAID</h3>
+<h3 id="格式化并挂载-raid">格式化并挂载 RAID</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# mkfs -t ext4 /dev/md0
 root@ubuntu:~# mkdir /mnt/raid
@@ -210,7 +210,7 @@ Filesystem     1K-blocks     Used Available Use% Mounted on
 </code></pre>
 </div>
 
-<h1 id="software-raid-">利用 Software RAID 处理数据损毁</h1>
+<h1 id="利用-software-raid-处理数据损毁">利用 Software RAID 处理数据损毁</h1>
 
 <p>先向 <code class="highlighter-rouge">/mnt/raid</code> 中添加一些数据，然后模拟 <code class="highlighter-rouge">/dev/sda8</code> 的出错状态</p>
 
@@ -252,7 +252,7 @@ Number   Major   Minor   RaidDevice State
 
 <p>发现数据完好。</p>
 
-<h1 id="raid-3">设置开机挂载 RAID</h1>
+<h1 id="设置开机挂载-raid">设置开机挂载 RAID</h1>
 
 <p>获取 RAID 设备的 uuid号码</p>
 
@@ -281,7 +281,7 @@ ARRAY /dev/md0 UUID=0a861ec3:399accad:00927385:a9c784c1
 </code></pre>
 </div>
 
-<h1 id="software-raid-2">关闭 Software RAID</h1>
+<h1 id="关闭-software-raid">关闭 Software RAID</h1>
 
 <p>如何在你不想使用 Software RAID 的时候关闭 RAID，其实很简单，只要将你之前创建的各种配置文件删除即可，有一下几步：</p>
 
@@ -330,6 +330,10 @@ ARRAY /dev/md0 UUID=0a861ec3:399accad:00927385:a9c784c1
     <ul>
       
       <li>
+        <a href="/anatomy-of-linux-kernel-2" class="title">Linux内核完全剖析（二）</a>
+      </li>
+      
+      <li>
         <a href="/you-do-not-understand-the-wonderful-world" class="title">你并不了解这个世界有多么精彩</a>
       </li>
       
@@ -346,7 +350,7 @@ ARRAY /dev/md0 UUID=0a861ec3:399accad:00927385:a9c784c1
       </li>
       
       <li>
-        <a href="/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84" class="title">Linux内核完全剖析（一）</a>
+        <a href="/anatomy-of-linux-kernel-1" class="title">Linux内核完全剖析（一）</a>
       </li>
       
       <li>

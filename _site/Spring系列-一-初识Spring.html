@@ -19,7 +19,7 @@
 
     <p>作为一个Java框架，Spring的根本使命就是简化Java开发。主要是让Java开发变得更加简单，更加具有可测试性，更加的松耦合。然而，Spring实现以上功能的仅仅只是基于少许的基本理念，比如说：松耦合、可重用等等。为了实现简化Java开发的使命，Spring采取了几种基本策略，如下。</p>
 
-<h1 id="spring">Spring采用的几种基本策略</h1>
+<h1 id="spring采用的几种基本策略">Spring采用的几种基本策略</h1>
 <ul>
   <li>基于对象的轻量级和最小侵入性
 非侵入性编程，通俗点说就是某一个类在使用了框架和不使用框架的情况下都能够发挥相同的作用。用Struts2框架举个例子。</li>
@@ -109,7 +109,7 @@
   </li>
 </ul>
 
-<h1 id="beanbean">Bean和Bean容器</h1>
+<h1 id="bean和bean容器">Bean和Bean容器</h1>
 
 <p>一个应用之中是有很多的对象的，对象和对象之间有着各种相互依赖的关系。在 Spring 中，每个对象被称之为 <strong>Bean</strong>，所有的 Bean 都被容纳在 Spring 的一个容器（Container）里面，这个容器就是 <strong>Bean 容器</strong>，而 Bean 和 Bean 之间的关系是 Bean 容器利用 DI 进行处理的。</p>
 
@@ -126,14 +126,16 @@
 	<span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Bean 容器是通过 bean 工厂 / 应用上下文（ApplicationContext）来创建所有的 bean 对象的，bean 工厂了解的不多，主要讲解应用上下文。
-* AnnotationConfigApplicationContext
-* ClassPathXmlApplicationContext
-* 其他 … …</p>
+<p>Bean 容器是通过 bean 工厂 / 应用上下文（ApplicationContext）来创建所有的 bean 对象的，bean 工厂了解的不多，主要讲解应用上下文。</p>
+<ul>
+  <li>AnnotationConfigApplicationContext</li>
+  <li>ClassPathXmlApplicationContext</li>
+  <li>其他 … …</li>
+</ul>
 
 <p>上面列出了两个常用的应用上下文类。如果你在main方法中创建了相应的 Application Context，它就会自动加载相关的配置文件，从配置文件中读取它需要创建哪些 bean，并初始化它们。不同的 ApplicationContext 的区别在于加载的配置文件的不同。其中 AnnotationConfigApplicationContext 通过读取 Java 注解来创建 Bean ，而 ClassPathXmlApplicationContext 则是通过读取 xml 文件来读取。</p>
 
-<h1 id="spring-1">Spring还可以做什么</h1>
+<h1 id="spring还可以做什么">Spring还可以做什么</h1>
 
 <p>基于 Spring 的核心容器上，Spring 还有着许多功能模块。</p>
 
@@ -179,6 +181,10 @@
     <ul>
       
       <li>
+        <a href="/anatomy-of-linux-kernel-2" class="title">Linux内核完全剖析（二）</a>
+      </li>
+      
+      <li>
         <a href="/you-do-not-understand-the-wonderful-world" class="title">你并不了解这个世界有多么精彩</a>
       </li>
       
@@ -195,7 +201,7 @@
       </li>
       
       <li>
-        <a href="/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90-%E4%B8%80-%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84" class="title">Linux内核完全剖析（一）</a>
+        <a href="/anatomy-of-linux-kernel-1" class="title">Linux内核完全剖析（一）</a>
       </li>
       
       <li>
