@@ -7,7 +7,9 @@ description: 时间太少了，所以这篇文章仅仅用来保存学习内核�
 comments: true
 ---
 
-时间太少了，所以这篇文章仅仅用来保存学习内核源代码的笔记，以防丢失，等以后再整理吧
+时间太少了，所以这篇文章仅仅用来保存学习内核源代码的笔记，以防丢失，等以后再整理吧。
+
+3月4日更新：
 
 <img src="../images/IMG_20180304_223334.jpg" alt="picture"/>
 
@@ -22,3 +24,9 @@ comments: true
 <img src="../images/IMG_20180304_223403.jpg" alt="picture"/>
 
 <img src="../images/IMG_20180304_223430.jpg" alt="picture"/>
+
+3月6号更新：
+
+<img src="../images/IMG_20180306_223250_HHT.jpg" alt="picture"/>
+
+<img src="../images/IMG_20180306_223301_HHT.jpg" alt="picture"/>
