@@ -7,8 +7,6 @@ description: 时间太少了，所以这篇文章仅仅用来保存学习内核�
 comments: true
 ---
 
-<h2>Linux内核剖析笔记</h2>
-
 时间太少了，所以这篇文章仅仅用来保存学习内核源代码的笔记，以防丢失，等以后再整理吧
 
 <img src="../images/IMG_20180304_223334.jpg" alt="picture"/>
