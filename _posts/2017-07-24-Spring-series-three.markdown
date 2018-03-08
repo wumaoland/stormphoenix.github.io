@@ -12,7 +12,7 @@ comments: true
 
 在面向对象程序设计中，程序是由一个个的对象组成的，不同的对象负责不同的工作。程序要实现某一个功能，通常是由多个对象协同工作来实现的。
 
-对象和对象之间的协同，意味着对象和对象之间的依赖。这一点可以参考之前写的[博客](https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/)。
+对象和对象之间的协同，意味着对象和对象之间的依赖。这一点可以参考之前写的[博客](https://stormphoenix.github.io/Spring-series-one/)。
 
 所谓的Java Bean，我简单的理解成Java对象。创建对象之间的依赖就是创建Bean之间的依赖。
 

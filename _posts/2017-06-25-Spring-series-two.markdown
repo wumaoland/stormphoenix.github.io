@@ -16,14 +16,14 @@ tag: Spring
 * Java注解
 * 依赖注入（Dependency Injection，DI)
 * Spring 是如何使用注解的 （比如@Bean，@Component之类）
-* 阅读过上一篇[博客](https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/)
+* 阅读过上一篇[博客](https://stormphoenix.github.io/Spring-series-one/)
 
 从自动扫描说起
 ==
 
 在 Spring 里面有一个我觉得比较厉害的功能——自动扫描。不了解的没有关系下面我举一个例子来说明一下。
 
-例子依旧沿用 Spring 系列的上一篇[博客](https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/)的例子：
+例子依旧沿用 Spring 系列的上一篇[博客](https://stormphoenix.github.io/Spring-series-one/)的例子：
 
 {% highlight ruby %}
 /**

@@ -11,22 +11,26 @@ comments: true
 
 3月4日更新：
 
-<img src="../images/IMG_20180304_223334.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180304_223334.jpg" alt="picture"/>
 
-<img src="../images/IMG_20180304_223214.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180304_223214.jpg" alt="picture"/>
 
-<img src="../images/IMG_20180304_223241.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180304_223241.jpg" alt="picture"/>
 
-<img src="../images/IMG_20180304_223303.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180304_223303.jpg" alt="picture"/>
 
-<img src="../images/IMG_20180304_223316.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180304_223316.jpg" alt="picture"/>
 
-<img src="../images/IMG_20180304_223403.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180304_223403.jpg" alt="picture"/>
 
-<img src="../images/IMG_20180304_223430.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180304_223430.jpg" alt="picture"/>
 
 3月6号更新：
 
-<img src="../images/IMG_20180306_223250_HHT.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180306_223250_HHT.jpg" alt="picture"/>
 
-<img src="../images/IMG_20180306_223301_HHT.jpg" alt="picture"/>
+<img src="../images/linux_kernel_source_code_note/IMG_20180306_223301_HHT.jpg" alt="picture"/>
+
+3月8号更新：
+
+<img src="../images/linux_kernel_source_code_note/IMG_20180308_235315.jpg" alt="picture"/>
