@@ -2,7 +2,7 @@
 layout: post
 title:    你并不了解这个世界有多么精彩
 date:    2018-02-20 23:32:59 +0800
-categories:    blog
+categories:    life
 description: 已经半年没更新blog了，今天是大年初五，本来不想写东西的，不过最近一直抱病在家，难得清闲。正好最近和朋友交流中有了一点想法，决定写点什么
 comments: true
 ---

@@ -2,7 +2,7 @@
 layout: post
 title:    "我失去了什么？"
 date:    2017-06-22 23:44:46 +0800
-categories:    思考 | blog
+categories:    life
 comments: true
 ---
 

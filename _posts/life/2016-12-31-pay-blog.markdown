@@ -2,7 +2,7 @@
 layout: post
 title:    博文的自愿付费方式
 date:    2016-12-31 20:13:36 +0800
-categories:   blog
+categories:   life
 description: 喜欢我的文章的人，可以自愿付费购买。你可以使用以下方式付款.
 comments: true
 ---

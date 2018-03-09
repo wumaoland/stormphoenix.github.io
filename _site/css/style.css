@@ -1,55 +1,8 @@
-html,
-div,
-span,
-applet,
-object,
-iframe,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-ins,
-kbd,
-h1,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td {
+html,div,span,applet,object, iframe, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, ins, kbd,
+h1, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt,
+dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td {
   margin: 0;
   padding: 0;
   border: 0;
@@ -61,18 +14,17 @@ td {
   vertical-align: baseline;
 }
 
-ol,
-ul {
+ol, ul {
   list-style: none;
 }
+
 table {
   border-collapse: separate;
   border-spacing: 0;
   vertical-align: middle;
 }
-caption,
-th,
-td {
+
+caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
@@ -87,33 +39,21 @@ img.displayed {
   display: block;
 }
 
-article,
-aside,
-canvas,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section,
-summary,
-main {
+article, aside, canvas, details, figcaption, figure, footer,
+header, hgroup, menu, nav, section, summary, main {
   margin: 0;
   padding: 0;
   border: 0;
   outline: 0;
   display: block;
 }
-audio,
-canvas,
-video {
+
+audio, canvas, video {
   display: inline-block;
   *display: inline;
   *zoom: 1;
 }
+
 audio:not([controls]),
 [hidden] {
   display: none;
@@ -249,15 +189,45 @@ a.external:hover {
     padding-right: 0;
   }
 }
+
+.index-content .cate-bar { height:3px; width:70%; margin:0 auto;margin-bottom:100px; }
+.index-content .cate-bar { width:85%; }
+.index-content #cateBar { display:inline-block; zoom:1; height:3px; background:red; position:relative; width:0; }
+
+.index-content .section { margin-left:0; padding-right:0; }
+.index-content .section ul { width:85%; }
+.index-content .section { margin-left:10%; padding-top:10px; padding-right:15%; ;}
+
+
+.index-content .artical-cate li.on span { color:red; }
+#menuIndex {overflow:auto;}
+#menuIndex a {display:block; padding:2px 0; }
+#menuIndex a:hover {text-decoration:none;}
+#menuIndex ul {margin-bottom:10px;}
+#menuIndex ul li{font-size:12px;margin-bottom:5px;word-wrap:break-word;padding-left:10px;}
+#menuIndex ul li.on{background-color:#f5f5f5;}
+#menuIndex li.h1{font-size:14px;font-weight:normal;padding-left:0;margin-bottom:10px;}
+#menuIndex li.h3{padding-left:25px;}
+
+.index-content .artical-cate { width:70%; margin:0 auto; }
+.index-content .artical-cate li { display:inline-block; *float:left; zoom:1; font-size:18px; width:32%; cursor:pointer; }
+.index-content .artical-cate li a,
+.index-content .artical-cate li a:visited { display:inline-block; zoom:1; color:#000; width:100%; }
+.index-content .artical-cate li a:hover { text-decoration:none; }
+.index-content .artical-cate li.on span{ color:red; }
+
+
 .index-wrapper .artical-list {
   width: 70%;
   margin: 0 auto;
 }
+
 @media screen and (max-width: 767px) {
   .index-wrapper .artical-list {
     width: 85%;
   }
 }
+
 .index-wrapper .artical-list li {
   margin-bottom: 70px;
 }

@@ -2,7 +2,7 @@
 layout: post
 title:    "从“模式匹配”谈起"
 date:    2017-07-08 21:56:31 +0800
-categories:    思考 | blog
+categories:    life
 comments: true
 tag: 思考
 ---

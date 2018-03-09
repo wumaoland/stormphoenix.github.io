@@ -3,7 +3,7 @@ layout: post
 title:    "Linux内核完全剖析（一）"
 description: 微型计算机组成结构
 date:    2017-07-08 21:04:41 +0800
-categories:    Linux内核剖析 | blog
+categories:    blog
 comments: true
 tag: Linux内核
 ---
