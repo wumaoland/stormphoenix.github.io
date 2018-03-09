@@ -1,0 +1,13 @@
+---
+layout: post
+title:    "2017年书单"
+date:    2017-07-05 16:31:43 +0800
+categories:    books
+description:
+comments: true
+---
+
++ 《鸟哥的Linux私房菜基础学习篇-第三版》
++ 《深入JVM虚拟机》
++ 《苏菲的世界》
++ 《高性能MySQL》

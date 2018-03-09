@@ -1,0 +1,13 @@
+---
+layout: post
+title:    "2018年书单"
+date:    2018-03-09 16:31:43 +0800
+categories:    books
+description:
+comments: true
+---
+
++ 《自私的基因》
++ 《基因传》
++ 《疯狂的独角兽》
++ 《Linux0.12源代码剖析》

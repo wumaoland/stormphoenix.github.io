@@ -3,6 +3,7 @@ layout: post
 title:    "我失去了什么？"
 date:    2017-06-22 23:44:46 +0800
 categories:    life
+description: 学会反思，要反思什么东西呢？因为这些年来，我丢失了许多东西
 comments: true
 ---
 

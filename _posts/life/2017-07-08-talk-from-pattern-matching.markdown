@@ -4,6 +4,7 @@ title:    "从“模式匹配”谈起"
 date:    2017-07-08 21:56:31 +0800
 categories:    life
 comments: true
+description: 几天前看到了王垠的一片博文——《如何掌握所有的程序语言》,于是我想起了了解的一个“模式匹配”的概念
 tag: 思考
 ---
 
