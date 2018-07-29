@@ -50,11 +50,10 @@
 <h1 id="设置文件系统支持quota">设置文件系统支持Quota</h1>
 <p>一般ext2、ext3和ext4都是能够支持Quota的。我们可以通过如下命令设置立即支持Quota。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#mount -o remount, usrquota,grpquota /home
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~#mount -o remount, usrquota,grpquota /home
 root@ubuntu:~#mount | grep home
 /dev/sda4 on /home type ext4 (rw,relatime,quota,usrquota,grpquota,data=ordered)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>有几点要注意</p>
 <ol>
@@ -67,9 +66,8 @@ root@ubuntu:~#mount | grep home
 
 <p>以上的命令只在此次开机中有效，如果想让系统在每次开机中都能够支持quota，则需要在/etc/fstab中添加如下语句</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>LABEL=/home    /home    ext4    default,usrquota,grpquota 1 2
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LABEL=/home    /home    ext4    default,usrquota,grpquota 1 2
+</code></pre></div></div>
 
 <p>在第四个字段的default后面加上usrquota，grpquota即可。</p>
 
@@ -82,9 +80,8 @@ root@ubuntu:~#mount | grep home
 
 <p>所以quotacheck命令是用来扫描这个磁盘，并在文件系统根目录创建配置文件的。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#quotacheck -augv -mf
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~#quotacheck -augv -mf
+</code></pre></div></div>
 
 <p>值得一提的是-mf两个选项，作用是强制扫描整个文件系统。因为某些时候会有其他程序在对文件系统进行读写，所以quotacheck查询出的文件数量可能是不准确的，系统会拒绝执行quotachec。不妥加上-mf参数就可以强制执行了，其他参数的含义不表。</p>
 
@@ -94,34 +91,30 @@ root@ubuntu:~#mount | grep home
 
 <p>开启Quota服务</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#quotaon -avug
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~#quotaon -avug
+</code></pre></div></div>
 
 <p>关闭Quota服务</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#quotaoff -a
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~#quotaoff -a
+</code></pre></div></div>
 
 <p>编辑具体的限制值</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>edquota -u [username] -g [groupname] -t
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>edquota -u [username] -g [groupname] -t
 说明：
 -u 对某一个用户进行编辑，后面接上用户名
 -g 对某一个用户组进行编辑，后面接上用户组组名字
 -t 设置宽限时间
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>样例：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#edquota -u stormphoenix
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~#edquota -u stormphoenix
 Disk quotas for user StormPhoenix (uid 1001):
 Filesystem	blocks	    soft	hard    inodes      soft hard
 /dev/sda4	60331452	0	    0	    1029831     0    0
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>分为7列，具体说明：</p>
 <ol>
@@ -139,20 +132,18 @@ Filesystem	blocks	    soft	hard    inodes      soft hard
 
 <p>查看某一个用户报表</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>quota -uvs StormPhoenix
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>quota -uvs StormPhoenix
 Disk quotes for user Developer (uid 1001):
 Filesystem		space		quota		limit		grace		files		quota		limit		grace
 /dev/sda4		58918M		0K			0K						1030K		0			0
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>查看某一个用户组报表同上，不同的是命令参数是 -gvs。</p>
 
 <p>查看某一个文件系统的限额报表。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#repquota -auvs
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~#repquota -auvs
+</code></pre></div></div>
 
 <h1 id="其他">其他</h1>
 <p>介绍两个命令</p>
@@ -161,9 +152,8 @@ Filesystem		space		quota		limit		grace		files		quota		limit		grace
 
 <p><code class="highlighter-rouge">setquota</code> 可以直接在命令行中设置限额，用法如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~#setquota [-u|-g] [name] block(soft) block(hard) inode(soft) inode(hard) [filesystem]
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~#setquota [-u|-g] [name] block(soft) block(hard) inode(soft) inode(hard) [filesystem]
+</code></pre></div></div>
 
 
     <div id="disqus_container">

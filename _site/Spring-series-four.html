@@ -98,7 +98,7 @@
     <span class="vi">@Bean</span>
     <span class="vi">@Conditional</span><span class="p">(</span><span class="no">RoadFlatConditional</span><span class="p">.</span><span class="nf">class</span><span class="p">)</span>
     <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getRubberWheel</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kp">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="sr">//</span> <span class="err">其他的省略</span>
@@ -151,13 +151,13 @@
     <span class="vi">@Bean</span>
     <span class="vi">@Profile</span><span class="p">(</span><span class="s2">"flat"</span><span class="p">)</span>
     <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getRubberWheel</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kp">new</span> <span class="no">RubberWheel</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">new</span> <span class="no">RubberWheel</span><span class="p">()</span>
     <span class="p">}</span>
 
     <span class="vi">@Bean</span>
     <span class="vi">@Profile</span><span class="p">(</span><span class="s2">"uneven"</span><span class="p">)</span>
     <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getSquareWheel</span><span class="p">())</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kp">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
     <span class="p">}</span></code></pre></figure>
 
 <p>额外提一些。注释中说程序运行时查看的参数，具体是如下两个参数：</p>
@@ -182,11 +182,11 @@ spring.profiles.default</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@Component</span>
 <span class="vi">@Qualifier</span><span class="p">(</span><span class="s2">"sweet"</span><span class="p">)</span>
-<span class="kp">public</span> <span class="k">class</span> <span class="nc">Apple</span> <span class="n">implements</span> <span class="no">Fruit</span> <span class="p">{</span> <span class="sr">//</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="p">}</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">Apple</span> <span class="n">implements</span> <span class="no">Fruit</span> <span class="p">{</span> <span class="sr">//</span> <span class="o">...</span> <span class="p">}</span>
 
 <span class="vi">@Component</span>
 <span class="vi">@Qualifier</span><span class="p">(</span><span class="s2">"water"</span><span class="p">)</span>
-<span class="kp">public</span> <span class="k">class</span> <span class="nc">Watermelon</span> <span class="n">implements</span> <span class="no">Fruit</span> <span class="p">{</span> <span class="sr">//</span> <span class="p">.</span><span class="nf">.</span><span class="o">.</span> <span class="p">}</span>
+<span class="kp">public</span> <span class="k">class</span> <span class="nc">Watermelon</span> <span class="n">implements</span> <span class="no">Fruit</span> <span class="p">{</span> <span class="sr">//</span> <span class="o">...</span> <span class="p">}</span>
 
 <span class="sr">/**
 * 由于 '苹果' 和 '西瓜' 都实现了 Fruit 接口，
@@ -216,7 +216,7 @@ spring.profiles.default</p>
     */</span>
     <span class="vi">@Bean</span>
     <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getSquareWheel</span><span class="p">())</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kp">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
     <span class="p">}</span></code></pre></figure>
 
 <p>另外三个作用域是</p>
@@ -241,7 +241,7 @@ spring.profiles.default</p>
     <span class="vi">@Bean</span>
     <span class="vi">@Scope</span><span class="p">(</span><span class="no">ConfigurableBeanFactory</span><span class="o">.</span><span class="no">SCOPE_PROTOTYPE</span><span class="p">)</span>
     <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getSquareWheel</span><span class="p">())</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kp">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">new</span> <span class="no">SquareWheel</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="sr">//</span> <span class="err">或者在</span> <span class="no">XML</span> <span class="err">文件里面声明</span>
@@ -261,7 +261,7 @@ spring.profiles.default</p>
     <span class="vi">@Scope</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="no">WebApplicationContext</span><span class="o">.</span><span class="no">SCOPE_SESSION</span><span class="p">,</span>
            <span class="n">proxyMode</span> <span class="o">=</span> <span class="no">ScopedProxyMode</span><span class="o">.</span><span class="no">INTERFACES</span><span class="p">)</span>
     <span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getWheel</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kp">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 

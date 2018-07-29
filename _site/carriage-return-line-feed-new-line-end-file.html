@@ -40,25 +40,23 @@
 
 <p>我们来验证一下，我在 Windows 下用记事本新建一个文本文件，它的二进制编码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>//源文件内容
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//源文件内容
 hello
 hello2
 
 //二进制内容
 0000000: 6865 6c6c 6f0d 0a68 656c 6c6f 32         hello..hello2
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>同样在 Mac 下用 Vim 新建一个：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>//源文件内容
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//源文件内容
 hello
 hello2
 
 //二进制内容
 0000000: 6865 6c6c 6f0a 6865 6c6c 6f32 0a         hello.hello2.
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">0a</code>是 LF 的 ASCII 编码, <code class="highlighter-rouge">0d</code>是 CR 的 ASCII 编码。区别很明显了</p>
 
@@ -85,36 +83,33 @@ hello2
 
 <p>这样做有什么好处呢，举个例子：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>//hello.c
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//hello.c
 #include head.h
 print('hello')
 
 //world.c
 #include tail.h
 print('hello')
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如果这两个文件都按 POSIX 规范来写， 在<code class="highlighter-rouge">cat *.c</code>之后，是没有问题的：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>//cat.c
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//cat.c
 
 #include head.h
 print('hello')
 #include tail.h
 print('hello')
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如果缺少最后一行的换行符（如 Windows 文件那样的定义），<code class="highlighter-rouge">cat</code>之后，就有问题了：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>//error.c
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//error.c
 
 #include head.h
 print('hello')#include tail.h
 print('hello')
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>所以，从这点去理解 POSIX 对行的定义，非常合理，对于任意文件的拼接，也各自保持了文件的完整性。</p>
 
@@ -130,11 +125,10 @@ print('hello')
 
 <p>各编辑器也有相应的办法去解决这个问题，比如 Sublime，在<code class="highlighter-rouge">Default/Preferences.sublime-settings</code>中设置：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>// Set to true to ensure the last line of the file ends in a newline
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Set to true to ensure the last line of the file ends in a newline
 // character when saving
 "ensure_newline_at_eof_on_save": true,
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>所以，请遵守规范。</p>
 

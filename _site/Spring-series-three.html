@@ -38,29 +38,29 @@
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">//</span> <span class="err">实现</span><span class="mi">1</span>
 <span class="kp">public</span> <span class="k">class</span> <span class="nc">Foo</span> <span class="p">{</span>
-	<span class="p">.</span><span class="nf">.</span><span class="p">.</span>
-	<span class="nf">public</span> <span class="no">Foo</span><span class="p">()</span> <span class="p">{</span>
-		<span class="n">this</span><span class="p">.</span><span class="nf">boo</span> <span class="o">=</span> <span class="kp">new</span> <span class="no">Boo</span><span class="p">();</span>
+	<span class="o">...</span>
+	<span class="kp">public</span> <span class="no">Foo</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">this</span><span class="p">.</span><span class="nf">boo</span> <span class="o">=</span> <span class="n">new</span> <span class="no">Boo</span><span class="p">();</span>
 	<span class="p">}</span>
-	<span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+	<span class="o">...</span>
 <span class="p">}</span>
 
 <span class="sr">//</span> <span class="err">实现</span><span class="mi">2</span>
 <span class="kp">public</span> <span class="k">class</span> <span class="nc">Foo</span> <span class="p">{</span>
-	<span class="p">.</span><span class="nf">.</span><span class="p">.</span>
-	<span class="nf">public</span> <span class="no">Foo</span><span class="p">(</span><span class="no">Boo</span> <span class="n">boo</span><span class="p">)</span> <span class="p">{</span>
+	<span class="o">...</span>
+	<span class="kp">public</span> <span class="no">Foo</span><span class="p">(</span><span class="no">Boo</span> <span class="n">boo</span><span class="p">)</span> <span class="p">{</span>
 		<span class="n">this</span><span class="p">.</span><span class="nf">boo</span> <span class="o">=</span> <span class="n">boo</span><span class="p">;</span>
 	<span class="p">}</span>
-	<span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+	<span class="o">...</span>
 <span class="p">}</span>
 
 <span class="sr">//</span> <span class="err">实现</span><span class="mi">3</span>
 <span class="kp">public</span> <span class="k">class</span> <span class="nc">Foo</span> <span class="p">{</span>
-	<span class="p">.</span><span class="nf">.</span><span class="p">.</span>
-	<span class="nf">public</span> <span class="n">void</span> <span class="n">setBoo</span><span class="p">(</span><span class="no">Boo</span> <span class="n">boo</span><span class="p">)</span> <span class="p">{</span>
+	<span class="o">...</span>
+	<span class="kp">public</span> <span class="n">void</span> <span class="n">setBoo</span><span class="p">(</span><span class="no">Boo</span> <span class="n">boo</span><span class="p">)</span> <span class="p">{</span>
 		<span class="n">this</span><span class="p">.</span><span class="nf">boo</span> <span class="o">=</span> <span class="n">boo</span><span class="p">;</span>
 	<span class="p">}</span>
-	<span class="p">.</span><span class="nf">.</span><span class="o">.</span>
+	<span class="o">...</span>
 <span class="p">}</span></code></pre></figure>
 
 <p>实现一有如下两个问题：</p>
@@ -199,7 +199,7 @@
         <span class="sr">//</span> <span class="err">这个</span> <span class="no">ApplicationContext</span> <span class="err">就是</span> <span class="no">Spring</span> <span class="err">容器，</span>
         <span class="sr">//</span> <span class="err">而</span> <span class="no">AnnotationConfigApplicationContext</span> <span class="err">是</span>
         <span class="sr">//</span> <span class="err">它的一种实现，用于加载</span> <span class="no">Java</span><span class="err">配置类</span>
-		<span class="no">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="kp">new</span> <span class="no">AnnotationConfigApplicationContext</span><span class="p">(</span><span class="no">JavaConfig</span><span class="p">.</span><span class="nf">class</span><span class="p">);</span>
+		<span class="no">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">new</span> <span class="no">AnnotationConfigApplicationContext</span><span class="p">(</span><span class="no">JavaConfig</span><span class="p">.</span><span class="nf">class</span><span class="p">);</span>
 		<span class="sr">//</span> <span class="err">等上面的代码执行完毕，那么</span> <span class="no">RubberWheel</span> <span class="err">和</span> <span class="no">Bench</span> <span class="err">两个类就</span>
 		<span class="sr">//</span> <span class="err">被实例化了。下面通过</span> <span class="no">Spring</span> <span class="err">容器来获取，实例化的这两个类。</span>
 
@@ -293,19 +293,19 @@ Java注解方式 … … 不也是 Java代码么 … …，而且 Java代码方�
     */</span>
     <span class="vi">@Bean</span>
 	<span class="kp">public</span> <span class="no">Car</span> <span class="n">getCar</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kp">new</span> <span class="no">Bench</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">new</span> <span class="no">Bench</span><span class="p">();</span>
 	<span class="p">}</span>
 
 	<span class="vi">@Bean</span>
 	<span class="kp">public</span> <span class="no">Wheel</span> <span class="n">getWheel</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kp">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">new</span> <span class="no">RubberWheel</span><span class="p">();</span>
 	<span class="p">}</span>
 <span class="p">}</span>
 
 <span class="kp">public</span> <span class="k">class</span> <span class="nc">Main</span> <span class="p">{</span>
     <span class="kp">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="no">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
 	    <span class="sr">//</span> <span class="err">同上</span>
-		<span class="no">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="kp">new</span> <span class="no">AnnotationConfigApplicationContext</span><span class="p">(</span><span class="no">JavaConfig</span><span class="p">.</span><span class="nf">class</span><span class="p">);</span>
+		<span class="no">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">new</span> <span class="no">AnnotationConfigApplicationContext</span><span class="p">(</span><span class="no">JavaConfig</span><span class="p">.</span><span class="nf">class</span><span class="p">);</span>
         <span class="sr">//</span> <span class="err">同上</span>
         <span class="no">Bench</span> <span class="n">benchCar</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="nf">getBean</span><span class="p">(</span><span class="no">Car</span><span class="p">.</span><span class="nf">class</span><span class="p">);</span>
         <span class="sr">//</span> <span class="err">调用方法</span>
@@ -319,10 +319,10 @@ Java注解方式 … … 不也是 Java代码么 … …，而且 Java代码方�
   <li><strong>XML配置方式</strong></li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="p">?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s2">"1.0"</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"UTF-8"</span><span class="sc">?&gt;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="p">?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s2">"1.0"</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"UTF-8"</span><span class="p">?</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">beans</span> <span class="n">xmlns</span><span class="o">=</span><span class="s2">"http://www.springframework.org/schema/beans"</span>
-       <span class="n">xmlns</span><span class="ss">:xsi</span><span class="o">=</span><span class="s2">"http://www.w3.org/2001/XMLSchema-instance"</span>
-       <span class="n">xsi</span><span class="ss">:schemaLocation</span><span class="o">=</span><span class="s2">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="o">&gt;</span>
+       <span class="n">xmlns</span><span class="p">:</span><span class="n">xsi</span><span class="o">=</span><span class="s2">"http://www.w3.org/2001/XMLSchema-instance"</span>
+       <span class="n">xsi</span><span class="p">:</span><span class="n">schemaLocation</span><span class="o">=</span><span class="s2">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="o">&gt;</span>
 
     <span class="o">&lt;!--</span> <span class="err">这里实例化一个</span> <span class="no">RubberWheel</span><span class="err">，</span> <span class="err">这里</span> <span class="n">rubberWheel</span> <span class="err">是它的</span><span class="nb">id</span><span class="err">，用来被其他位置引用</span> <span class="o">--&gt;</span>
     <span class="o">&lt;</span><span class="n">bean</span> <span class="nb">id</span><span class="o">=</span><span class="s2">"rubberWheel"</span> <span class="k">class</span><span class="o">=</span><span class="s2">"com.stormphoenix.demo.RubberWheel"</span><span class="o">/&gt;</span>

@@ -123,7 +123,7 @@
 
 <p>在磁盘中划分出几个分区用作练习，展示一下本人的分区</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# fdisk -l
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# fdisk -l
 Disk /dev/sda: 119.2 GiB, 128035676160 bytes, 250069680 sectors
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 4096 bytes
@@ -153,8 +153,7 @@ tmpfs            1965960        0   1965960   0% /sys/fs/cgroup
 /dev/sda4       86414720 75004380   6997668  92% /home
 cgmfs                100        0       100   0% /run/cgmanager/fs
 tmpfs             393196       92    393104   1% /run/user/1001
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">fdisk -l</code> 命令查看本机上有多少分区，<code class="highlighter-rouge">df</code> 查看有哪些分区没有被挂载，这些些没有被挂载的分区用来做此次的实验。从上面可以看出 /dev/sda{5 - 9} 是此次的实验分区。</p>
 
@@ -162,13 +161,12 @@ tmpfs             393196       92    393104   1% /run/user/1001
 
 <p>利用 <code class="highlighter-rouge">mdadm</code> 命令创建 RAID</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# mdadm --create --auto=yes /dev/raid0 --level=5 --raid-devices=4 --spare-devices=1 /dev/sda{5,6,7,8,9}
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# mdadm --create --auto=yes /dev/raid0 --level=5 --raid-devices=4 --spare-devices=1 /dev/sda{5,6,7,8,9}
 mdadm: /dev/raid0 is an invalid name for an md device.  Try /dev/md/raid0
 root@ubuntu:~# mdadm --create --auto=yes /dev/md0 --level=5 --raid-devices=4 --spare-devices=1 /dev/sda{5,6,7,8,9}
 mdadm: Defaulting to version 1.2 metadata
 mdadm: array /dev/md0 started.
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li><code class="highlighter-rouge">--create</code> 表示创建 RAID。</li>
@@ -181,7 +179,7 @@ mdadm: array /dev/md0 started.
 
 <p>查看创建完成的 RAID 设备信息</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# mdadm --detail /dev/md0
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# mdadm --detail /dev/md0
 /dev/md0:
 Number   Major   Minor   RaidDevice State
 0       8        5        0      active sync   /dev/sda5
@@ -190,8 +188,7 @@ Number   Major   Minor   RaidDevice State
 5       8        8        3      active sync   /dev/sda8
 
 4       8        9        -      spare   /dev/sda9
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>看最后几行，发现 <code class="highlighter-rouge">/dev/sda{5 - 8}</code> 已经成为了 RAID 设备，<code class="highlighter-rouge">/dev/sda9</code> 是预备的设备。</p>
 
@@ -199,7 +196,7 @@ Number   Major   Minor   RaidDevice State
 
 <h3 id="格式化并挂载-raid">格式化并挂载 RAID</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# mkfs -t ext4 /dev/md0
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# mkfs -t ext4 /dev/md0
 root@ubuntu:~# mkdir /mnt/raid
 root@ubuntu:~# mount /dev/md0 /mnt/raid
 root@ubuntu:~# df
@@ -208,14 +205,13 @@ Filesystem     1K-blocks     Used Available Use% Mounted on
 /dev/sda1         973952     3540    970412   1% /boot/efi
 /dev/sda4       86414720 75005600   6996448  92% /home
 /dev/md0         3027728     4608   2849604   1% /mnt/raid
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h1 id="利用-software-raid-处理数据损毁">利用 Software RAID 处理数据损毁</h1>
 
 <p>先向 <code class="highlighter-rouge">/mnt/raid</code> 中添加一些数据，然后模拟 <code class="highlighter-rouge">/dev/sda8</code> 的出错状态</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# cp -a /etc /mnt/raid
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# cp -a /etc /mnt/raid
 root@ubuntu:~# mdadm --manage /dev/md0 --fail /dev/sda8
 mdadm: set /dev/sda8 faulty in /dev/md0
 root@ubuntu:~# mdadm --detail /dev/md0
@@ -226,12 +222,11 @@ Number   Major   Minor   RaidDevice State
 4       8        9        3      active sync   /dev/sda9
 
 5       8        8        -      faulty   /dev/sda8
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>查看可发现 /dev/sda8 确实被设置出现了错误状态，接下来我将出现错误的磁盘从 RAID 中移除，并添加一块新的磁盘，在这里新的磁盘是 <code class="highlighter-rouge">/dev/sda10</code>。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# mdadm --manage /dev/md0 --add /dev/sda10 --remove /dev/sda8
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# mdadm --manage /dev/md0 --add /dev/sda10 --remove /dev/sda8
 root@ubuntu:~# mdadm --detail
 Number   Major   Minor   RaidDevice State
 0       8        5        0      active sync   /dev/sda5
@@ -240,16 +235,14 @@ Number   Major   Minor   RaidDevice State
 4       8        9        3      active sync   /dev/sda9
 
 6       8       10        -      spare   /dev/sda10
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>可以看到 <code class="highlighter-rouge">/dev/sda8</code> 已经被替换，而 <code class="highlighter-rouge">/dev/sda10</code> 出现在预留磁盘的位置，可以查看一下 RAID 里面的数据</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# du -sm /mnt/raid/*
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# du -sm /mnt/raid/*
 17		/mnt/raid/etc
 1		/mnt/raid/lost+found
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>发现数据完好。</p>
 
@@ -257,41 +250,36 @@ Number   Major   Minor   RaidDevice State
 
 <p>获取 RAID 设备的 uuid号码</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# mdadm --detail | grep -i uuid
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# mdadm --detail | grep -i uuid
 UUID : 0a861ec3:399accad:00927385:a9c784c1
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>将设备号写入配置文件，供系统在挂载 RAID 设备的时候读取</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# vim /etc/mdadm.conf
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# vim /etc/mdadm.conf
 ARRAY /dev/md0 UUID=0a861ec3:399accad:00927385:a9c784c1
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>编辑 <code class="highlighter-rouge">/etc/fstab</code> 进行开机挂载</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# vim /etc/fstab
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# vim /etc/fstab
 /dev/md0 /mnt/raid ext4 defaults 1 2
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>重新挂载</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@ubuntu:~# umount /dev/md0 ; mount -a
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@ubuntu:~# umount /dev/md0 ; mount -a
+</code></pre></div></div>
 
 <h1 id="关闭-software-raid">关闭 Software RAID</h1>
 
 <p>如何在你不想使用 Software RAID 的时候关闭 RAID，其实很简单，只要将你之前创建的各种配置文件删除即可，有一下几步：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1. 卸载 /dev/md0
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. 卸载 /dev/md0
 2. 删除 `/etc/fstab` 中的记录
 3. 通过 `mdadm --stop /dev/md0` 停止 RAID 服务
 4. 删除 `/etc/mdadm.conf` 中的uid记录
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>完。</p>
 
