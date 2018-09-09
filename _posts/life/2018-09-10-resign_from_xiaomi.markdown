@@ -1,9 +1,9 @@
 ---
 layout: post
-title:    "resign_from_xiaomi"
+title:    "从小米离职"
 date:    2018-09-10 00:49:29 +0800
 categories:    life
-description:
+description: 2018年9月7号是我在小米的最后一天，在公司工作不算实习期刚刚有两个月，现在说一说辞职的想法
 comments: true
 ---
 
