@@ -1,0 +1,42 @@
+---
+layout: post
+title:    "ACL的使用"
+category:    blog
+description: ACL全称访问控制列表（Access Controll List）
+comments:    true
+---
+
+ACL全称访问控制列表（Access Controll List），用于提供owner，group，others的rwx以外的权限。ACL可以针对某一份文件、某一个用户和用户组来设置对文件的访问控制。
+
+启动ACL支持
+======================================
+
+ ACL需要文件系统支持，所以需要查看自己的系统是否支持ACL。我们可以通过“fdisk -l”命令来查询文件系统挂载到了哪些磁盘分区中。<br>
+
+![图片](/assets/Screenshot from 2017-06-10 19-31-56.png)
+
+从图中可以看到有sda2和sda4两个磁盘分区挂载了文件系统。以`sda2`为例子，用
+
+`dumpe2fs -h /dev/sda2 | grep acl`
+
+命令去查询这个文件系统是否支持acl。只要有如下的acl出现，就证明系统启动了ACL支持。
+
+![图片](/assets/Screenshot from 2017-06-10 19-43-52.png)
+
+
+设置ACL
+=====================================
+
+* `setfacl` 用于设置针对某一个文件或某一个用户的acl属性。
+
+    * -m : 选项用于给文件添加某一个acl属性。例如：setfacl -m u:用户名称:权限 文件名字。
+
+    * -b：删除文件的所有acl属性。
+
+![图片](/assets/Screenshot from 2017-06-10 17-05-52.png)
+
+* `getfacl` 查看某一个文件的acl属性。例如：getfacl testfile。
+
+![图片](/assets/Screenshot from 2017-06-10 16-27-38.png)
+
+* `mask`说明。使用`getfacl`命令的时候，会看到`mask`这个字段。`mask`代表在设置acl的时候，用户和用户组的权限范围不得超过`mask`的设置值。例如如果user1针对文件test的acl属性是rwx，但是test的`mask`字段设置为r--，由于user1的权限范围不超过mask设置的值，所以user1针对test文件只具有r--的权限。

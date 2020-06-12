@@ -2,8 +2,8 @@
 layout: post
 title:    "北大那些事（一）复试"
 date:    2019-04-14 00:13:47 +0800
-categories:    blog
-description:
+categories:    life
+description:    我的北大故事，应该从考研讲起。
 comments: true
 ---
 
