@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>坠入爱河 | StormPhoenix</title>
+    <title>GAMES202 Lecture 01 | StormPhoenix</title>
     <meta name="author" content="StormPhoenix" />
     <meta name="renderer" content="webkit">
     <meta name="description" content="StormPhoenix's Blog" />
@@ -15,37 +15,57 @@
 
     <body class="body-post">
   <div class="post-wrapper">
-    <h1 class="post-title"><a href="/fall_in_love" title="坠入爱河">坠入爱河</a></h1>
-    <p class="post-date">2018-09-10</p>
+    <h1 class="post-title"><a href="/GAMES202_Lecture_01" title="GAMES202 Lecture 01">GAMES202 Lecture 01</a></h1>
+    <p class="post-date">2021-09-17</p>
 
-    <p>自从我爱上<a href="https://weibo.com/u/2162251055">你</a>开始，已经有</p>
-<p id="content">
-    <h1 style="font-size: 30px; font-weight: bold" id="time_text">时间正在计算中... ...</h1>
-</p>
-<p class="vcenter">岁月悠悠，我们彼此守候。</p>
-<script type="text/javascript">
-        function show() {
-            var date1 = '2018/06/18 02:11:00';  //开始时间
-            var date2 = new Date();    //结束时间
-            var date3 = date2.getTime() - new Date(date1).getTime();   //时间差的毫秒数
-            //计算出相差天数
-            var days = Math.floor(date3 / (24 * 3600 * 1000))
-            //计算出小时数
-            var leave1 = date3 % (24 * 3600 * 1000)    //计算天数后剩余的毫秒数
-            var hours = Math.floor(leave1 / (3600 * 1000))
-            //计算相差分钟数
-            var leave2 = leave1 % (3600 * 1000)        //计算小时数后剩余的毫秒数
-            var minutes = Math.floor(leave2 / (60 * 1000))
-            //计算相差秒数
-            var leave3 = leave2 % (60 * 1000)      //计算分钟数后剩余的毫秒数
-            var seconds = Math.round(leave3 / 1000)
-            var $timeText = $(' <h1 id="time_text"> ' + days + " 天 " + hours + " 小时 " + minutes + " 分钟 " + seconds + " 秒了 </h1>")
-            document.getElementById("time_text").innerText = days + " 天 " + hours + " 小时 " + minutes + " 分钟 " + seconds + " 秒了 "
-            
-        }
-        window.setInterval("show()", 1000)
-</script>
+    <h3 id="games202-lecture-01-笔记">GAMES202 Lecture 01 笔记</h3>
 
+<ul>
+  <li>Real-Time High Quality Rendering 要实现的目标
+    <ul>
+      <li>Real-Time 做到实时渲染</li>
+      <li>High Quality 保证渲染质量</li>
+    </ul>
+  </li>
+  <li>RTR 四大模块
+    <ul>
+      <li>阴影、环境光（Shadows and Environment Mapping）</li>
+      <li>全局光照（Scene / Image Space Precomputation)</li>
+      <li>基于物理的渲染（Physically-based Shading）</li>
+      <li>实时光线追踪 (Real-Time Ray Tracing)</li>
+    </ul>
+  </li>
+  <li>课程内容
+    <ul>
+      <li>Shadow and Environment Mapping</li>
+      <li>Interactive Global Illumination</li>
+      <li>Precomputed Radiance Transfer</li>
+      <li>Real-Time Ray Tracing</li>
+      <li>Participating Media</li>
+      <li>Image space Effect</li>
+      <li>NPR (Non-Photorealistic Rendering) 非真实感渲染</li>
+      <li>Antialiasing and supersampling
+（此处有提到提到顾显峰的：<a href="https://www.bilibili.com/video/av796221315/">几何图像、虚拟模拟</a>）</li>
+    </ul>
+  </li>
+  <li>相关参考资料
+    <ul>
+      <li>SIGGRAPH Course + 引擎设计文档</li>
+    </ul>
+  </li>
+  <li>图形学几个里程碑事件
+    <ul>
+      <li>可编程图形硬件出现（Shaders）</li>
+      <li>可编程渲染管线被研发出来（Shaders）</li>
+      <li>基于预计算的方法被剔除
+        <ul>
+          <li>复杂的视觉效果预先计算出来，实际运行期间直接使用预计算结果（eg：relighting）</li>
+        </ul>
+      </li>
+      <li>可交互式的光线追踪。以低采样率在每个像素上采样，通过后处理降噪。</li>
+    </ul>
+  </li>
+</ul>
 
 
     <div id="disqus_container">
@@ -53,9 +73,9 @@
     <script type="text/javascript" charset="utf-8">
       (function(){
         var param = {
-          url: 'http://stormphoenix.github.io/fall_in_love',
+          url: 'http://stormphoenix.github.io/GAMES202_Lecture_01',
           type: '6',
-          title: '《坠入爱河》' + '- 把这个时间点留作纪念',
+          title: '《GAMES202 Lecture 01》' + '- GAMES202 高质量实时渲染课程 Lecture 01 记录',
           ralateUid: '6425419082',
           rnd:new Date().valueOf()
         }

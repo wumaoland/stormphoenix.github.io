@@ -1,0 +1,41 @@
+---
+layout: post
+title:    "GAMES202 Lecture 01"
+date:    2021-09-17 17:44:30 +0800
+categories:    blog
+description: GAMES202 高质量实时渲染课程 Lecture 01 记录
+comments: true
+---
+
+### GAMES202 Lecture 01 笔记
+
+- Real-Time High Quality Rendering 要实现的目标
+    * Real-Time 做到实时渲染
+    * High Quality 保证渲染质量
+
+- RTR 四大模块
+    - 阴影、环境光（Shadows and Environment Mapping）
+    - 全局光照（Scene / Image Space Precomputation)
+    - 基于物理的渲染（Physically-based Shading）
+    - 实时光线追踪 (Real-Time Ray Tracing)
+
+- 课程内容
+    * Shadow and Environment Mapping
+    * Interactive Global Illumination
+    * Precomputed Radiance Transfer
+    * Real-Time Ray Tracing
+    * Participating Media
+    * Image space Effect
+    * NPR (Non-Photorealistic Rendering) 非真实感渲染
+    * Antialiasing and supersampling
+（此处有提到提到顾显峰的：[几何图像、虚拟模拟](https://www.bilibili.com/video/av796221315/)）
+
+- 相关参考资料
+    - SIGGRAPH Course + 引擎设计文档
+
+- 图形学几个里程碑事件
+    * 可编程图形硬件出现（Shaders）
+    * 可编程渲染管线被研发出来（Shaders）
+    * 基于预计算的方法被剔除
+        * 复杂的视觉效果预先计算出来，实际运行期间直接使用预计算结果（eg：relighting）
+    * 可交互式的光线追踪。以低采样率在每个像素上采样，通过后处理降噪。
