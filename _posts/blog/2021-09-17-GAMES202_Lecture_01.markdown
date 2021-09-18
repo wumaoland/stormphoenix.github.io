@@ -9,6 +9,8 @@ comments: true
 
 ### GAMES202 Lecture 01 笔记
 
+***Lecture 01 没有讲具体知识点，只是对后续课程内容做了一个概览。***
+
 - Real-Time High Quality Rendering 要实现的目标
     * Real-Time 做到实时渲染
     * High Quality 保证渲染质量
