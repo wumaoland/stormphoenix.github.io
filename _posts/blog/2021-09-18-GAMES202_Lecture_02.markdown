@@ -11,26 +11,39 @@ comments: true
 
 课程前半部分是关于 OpenGL 渲染管线的回顾，这一块之前学过就不记录了。这里给推荐一个不错的 [OpenGL 入门教程][link_OpenGL]。
 
-但是，后半部分提到的 Rendering Equation 很重要。
+但是，后半部分提到的 Rendering Equation 很重要。离线渲染（offline rendering）中渲染方程的形式如下：
 
-![Rendering Equation](/images/Rendering_Equation.jpeg)
+![Rendering Equation](/images/Rendering_Equation.jpeg){:height="70%" width="70%"}
 
-上图的 Rendering Equation 是 Offline Rendering 中的形式。对应到 RTR 领域是另外一个形式：
+对应到 RTR（Real-Time rendering） 领域是另外一个形式：
 
-![Rendering Equation in RTR](/images/Rendering_Equation_RTR.jpg)
+![Rendering Equation in RTR](/images/Rendering_Equation_RTR.jpg){:height="70%" width="70%"}
 
-我的理解是 RTR 这里的渲染方程和 Offline Rendering 有两处不同：
+RTR 的渲染方程和离线渲染至少有两处不同：
 
 - **Irradiance term**
   
 在 offline rendering 中，Li 是指从任意方向投射到 p 点处的光线携带的能量（irradiance），这个光线可以是直接光照、经过多次散射的光照。而在 RTR 中，L 指的是广义上的光源，包括：environment lighting（环境光照）、Direct illumination（直接光照明）和 one bounce illumination（一次散射光照明）。
 
-可以发现， RTR 为了减少计算量，在渲染流程中忽略了 multi-bounce illumination 的计算。这基于一个重要的理论：通常 multi-bounce illumination 携带的能量对于最终成像效果贡献是很小的。例如：光线散射次数分别为 N 和 N + 1 这两种情况下，渲染出来的图像区别一般不大（除了 specular scatter 这种例外），就是因为 N + 1 次 bounce 的光线携带的能量贡献较小。
+可以发现， RTR 为了减少计算量，在渲染流程中忽略了 multi-bounce illumination 的计算。这基于一个重要的理论：通常 multi-bounce illumination 携带的能量对于最终成像效果贡献是很小的。
 
-所以 RTR 实际上是在“性能”和“渲染质量” 上做了一个权衡，忽略 multi-bounce illumination 的计算，用 environment lighting 来代替。
+**一次散射结果** ->
+![One-bounce global illumination](/images/One-bounce_global_illumination.jpeg){:height="70%" width="70%"}
+
+**二次散射结果** ->
+![Two-bounce global illumination](/images/Two-bounce_global_illumination.jpeg){:height="70%" width="70%"}
+
+如上图：光线散射次数分别为1次和2次，从视觉上看渲染结果区别不是很大（除了背光面），就是因为经过二次 散射的光线携带的能量贡献较小，随着散射次数增加，这个能量会小到可以忽略。
+
+结论就是： RTR 实际上是在“性能”和“渲染质量” 上做了一个权衡，只计算直接光照明和一次散射光照明，多次散射的计算用环境光照明代替。
+
+**环境光照明** ->
+![Environment lighting](/images/Environment_lighting.jpeg){:height="70%" width="70%"}
 
 * **Visibility term**
   
 这个很好理解，由于 RTR 将 Li 看做成广义的“光源”，而场景是存在遮挡的，所以 RTR 中加上了 visibility term 表示 p 点和“光源” 之间的遮挡关系。
+
+以上。
 
 [link_OpenGL]: https://learnopengl-cn.github.io
