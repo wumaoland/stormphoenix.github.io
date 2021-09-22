@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
     <title>Linux内核完全剖析（一） | StormPhoenix</title>
-    <meta name="author" content="StormPhoenix" />
+    <meta name="author" content="StormPhoenix">
     <meta name="renderer" content="webkit">
-    <meta name="description" content="StormPhoenix's Blog" />
+    <meta name="description" content="StormPhoenix's Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
   </head>
 
@@ -18,7 +19,10 @@
     <h1 class="post-title"><a href="/anatomy-of-linux-kernel-1" title="Linux内核完全剖析（一）">Linux内核完全剖析（一）</a></h1>
     <p class="post-date">2017-07-08</p>
 
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    
+<script src="/js/mermaid.min.js"></script>
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -27,6 +31,7 @@
     }
   });
 </script>
+-->
 
     <p>重新看了Linux内核完全剖析的第二章，记录几个关键的概念。</p>
 
@@ -61,7 +66,7 @@
 
 <p>早期的PC系统的主存储器大小很小，CPU只有20根地址线，内存最大只有1024KB（1MB）。目前的计算机内存变大了（此处讨论4G大小），为了以前PC在软件上兼容，内存在1MB以下的物理地址空间的使用分配上依然和以前一样。只不过由于BIOS处于CPU能够寻址空间的最高端，原本1MB处的BIOS的位置被用作BIOS的影子（shadow）区域，运行时4GB处的BIOS的代码会被复制到这个地方。</p>
 
-<p><img src="/images/internal_storage_struct.jpg" alt="内存管理" /></p>
+<p><img src="/images/internal_storage_struct.jpg" alt="内存管理"></p>
 
 <p>计算机启动初始化的时候，4G空间中的640KB~1MB和4GB处的最后64KB以外的空间用作系统的内存。</p>
 

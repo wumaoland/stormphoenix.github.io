@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
     <title>Linux文件操作 | StormPhoenix</title>
-    <meta name="author" content="StormPhoenix" />
+    <meta name="author" content="StormPhoenix">
     <meta name="renderer" content="webkit">
-    <meta name="description" content="StormPhoenix's Blog" />
+    <meta name="description" content="StormPhoenix's Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
   </head>
 
@@ -18,7 +19,10 @@
     <h1 class="post-title"><a href="/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C" title="Linux文件操作">Linux文件操作</a></h1>
     <p class="post-date">2017-06-10</p>
 
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    
+<script src="/js/mermaid.min.js"></script>
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -27,6 +31,7 @@
     }
   });
 </script>
+-->
 
     <p>记录一下几天前学习的Linux文件和目录操作的知识。</p>
 
@@ -45,7 +50,7 @@
 <p># mkdir -m 711 test
  # ls -l
 drwx–x–x 2 root root 4096 9月 27 10:32 test
-关于rmdir也差不多，每次只能删除一级目录且该目录必须为空。要删除多级目录就要加上参数 -p。如果要删除目录和目录里面所有的东西（包括文件），那么可以采用 rm -r <目录名称>。</目录名称></p>
+关于rmdir也差不多，每次只能删除一级目录且该目录必须为空。要删除多级目录就要加上参数 -p。如果要删除目录和目录里面所有的东西（包括文件），那么可以采用 rm -r 。目录名称&gt;</p>
 
 <p>查看文件与目录的命令：</p>
 
@@ -56,9 +61,9 @@ drwx–x–x 2 root root 4096 9月 27 10:32 test
 -h : 将文件的容量用GB，MB，KB等方式列出（方便理解）。
 -i : 列出inode号码。
 -l : 列出文件的属性和权限信息。
-–time=<值> : 输出相应的时间。如果值等于atime，输出该文件上一次被访问的时间，如果值等于ctime，输出该文件上一次权限被修改的时间。
+–time= : 输出相应的时间。如果值等于atime，输出该文件上一次被访问的时间，如果值等于ctime，输出该文件上一次权限被修改的时间。
 --full-time : 以年、月、日、时、分的格式输出时间。
-复制文件的命令：</值></p>
+复制文件的命令：值&gt;</p>
 
 <p>cp: 复制文件
 用法：cp source（源文件） destination（目标文件）//将source复制到destination里面
@@ -116,7 +121,7 @@ page Up： 向上翻页。</p>
 <p>head：
 用法： 类似与cat，但是只会取出前n行数据，具体的n又参数制定。
 参数：
--n <数字>： 代表去取前n行数据。</数字></p>
+-n ： 代表去取前n行数据。数字&gt;</p>
 
 <p>tail：
 用法： 同head，只不过取得是文件末尾n行数据。</p>
@@ -248,23 +253,23 @@ find：直接在整个磁盘搜索相关文件名。</p>
 
 <p>用法1：将路径下所有符合时间条件的文件全部列出来。</p>
 
-<p>find <在什么路径下搜索> <按照什么条件搜索> <搜索条件的取值>
-相关搜索条件：<按照什么条件搜索> <搜索条件的取值>
+<p>find   
+相关搜索条件： 
 -mtime +n：搜索在n天之前（不包含第n天）修改过的文件。
 -mtime n：搜索在n天之前的一天之内被更改的文件。
 -mtime -n：搜索在n天之内（包含n天）被更改过的文件。
--newer file :file是一个文件，这个条件的含义是搜索比这个file更加新的文件。</搜索条件的取值></按照什么条件搜索></搜索条件的取值></按照什么条件搜索></在什么路径下搜索></p>
+-newer file :file是一个文件，这个条件的含义是搜索比这个file更加新的文件。搜索条件的取值&gt;按照什么条件搜索&gt;搜索条件的取值&gt;按照什么条件搜索&gt;在什么路径下搜索&gt;</p>
 
 <p>用法2：将路径下所有符合文件所有者、所有组和其他人权限的文件列出来。</p>
 
-<p>find <在什么路径下搜索> <搜索条件> <搜索条件的取值>
+<p>find   
 相关搜索条件：
 -uid n：n代表用户帐号的ID，只要文件的所有者的id是这个n，则列出这个文件。
 -gid n：n代表用户组的ID，只要文件的所有组的id是这个n，则列出这个文件。
 -user name：那么是用户的名字，只要文件所有者是这个名字，则列出这个文件。
 -group name：同上，这不过这个name是文件所有组的名字。
 -nouser：列出文件所有者不存在的文件。
--nogroup：列出所有文件所有组不存在的文件。</搜索条件的取值></搜索条件></在什么路径下搜索></p>
+-nogroup：列出所有文件所有组不存在的文件。搜索条件的取值&gt;搜索条件&gt;在什么路径下搜索&gt;</p>
 
 <p>用法3：将路径下符合指定的文件名、文件类型、文件权限的的文件列出来。</p>
 

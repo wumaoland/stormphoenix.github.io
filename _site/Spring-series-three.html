@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
     <title>Spring系列（三） | StormPhoenix</title>
-    <meta name="author" content="StormPhoenix" />
+    <meta name="author" content="StormPhoenix">
     <meta name="renderer" content="webkit">
-    <meta name="description" content="StormPhoenix's Blog" />
+    <meta name="description" content="StormPhoenix's Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
   </head>
 
@@ -18,7 +19,10 @@
     <h1 class="post-title"><a href="/Spring-series-three" title="Spring系列（三）">Spring系列（三）</a></h1>
     <p class="post-date">2017-07-24</p>
 
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    
+<script src="/js/mermaid.min.js"></script>
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -27,6 +31,7 @@
     }
   });
 </script>
+-->
 
     <h1 id="前言">前言</h1>
 
@@ -86,7 +91,8 @@
 <ul>
   <li>Component。意思是<code class="language-plaintext highlighter-rouge">组件</code>，一个简单的概念。可以认为一个Bean就是一个组件。建立对象之间的依赖关系可以理解为将 Bean 和 Bean 组装在一起。</li>
   <li>Autowire。自动装配。Spring的自动装配功能，可以自动将不同的Component组装在一起，构成组件和组件之间的依赖。</li>
-  <li>阅读过<a href="https://stormphoenix.github.io/2017/06/25/Spring系列-二-Spring内部实现的简单理解">Spring 系列（二）</a></li>
+  <li>阅读过<a href="https://stormphoenix.github.io/2017/06/25/Spring%E7%B3%BB%E5%88%97-%E4%BA%8C-Spring%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3">Spring 系列（二）</a>
+</li>
 </ul>
 
 <h1 id="利用spring配置bean之间的依赖">利用Spring配置Bean之间的依赖</h1>
@@ -127,13 +133,14 @@
 	<span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>这里 Bench Bean依赖于 Wheel，所以 Wheel 是要被注入到 Bench 的。在第一篇<a href="https://stormphoenix.github.io/2017/06/24/Spring系列-一-初识Spring/">博客</a>中提到了 Spring 可以帮我们做<code class="language-plaintext highlighter-rouge">注入</code>这件事情，那就用这个例子来说明 Spring 是怎么做的吧。</p>
+<p>这里 Bench Bean依赖于 Wheel，所以 Wheel 是要被注入到 Bench 的。在第一篇<a href="https://stormphoenix.github.io/2017/06/24/Spring%E7%B3%BB%E5%88%97-%E4%B8%80-%E5%88%9D%E8%AF%86Spring/">博客</a>中提到了 Spring 可以帮我们做<code class="language-plaintext highlighter-rouge">注入</code>这件事情，那就用这个例子来说明 Spring 是怎么做的吧。</p>
 
 <p>创建Bean之间依赖的方式分为两大类：Java方式；XML配置文件方式。其中Java方式又划分成两种：Java注解方式；Java代码方式。依次讲解。</p>
 
 <ul>
-  <li><strong>Java注解方式</strong>
-思路：这种方式是和<code class="language-plaintext highlighter-rouge">自动扫描</code>功能搭配起来的。首先<code class="language-plaintext highlighter-rouge">Spring容器</code>会加载<code class="language-plaintext highlighter-rouge">Spring 配置类</code>，然后发现<code class="language-plaintext highlighter-rouge">Spring 配置类</code>设置成自动扫描模式，于是<code class="language-plaintext highlighter-rouge">Spring 容器</code>会自动扫描配置类所在的整个包里面的Java类，查看是否有Java类被加上了<code class="language-plaintext highlighter-rouge">@Component</code>注解，如果加上了，就认为这个类是<code class="language-plaintext highlighter-rouge">Spring 容器</code>中的一个组件，然后把这个组件初始化。在初始化这个组件的过程中，如果发现有属性字段被<code class="language-plaintext highlighter-rouge">@Autowire</code>注解修饰，就认为这个字段是这个组件依赖的另外一个组件，就在<code class="language-plaintext highlighter-rouge">Spring 容器</code>中查找是否以及初始化了这个被依赖的组件，如果初始化了，就把这个组件赋值给<code class="language-plaintext highlighter-rouge">@Autowire</code>修饰的字段。从而实现了 Spring 的依赖注入功能。下面利用例子来解释。(<code class="language-plaintext highlighter-rouge">Spring容器</code>这个概念可以参考<a href="https://stormphoenix.github.io/2017/06/25/Spring系列-二-Spring内部实现的简单理解">Spring 系列（二）</a>)</li>
+  <li>
+<strong>Java注解方式</strong>
+思路：这种方式是和<code class="language-plaintext highlighter-rouge">自动扫描</code>功能搭配起来的。首先<code class="language-plaintext highlighter-rouge">Spring容器</code>会加载<code class="language-plaintext highlighter-rouge">Spring 配置类</code>，然后发现<code class="language-plaintext highlighter-rouge">Spring 配置类</code>设置成自动扫描模式，于是<code class="language-plaintext highlighter-rouge">Spring 容器</code>会自动扫描配置类所在的整个包里面的Java类，查看是否有Java类被加上了<code class="language-plaintext highlighter-rouge">@Component</code>注解，如果加上了，就认为这个类是<code class="language-plaintext highlighter-rouge">Spring 容器</code>中的一个组件，然后把这个组件初始化。在初始化这个组件的过程中，如果发现有属性字段被<code class="language-plaintext highlighter-rouge">@Autowire</code>注解修饰，就认为这个字段是这个组件依赖的另外一个组件，就在<code class="language-plaintext highlighter-rouge">Spring 容器</code>中查找是否以及初始化了这个被依赖的组件，如果初始化了，就把这个组件赋值给<code class="language-plaintext highlighter-rouge">@Autowire</code>修饰的字段。从而实现了 Spring 的依赖注入功能。下面利用例子来解释。(<code class="language-plaintext highlighter-rouge">Spring容器</code>这个概念可以参考<a href="https://stormphoenix.github.io/2017/06/25/Spring%E7%B3%BB%E5%88%97-%E4%BA%8C-Spring%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3">Spring 系列（二）</a>)</li>
 </ul>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">/**
@@ -228,7 +235,8 @@
 <p>所有的说明已经写入了代码注释之中。</p>
 
 <ul>
-  <li><strong>Java代码方式</strong>
+  <li>
+<strong>Java代码方式</strong>
 Java注解方式 … … 不也是 Java代码么 … …，而且 Java代码方式也用到了注解，不过两者还是有区别的，区别在于自动扫描 : )
 思路：依然是 <code class="language-plaintext highlighter-rouge">Spring 容器</code>加载 <code class="language-plaintext highlighter-rouge">Java 配置类</code>，不过此时 <code class="language-plaintext highlighter-rouge">Java配置类</code>没有被设置成自动扫描，所有的信息都要从这个配置类中获取。一个类是否属于<code class="language-plaintext highlighter-rouge">Spring 容器</code>、是否需要初始化完全由配置类决定 … … 所以，<code class="language-plaintext highlighter-rouge">@Component</code>注解在这种方式下是没有作用的。其他的地方和<code class="language-plaintext highlighter-rouge">Java注解方式</code>一样。</li>
 </ul>

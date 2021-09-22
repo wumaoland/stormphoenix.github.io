@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
     <title>GAMES202 CG Basics | StormPhoenix</title>
-    <meta name="author" content="StormPhoenix" />
+    <meta name="author" content="StormPhoenix">
     <meta name="renderer" content="webkit">
-    <meta name="description" content="StormPhoenix's Blog" />
+    <meta name="description" content="StormPhoenix's Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
   </head>
 
@@ -18,7 +19,10 @@
     <h1 class="post-title"><a href="/GAMES202_Lecture_02" title="GAMES202 CG Basics">GAMES202 CG Basics</a></h1>
     <p class="post-date">2021-09-18</p>
 
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    
+<script src="/js/mermaid.min.js"></script>
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -27,6 +31,7 @@
     }
   });
 </script>
+-->
 
     <h3 id="rendering-equation">Rendering Equation</h3>
 
@@ -34,11 +39,11 @@
 
 <p>但是，后半部分提到的 Rendering Equation 很重要。离线渲染（offline rendering）中渲染方程的形式如下：</p>
 
-<p><img src="/images/Rendering_Equation.jpeg" alt="Rendering Equation" height="70%" width="70%" /></p>
+<p><img src="/images/Rendering_Equation.jpeg" alt="Rendering Equation" height="70%" width="70%"></p>
 
 <p>对应到 RTR（Real-Time rendering） 领域是另外一个形式：</p>
 
-<p><img src="/images/Rendering_Equation_RTR.jpg" alt="Rendering Equation in RTR" height="70%" width="70%" /></p>
+<p><img src="/images/Rendering_Equation_RTR.jpg" alt="Rendering Equation in RTR" height="70%" width="70%"></p>
 
 <p>RTR 的渲染方程和离线渲染至少有两处不同：</p>
 
@@ -49,17 +54,17 @@
 <p>可以发现， RTR 为了减少计算量，在渲染流程中忽略了 multi-bounce illumination 的计算。这基于一个重要的理论：通常 multi-bounce illumination 携带的能量对于最终成像效果贡献是很小的。</p>
 
 <p><strong>一次散射结果</strong> -&gt;
-<img src="/images/One-bounce_global_illumination.jpeg" alt="One-bounce global illumination" height="70%" width="70%" /></p>
+<img src="/images/One-bounce_global_illumination.jpeg" alt="One-bounce global illumination" height="70%" width="70%"></p>
 
 <p><strong>二次散射结果</strong> -&gt;
-<img src="/images/Two-bounce_global_illumination.jpeg" alt="Two-bounce global illumination" height="70%" width="70%" /></p>
+<img src="/images/Two-bounce_global_illumination.jpeg" alt="Two-bounce global illumination" height="70%" width="70%"></p>
 
 <p>如上图：光线散射次数分别为1次和2次，从视觉上看渲染结果区别不是很大（除了背光面），就是因为经过二次 散射的光线携带的能量贡献较小，随着散射次数增加，这个能量会小到可以忽略。</p>
 
 <p>结论就是： RTR 实际上是在“性能”和“渲染质量” 上做了一个权衡，只计算直接光照明和一次散射光照明，多次散射的计算用环境光照明代替。</p>
 
 <p><strong>环境光照明</strong> -&gt;
-<img src="/images/Environment_lighting.jpeg" alt="Environment lighting" height="70%" width="70%" /></p>
+<img src="/images/Environment_lighting.jpeg" alt="Environment lighting" height="70%" width="70%"></p>
 
 <h5 id="visibility-term">Visibility term</h5>
 

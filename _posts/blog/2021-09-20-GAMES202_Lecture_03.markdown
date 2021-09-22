@@ -96,6 +96,27 @@ Shadow map 上记录的深度是离散、不连续的，不能代表场景中任
 
 ![Conclusion](/images/RTR/Conclusion.jpeg){:width="70%"}
 
+
+<div class="mermaid">
+pie title Pets adopted by volunteers
+"Dogs" : 386
+"Cats" : 85
+"Rats" : 35
+</div>
+
+<div class="mermaid">
+graph LR
+A[hard edge] -->B(Round edge)
+</div>
+
+<div class="mermaid">
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+</div>
+
 ### Shadow Mapping 后的数学原理
 
 课程引入了一个重要的不等式：
@@ -128,7 +149,7 @@ $$ L_o(p, \omega_o) \approx \frac{\int_{\Omega+}V(p, \omega_i)d\omega_i}{\int_{\
 
 如果 “遮挡率” 计算的值为 0，那么 shading point 被完全遮挡；为 1 说明 shading point 没有被遮挡；处于 (0, 1) 之间说明 p 点被部分遮挡，计算结果半明半暗，也就对应到 SM 中的软阴影部位。
 
-总结：在点光源、亮度平滑的面光源或 BRDF 足够平滑的情况下，shading 值可以通过独立计算 “遮挡率” 来表示明暗程度。那么接下来如何 “遮挡率” ？对 shading point 的半球面做积分太耗费时间，肯定是不可行的，可行的方法只能在采样算法里面找，这就引出接下来的办法：PCF。
+总结：在点光源、亮度平滑的面光源或 BRDF 足够平滑的情况下，shading 值可以通过独立计算 “遮挡率” 来表示明暗程度。那么接下来如何 “遮挡率” ？对 shading point 的半球面做积分太耗费时间，必定不可行。可能的方法只能在采样算法里面找，这就引出接下来的办法：PCF。
 
 ### Percentage Closer Filter (PCF)
 

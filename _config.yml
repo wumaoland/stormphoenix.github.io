@@ -1,7 +1,14 @@
 permalink: /:title
 
 title: StormPhoenix
+email: chengwang1@pku.edu.cn
 url: http://stormphoenix.github.io
-feed: /atom.xml
+description: Computer Graphics is awesome !
+github_username: StormPhoenix
+# feed: /atom.xml
 author_info: <a href="http://stormphoenix.github.io">StormPhoenix</a>
 markdown: kramdown
+
+plugins:
+  - jekyll-feed
+  - jekyll-spaceship

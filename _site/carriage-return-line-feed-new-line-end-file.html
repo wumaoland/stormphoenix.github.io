@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
     <title>回车、换行、和文件末尾空行 | StormPhoenix</title>
-    <meta name="author" content="StormPhoenix" />
+    <meta name="author" content="StormPhoenix">
     <meta name="renderer" content="webkit">
-    <meta name="description" content="StormPhoenix's Blog" />
+    <meta name="description" content="StormPhoenix's Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="">
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
   </head>
 
@@ -18,7 +19,10 @@
     <h1 class="post-title"><a href="/carriage-return-line-feed-new-line-end-file" title="回车、换行、和文件末尾空行">回车、换行、和文件末尾空行</a></h1>
     <p class="post-date">2016-05-18</p>
 
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    
+<script src="/js/mermaid.min.js"></script>
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -27,6 +31,7 @@
     }
   });
 </script>
+-->
 
     <h2 id="回车和换行">回车和换行</h2>
 
@@ -43,9 +48,9 @@
 <p>发明计算机时，这个概念被沿用下来，但因为条件的限制和设计者的喜好，有了一些分歧：</p>
 
 <ul>
-  <li>Unix 系统里，每行结尾只有”<换行>"，即"\n"</换行></li>
-  <li>Windows 系统里面，每行结尾是”<回车><换行>"，即"\r\n"</换行></回车></li>
-  <li>在老的 Mac 系统里，每行结尾是”<回车>"，即"\r"</回车></li>
+  <li>Unix 系统里，每行结尾只有”"，即"\n"换行&gt;</li>
+  <li>Windows 系统里面，每行结尾是”"，即"\r\n"换行&gt;回车&gt;</li>
+  <li>在老的 Mac 系统里，每行结尾是”"，即"\r"回车&gt;</li>
 </ul>
 
 <p>我们来验证一下，我在 Windows 下用记事本新建一个文本文件，它的二进制编码如下：</p>
@@ -71,7 +76,8 @@ hello2
 <p><code class="language-plaintext highlighter-rouge">0a</code>是 LF 的 ASCII 编码, <code class="language-plaintext highlighter-rouge">0d</code>是 CR 的 ASCII 编码。区别很明显了</p>
 
 <ul>
-  <li>Mac 下的文本文件在 Windows 下打开会成为一行，因为 Windows 只认识<code class="language-plaintext highlighter-rouge">\r\n</code>，也就是<code class="language-plaintext highlighter-rouge">0d0a</code></li>
+  <li>Mac 下的文本文件在 Windows 下打开会成为一行，因为 Windows 只认识<code class="language-plaintext highlighter-rouge">\r\n</code>，也就是<code class="language-plaintext highlighter-rouge">0d0a</code>
+</li>
   <li>Windows 下的文本文件在 Mac 下打开，Vim 中会在每行末尾显示一个 <code class="language-plaintext highlighter-rouge">^M</code>，(不是两个字符组成的)</li>
 </ul>
 
