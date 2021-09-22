@@ -11,4 +11,3 @@ markdown: kramdown
 
 plugins:
   - jekyll-feed
-  - jekyll-spaceship
