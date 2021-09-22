@@ -1,0 +1,98 @@
+---
+layout: post
+title:    "GAMES202 Real-Time Shadow Mapping"
+date:    2021-09-20 12:25:50 +0800
+categories:    blog
+description: 高质量实时渲染 Lecture 03 - Real-Time Shadow Mapping
+comments: true
+---
+
+### Real-Time Shadow Mapping
+
+一种在实时渲染中生成阴影的算法，后文用 SM 代替 Shadow Mapping
+
+### SM 有什么用
+用来在实时渲染中生成阴影。
+
+对比离线渲染，离线渲染是没有单独考虑如何生成阴影的。因为场景中点 p 的光照强弱是由四面八方的 Radiance 决定的（按照渲染方程计算）。首先光线的传播、光强损失是遵循物理的，p 点如果被遮挡的多，那么传播到 p 点的光线就少、光强就弱，反之光线就多，光强就强。所以理论上 p 点计算的光强就应该和实际情况一致，不需要把阴影作为一个特殊的 case 考虑。
+
+还是前文提到过的，实时渲染需要的是性能，要在极短的事件内计算出结果，采用光线追踪肯定是不可行的。如果能够知道场景中物体的空间结构以及光源位置，那么阴影覆盖区域是可以提前计算的。
+
+所以 SM 的思路就是：先计算场景“遮挡关系”，后续渲染流程就根据计算好的“遮挡关系”来判断某一点 p 是否被遮挡，如果遮挡就认为 p 点处有阴影。
+
+### Shadow Mapping
+RTR 中有一个可以用来表示场景 “遮挡关系” 的东西 - 相机拍摄的深度信息。而在 OpenGL 渲染管线中有一个可以用来存储深度信息的技术 - [帧缓冲][link_FrameBuffer]，帧缓冲具体是什么可以在学习 OpenGL 时了解，这里只需要知道它是用来存储场景到相机的深度信息。
+
+![Render from Light](/images/RTR/Render_from_Light.jpeg){:height="70%" width="70%"}
+
+深度信息图示：
+![Depth texture](/images/RTR/Depth_Texture.jpg){:height="70%" width="70%"}
+
+我们考虑场景里有一个点光源，假设在点光源处放置一个相机去拍摄整个场景，得到这个相机视角下场景的深度信息。这块深度信息将被存储到一块 depth texture 纹理里面，供算法后续使用。至此，SM 算法第一阶段完成（称之为第一个 Pass）。
+
+![Render from Eye](/images/RTR/Render_from_Eye.jpeg){:height="70%" width="70%"}
+
+将相机转移至 eye 处进行拍摄渲染，为了方便称呼，我们把场景中每个需要渲染的点称之为 shading point。
+
+此时可以得到两个信息：一幅没有阴影的渲染图像、从上个 pass 传递过来的 depth texture。我们知道 depth texture 保存的是光源视角下拍摄的深度信息，为了在相机视角下确定某个位置是否被遮挡，只需将 shading point 到光源的深度和 depth texture 记录的深度进行比较，如果比记录的深度大，说明该 shading point 被遮挡。
+
+![Shadow Mapping Results](/images/RTR/SM_Results.jpeg){:height="70%" width="70%"}
+
+### SM 存在的问题
+
+SM 算法实际应用下至少会有三个问题：
+- 锯齿状阴影
+- 自遮挡现象
+- 只能渲染硬阴影
+
+#### 锯齿状阴影
+
+阴影边缘出现锯齿状的原因在于 SM 的分辨率。
+
+![Shadow Map Antialiasing](/images/RTR/Shadow_Map_Antianliasing.jpg){:height="70%" width="70%"}
+
+[Shadow Map Antialiasing][link_Antialiasing]
+
+理想情况下，SM 的深度图中，每个像素记录的应该是场景中每个点的深度，但 depth texture 存在分辨率的限制，所以实际上每个像素代表的不是场景中一个 “**点**”，而是一块 “**区域**”。
+
+![SM Resolution](/images/RTR/SM_Resolution.jpeg){:height="70%" width="70%"}
+
+如上图，因为 shadow map 分辨率的原因，反投影回地面区域的深度信息是离散、不连续的。一些不应该被遮挡的部分被 SM 判定为遮挡，展现出来就是阴影边缘的锯齿。一种解决办法是 PCF，在 shadow map 上做多次采样深度并加权，后文会提到。
+
+#### 自遮挡现象（Self occlusion）
+
+自遮挡现象是指一些没有被遮挡的部位也出现了被遮挡现象。
+
+![Self occlusion](/images/RTR/Self_occlusion.jpg){:height="40%" width="40%"}
+
+这张图渲染错误的地方是地板上出现的花纹状阴影。本质上和锯齿状阴影一样，是由 Shadow map 的分辨率不足引起的。
+
+Shadow map 上记录的深度是离散、不连续的，不能代表场景中任意位置的真实深度。因此从 Shadow map 采样得到的深度可能要比真实深度或大或小，之后的比较的结果会出错，让一些本来没有被遮挡的区域看起来被遮挡了。
+
+![Self occlusion 2](/images/RTR/Self_occlusion2.jpeg){:width="70%"}
+
+容易想到的解决方法：做深度判定的时候增加一个 bias 项，shadow map 记录的深度如果落在 bias 区间内则认为不存在遮挡。
+
+![Self occlusion bias](/images/RTR/Self_occlusion_bias.jpeg){:width="70%"}
+
+这个方法引入了一个新问题：模型悬空。bias 是人为选取，那么选取多大的 bias 才是合适？bias 选取过大会让本应存在的遮挡关系被忽略，让物体看起来像是悬空。
+
+![Self_occlusion_bias_detach](/images/RTR/Self_occlusion_bias_detach.jpg){:width="40%"}
+
+#### 只能渲染硬阴影
+
+以上的 SM 模型是以点光源来构建的，阴影会有明显的边界。实际中大部分光源是面光源，阴影边界处会有明显的明暗过渡，如下：
+
+![Soft shadow](/images/RTR/Soft_shadow.jpg){:width="70%"}
+
+直接将 SM 中的点光源模型替换成面光源是不可行的。因为拍摄 Shadow map 的相机可以摆放到点光源位置，如果是面光源，那相机应该摆放在何处？
+
+有一种解决办法也是利用 PCF。首先假设，如果 p 点被遮挡，那么深度比较结果为 1，反之为 0。现在依然以点光源为模型生成 Shadow map，不在处理阴影的时候多次采样深度比较，结果做加权，最终 p 点得到的结果将会介于 [0, 1] 之间，用这个结果来表示阴影软硬程度。
+
+### Percentage Closer Filter (PCF)
+
+### Percentage Closer Soft Shadows (PCSS)
+
+[link_FrameBuffer]: https://learnopengl-cn.github.io/04%20Advanced%20OpenGL/05%20Framebuffers/
+
+[link_Antialiasing]: https://developer.download.nvidia.com/books/HTML/gpugems/gpugems_ch11.html

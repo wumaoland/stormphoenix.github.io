@@ -1,13 +1,13 @@
 ---
 layout: post
-title:    "GAMES202_Lecture_02"
+title:    "GAMES202 CG Basics"
 date:    2021-09-18 21:01:55 +0800
 categories:    blog
-description: GAMES202 高质量实时渲染课程 Lecture 02 记录
+description: 高质量实时渲染课程 Lecture 02 - 往期回顾
 comments: true
 ---
 
-### GAMES202 Lecture 02 笔记
+### Rendering Equation
 
 课程前半部分是关于 OpenGL 渲染管线的回顾，这一块之前学过就不记录了。这里给推荐一个不错的 [OpenGL 入门教程][link_OpenGL]。
 
@@ -21,7 +21,7 @@ comments: true
 
 RTR 的渲染方程和离线渲染至少有两处不同：
 
-- **Irradiance term**
+##### Irradiance term
   
 在 offline rendering 中，Li 是指从任意方向投射到 p 点处的光线携带的能量（irradiance），这个光线可以是直接光照、经过多次散射的光照。而在 RTR 中，L 指的是广义上的光源，包括：environment lighting（环境光照）、Direct illumination（直接光照明）和 one bounce illumination（一次散射光照明）。
 
@@ -40,7 +40,7 @@ RTR 的渲染方程和离线渲染至少有两处不同：
 **环境光照明** ->
 ![Environment lighting](/images/Environment_lighting.jpeg){:height="70%" width="70%"}
 
-* **Visibility term**
+##### Visibility term
   
 这个很好理解，由于 RTR 将 Li 看做成广义的“光源”，而场景是存在遮挡的，所以 RTR 中加上了 visibility term 表示 p 点和“光源” 之间的遮挡关系。
 

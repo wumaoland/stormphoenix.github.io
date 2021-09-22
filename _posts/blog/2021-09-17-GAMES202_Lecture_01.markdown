@@ -1,13 +1,13 @@
 ---
 layout: post
-title:    "GAMES202 Lecture 01"
+title:    "GAMES202 Introduction and Overview"
 date:    2021-09-17 17:44:30 +0800
 categories:    blog
-description: GAMES202 高质量实时渲染课程 Lecture 01 记录
+description: 高质量实时渲染课程 Lecture 01 - 课程概论 
 comments: true
 ---
 
-### GAMES202 Lecture 01 笔记
+### 课程大纲
 
 ***Lecture 01 没有讲具体知识点，只是对后续课程内容做了一个概览。***
 

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>GAMES202_Lecture_02 | StormPhoenix</title>
+    <title>GAMES202 CG Basics | StormPhoenix</title>
     <meta name="author" content="StormPhoenix" />
     <meta name="renderer" content="webkit">
     <meta name="description" content="StormPhoenix's Blog" />
@@ -15,10 +15,10 @@
 
     <body class="body-post">
   <div class="post-wrapper">
-    <h1 class="post-title"><a href="/GAMES202_Lecture_02" title="GAMES202_Lecture_02">GAMES202_Lecture_02</a></h1>
+    <h1 class="post-title"><a href="/GAMES202_Lecture_02" title="GAMES202 CG Basics">GAMES202 CG Basics</a></h1>
     <p class="post-date">2021-09-18</p>
 
-    <h3 id="games202-lecture-02-笔记">GAMES202 Lecture 02 笔记</h3>
+    <h3 id="rendering-equation">Rendering Equation</h3>
 
 <p>课程前半部分是关于 OpenGL 渲染管线的回顾，这一块之前学过就不记录了。这里给推荐一个不错的 <a href="https://learnopengl-cn.github.io">OpenGL 入门教程</a>。</p>
 
@@ -32,9 +32,7 @@
 
 <p>RTR 的渲染方程和离线渲染至少有两处不同：</p>
 
-<ul>
-  <li><strong>Irradiance term</strong></li>
-</ul>
+<h5 id="irradiance-term">Irradiance term</h5>
 
 <p>在 offline rendering 中，Li 是指从任意方向投射到 p 点处的光线携带的能量（irradiance），这个光线可以是直接光照、经过多次散射的光照。而在 RTR 中，L 指的是广义上的光源，包括：environment lighting（环境光照）、Direct illumination（直接光照明）和 one bounce illumination（一次散射光照明）。</p>
 
@@ -53,9 +51,7 @@
 <p><strong>环境光照明</strong> -&gt;
 <img src="/images/Environment_lighting.jpeg" alt="Environment lighting" height="70%" width="70%" /></p>
 
-<ul>
-  <li><strong>Visibility term</strong></li>
-</ul>
+<h5 id="visibility-term">Visibility term</h5>
 
 <p>这个很好理解，由于 RTR 将 Li 看做成广义的“光源”，而场景是存在遮挡的，所以 RTR 中加上了 visibility term 表示 p 点和“光源” 之间的遮挡关系。</p>
 
@@ -70,7 +66,7 @@
         var param = {
           url: 'http://stormphoenix.github.io/GAMES202_Lecture_02',
           type: '6',
-          title: '《GAMES202_Lecture_02》' + '- GAMES202 高质量实时渲染课程 Lecture 02 记录',
+          title: '《GAMES202 CG Basics》' + '- 高质量实时渲染课程 Lecture 02 - 往期回顾',
           ralateUid: '6425419082',
           rnd:new Date().valueOf()
         }
@@ -98,11 +94,15 @@
     <ul>
       
       <li>
-        <a href="/GAMES202_Lecture_02" class="title">GAMES202_Lecture_02</a>
+        <a href="/GAMES202_Lecture_03" class="title">GAMES202 Real-Time Shadow Mapping</a>
       </li>
       
       <li>
-        <a href="/GAMES202_Lecture_01" class="title">GAMES202 Lecture 01</a>
+        <a href="/GAMES202_Lecture_02" class="title">GAMES202 CG Basics</a>
+      </li>
+      
+      <li>
+        <a href="/GAMES202_Lecture_01" class="title">GAMES202 Introduction and Overview</a>
       </li>
       
       <li>
