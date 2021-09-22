@@ -18,6 +18,16 @@
     <h1 class="post-title"><a href="/use-quota" title="使用Quota">使用Quota</a></h1>
     <p class="post-date">2017-06-12</p>
 
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      inlineMath: [['$','$']]
+    }
+  });
+</script>
+
     <p>Quota翻译成中文就是“限额”的意思，在Linux中Quota用来对用户（或用户组）的磁盘用量进行管理，这种管理在多用户的Linux系统上是很有必要的。假设有这样一种情况，好多个用户同时在主机上工作，其中一个用户无加限制的使用了很大的磁盘空间，这样就导致了其他用户可用的磁盘空间变小了，所以我们必须要对这个用户做一些磁盘容量的使用限制。</p>
 
 <h1 id="注意事项">注意事项</h1>

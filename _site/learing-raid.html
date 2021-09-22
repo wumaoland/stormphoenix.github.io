@@ -18,6 +18,16 @@
     <h1 class="post-title"><a href="/learing-raid" title="学习使用软件磁盘阵列">学习使用软件磁盘阵列</a></h1>
     <p class="post-date">2017-06-14</p>
 
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      inlineMath: [['$','$']]
+    }
+  });
+</script>
+
     <p>先从遇到的问题谈起，然后再讲讲什么是<code class="language-plaintext highlighter-rouge">磁盘阵列(Software RAID)</code>和<code class="language-plaintext highlighter-rouge">软件磁盘阵列(Software RAID) </code>，以及为什么要使用使用软件磁盘阵列。</p>
 
 <p>在使用磁盘时可能会遇到很多这样些问题。比如说在存储一些超大文件的时候，发现磁盘容量不够用了；磁盘长期进行大数据量的读写导致磁盘损毁，无法恢复数据之类的问题。为了解决这个问题，引入了RAID。</p>
