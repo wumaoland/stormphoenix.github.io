@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="http://stormphoenix.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="http://stormphoenix.github.io/" rel="alternate" type="text/html" /><updated>2021-09-22T21:29:18+08:00</updated><id>http://stormphoenix.github.io/feed.xml</id><title type="html">StormPhoenix</title><subtitle>Computer Graphics is awesome !</subtitle><entry><title type="html">GAMES202 Real-Time Shadow Mapping</title><link href="http://stormphoenix.github.io/GAMES202_Lecture_03" rel="alternate" type="text/html" title="GAMES202 Real-Time Shadow Mapping" /><published>2021-09-20T12:25:50+08:00</published><updated>2021-09-20T12:25:50+08:00</updated><id>http://stormphoenix.github.io/GAMES202_Lecture_03</id><content type="html" xml:base="http://stormphoenix.github.io/GAMES202_Lecture_03">&lt;h3 id=&quot;real-time-shadow-mapping&quot;&gt;Real-Time Shadow Mapping&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="http://stormphoenix.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="http://stormphoenix.github.io/" rel="alternate" type="text/html" /><updated>2021-09-22T21:45:36+08:00</updated><id>http://stormphoenix.github.io/feed.xml</id><title type="html">StormPhoenix</title><subtitle>Computer Graphics is awesome !</subtitle><entry><title type="html">GAMES202 Real-Time Shadow Mapping</title><link href="http://stormphoenix.github.io/GAMES202_Lecture_03" rel="alternate" type="text/html" title="GAMES202 Real-Time Shadow Mapping" /><published>2021-09-20T12:25:50+08:00</published><updated>2021-09-20T12:25:50+08:00</updated><id>http://stormphoenix.github.io/GAMES202_Lecture_03</id><content type="html" xml:base="http://stormphoenix.github.io/GAMES202_Lecture_03">&lt;h3 id=&quot;real-time-shadow-mapping&quot;&gt;Real-Time Shadow Mapping&lt;/h3&gt;
 
 &lt;p&gt;一种在实时渲染中生成阴影的算法，后文用 SM 代替 Shadow Mapping&lt;/p&gt;
 
@@ -115,31 +115,28 @@ graph TD;
 
 &lt;p&gt;$$ \int_{\Omega} f(x)g(x)dx \approx \frac{\int_{\Omega} f(x)dx}{\int_{\Omega}dx} \cdot \int_{\Omega} g(x) dx $$&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;成立条件：
-(1) g(x) 的 support（积分范围）足够小。
-(2) g(x) 足够 smooth（平滑）。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 成立条件：
+ (1) g(x) 的 support（积分范围）足够小。
+ (2) g(x) 足够 smooth（平滑）。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;引入这个公式的目的是为了说明：在实时渲染领域，任何 “近似相等” 都等价于 “相等”。将这个约等式应用于渲染方程，将方程内的 Visibility 项提到公式外部，如下：&lt;/p&gt;
 
-&lt;p&gt;$$ L_o(p, \omega_o) = \int_{\Omega_{+}} L_i(p, \omega_i)f_r(p,\omega_i,\omega_o)\cos\theta_{i}V(p, \omega_i)d \omega_{i}$$&lt;/p&gt;
+&lt;p&gt;$$ L_o(p, \omega_o) = \int_{\Omega_{+}} L_i(p, \omega_i)f_r(p,\omega_i,\omega_o)\cos\theta_{i}V(p, \omega_i)d \omega_{i} $$&lt;/p&gt;
 
 &lt;p&gt;Visibibity 项提取到外部&lt;/p&gt;
 
-&lt;p&gt;$$ L_o(p, \omega_o) \approx \frac{\int_{\Omega+}V(p, \omega_i)d\omega_i}{\int_{\Omega+}d\omega_i} \int_{\Omega+}L_i(p, \omega_i) f_r(p, \omega_i, \omega_o) \cos \theta_i d\omega_i$$&lt;/p&gt;
+&lt;p&gt;$$ L_o(p, \omega_o) \approx \frac{\int_{\Omega+}V(p, \omega_i)d\omega_i}{\int_{\Omega+}d\omega_i} \int_{\Omega+}L_i(p, \omega_i) f_r(p, \omega_i, \omega_o) \cos \theta_i d\omega_i $$&lt;/p&gt;
 
 &lt;p&gt;重新审视一下公式成立条件，看这个近似能不能成立。首先是&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;(1) g(x) 的 support（积分范围）足够小。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; (1) g(x) 的 support（积分范围）足够小。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;这要求公式左边的 Li 的积分范围足够小，对应到实际环境是要求光源必须是点光源。点光源相当于是空间中的一个点，体积很小，从 p 点看向光源的立体角 wi 也相对小。&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;(2) g(x) 必须是 smooth 的&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; (2) g(x) 必须是 smooth 的
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;这要求公示左边的 Li 和 BRDF 足够光滑。Li 足够光滑的情况是环境光、面光源，BRDF 必须是接近 diffuse 的。&lt;/p&gt;
 

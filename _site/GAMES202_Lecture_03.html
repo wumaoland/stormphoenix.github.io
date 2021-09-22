@@ -22,8 +22,20 @@
 
     
 <script src="/js/mermaid.min.js"></script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-<!-- <script src="/js/MathJax.js" type="text/javascript"></script> -->
+
+<!--
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+  </script>
+-->
+
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -32,6 +44,23 @@
     }
   });
 </script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+-->
+
+<!-- <script src="/js/MathJax.js" type="text/javascript"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      inlineMath: [['$','$']]
+    }
+  });
+</script>
+-->
 
     <h3 id="real-time-shadow-mapping">Real-Time Shadow Mapping</h3>
 
@@ -150,31 +179,28 @@ graph TD;
 
 <p>$$ \int_{\Omega} f(x)g(x)dx \approx \frac{\int_{\Omega} f(x)dx}{\int_{\Omega}dx} \cdot \int_{\Omega} g(x) dx $$</p>
 
-<blockquote>
-  <p>成立条件：
-(1) g(x) 的 support（积分范围）足够小。
-(2) g(x) 足够 smooth（平滑）。</p>
-</blockquote>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 成立条件：
+ (1) g(x) 的 support（积分范围）足够小。
+ (2) g(x) 足够 smooth（平滑）。
+</code></pre></div></div>
 
 <p>引入这个公式的目的是为了说明：在实时渲染领域，任何 “近似相等” 都等价于 “相等”。将这个约等式应用于渲染方程，将方程内的 Visibility 项提到公式外部，如下：</p>
 
-<p>$$ L_o(p, \omega_o) = \int_{\Omega_{+}} L_i(p, \omega_i)f_r(p,\omega_i,\omega_o)\cos\theta_{i}V(p, \omega_i)d \omega_{i}$$</p>
+<p>$$ L_o(p, \omega_o) = \int_{\Omega_{+}} L_i(p, \omega_i)f_r(p,\omega_i,\omega_o)\cos\theta_{i}V(p, \omega_i)d \omega_{i} $$</p>
 
 <p>Visibibity 项提取到外部</p>
 
-<p>$$ L_o(p, \omega_o) \approx \frac{\int_{\Omega+}V(p, \omega_i)d\omega_i}{\int_{\Omega+}d\omega_i} \int_{\Omega+}L_i(p, \omega_i) f_r(p, \omega_i, \omega_o) \cos \theta_i d\omega_i$$</p>
+<p>$$ L_o(p, \omega_o) \approx \frac{\int_{\Omega+}V(p, \omega_i)d\omega_i}{\int_{\Omega+}d\omega_i} \int_{\Omega+}L_i(p, \omega_i) f_r(p, \omega_i, \omega_o) \cos \theta_i d\omega_i $$</p>
 
 <p>重新审视一下公式成立条件，看这个近似能不能成立。首先是</p>
 
-<blockquote>
-  <p>(1) g(x) 的 support（积分范围）足够小。</p>
-</blockquote>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> (1) g(x) 的 support（积分范围）足够小。
+</code></pre></div></div>
 
 <p>这要求公式左边的 Li 的积分范围足够小，对应到实际环境是要求光源必须是点光源。点光源相当于是空间中的一个点，体积很小，从 p 点看向光源的立体角 wi 也相对小。</p>
 
-<blockquote>
-  <p>(2) g(x) 必须是 smooth 的</p>
-</blockquote>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> (2) g(x) 必须是 smooth 的
+</code></pre></div></div>
 
 <p>这要求公示左边的 Li 和 BRDF 足够光滑。Li 足够光滑的情况是环境光、面光源，BRDF 必须是接近 diffuse 的。</p>
 
