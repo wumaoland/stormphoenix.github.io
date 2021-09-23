@@ -1,4 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="http://stormphoenix.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="http://stormphoenix.github.io/" rel="alternate" type="text/html" /><updated>2021-09-23T12:50:13+08:00</updated><id>http://stormphoenix.github.io/feed.xml</id><title type="html">StormPhoenix</title><subtitle>Computer Graphics is awesome !</subtitle><entry><title type="html">GAMES202 Real-Time Shadow Mapping</title><link href="http://stormphoenix.github.io/GAMES202_Lecture_03" rel="alternate" type="text/html" title="GAMES202 Real-Time Shadow Mapping" /><published>2021-09-20T12:25:50+08:00</published><updated>2021-09-20T12:25:50+08:00</updated><id>http://stormphoenix.github.io/GAMES202_Lecture_03</id><content type="html" xml:base="http://stormphoenix.github.io/GAMES202_Lecture_03">&lt;h3 id=&quot;real-time-shadow-mapping&quot;&gt;Real-Time Shadow Mapping&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="http://stormphoenix.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="http://stormphoenix.github.io/" rel="alternate" type="text/html" /><updated>2021-09-23T14:56:24+08:00</updated><id>http://stormphoenix.github.io/feed.xml</id><title type="html">StormPhoenix</title><subtitle>Computer Graphics is awesome !</subtitle><entry><title type="html">如何在 Github Pages 中配置 Latex</title><link href="http://stormphoenix.github.io/Config_Latex" rel="alternate" type="text/html" title="如何在 Github Pages 中配置 Latex" /><published>2021-09-23T12:51:46+08:00</published><updated>2021-09-23T12:51:46+08:00</updated><id>http://stormphoenix.github.io/Config_Latex</id><content type="html" xml:base="http://stormphoenix.github.io/Config_Latex">&lt;h3 id=&quot;配置环境&quot;&gt;配置环境&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;OS：macOS Catalina&lt;/li&gt;
+  &lt;li&gt;Github pages 构建工具：jekyll&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我自己试了三种方法，最后一种直接在本地用 MathJax javascript 库解析 LaTeX 效果是最好的。&lt;/p&gt;
+
+&lt;h3 id=&quot;用-jekyll-spaceship-插件处理-latex-语法&quot;&gt;用 jekyll-spaceship 插件处理 LaTeX 语法&lt;/h3&gt;
+
+&lt;p&gt;之前没接触过 ruby 语言，对 jekyll 的执行流不太清楚。这次借机会把 ruby \ rvm \ gem \ bundle 之间的关系理了一下。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ruby： 一种脚本语言&lt;/li&gt;
+  &lt;li&gt;rvm：ruby 版本管理工具&lt;/li&gt;
+  &lt;li&gt;gem：全局包管理器，管理 ruby 库的版本、依赖关系&lt;/li&gt;
+  &lt;li&gt;bundle： 项目中的包管理器。有了 bundle，每个 ruby 项目都可以管理同版本的 ruby 库&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;gem 可以理解为全局的包管理器，而 bundle 理解为项目级别的包管理器。一个项目可以是一个文件夹下面的所有内容。而 bundle 又是通过项目下面的 Gemfile / Gemfile.lock 文件起作用的。&lt;/p&gt;
+
+&lt;p&gt;转入正题，jekyll-spaceship 是 jekyll 下的插件（本质上也是一个 ruby 库），功能很多，包括了处理 LaTeX 语法。而一个 github pages 本质上是一个项目，可以用 bundle 管理 jekyll-spaceship 插件。&lt;/p&gt;
+
+&lt;p&gt;在 Gemfile 中的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;group&lt;/code&gt; 标签添加 jekyll-spaceship 库：&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;group :jekyll_plugins do
+  gem 'jekyll-spaceship'
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;运行 bundle，bundle 会检查 Gemfile 配置更新项目依赖的库：&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;安装过程如果无误，那么配置就完成了，可直接在 markdown 里编写 LaTeX 代码。&lt;/p&gt;
+
+&lt;p&gt;缺点：jekyll 项目在本地运行可以完美解析 LaTeX 语法，但上传到 github pages 就不行了，猜测是 github 在构建 jekyll 项目时是没有 jekyll-spaceship 插件的。&lt;/p&gt;
+
+&lt;h3 id=&quot;cdn-分发-mathjaxjs&quot;&gt;CDN 分发 MathJax.js&lt;/h3&gt;
+
+&lt;p&gt;这种方法最方便简洁，在每篇 post 之前插入下面这行代码即可：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script type=&quot;text/javascript&quot; async src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这段链接会指向一个 CDN 分发服务，将最新的 MathJax Js 库 发送到本地用于 LaTeX 渲染。&lt;/p&gt;
+
+&lt;p&gt;缺点：虽然做起来很简单，但每次打开新 post 都会重新加载这段代码，引起不必要的网络开销，网页会卡上一会。&lt;/p&gt;
+
+&lt;h3 id=&quot;本地添加-mathjax-库&quot;&gt;本地添加 MathJax 库&lt;/h3&gt;
+
+&lt;p&gt;用 CDN 分发服务会让网页卡顿，所以我考虑将 MathJax Js 库全部存放到本地 js 文件夹。这里参考了 &lt;a href=&quot;https://docs.mathjax.org/en/latest/web/hosting.html&quot;&gt;Hosting Your Own Copy of MathJax&lt;/a&gt; 这篇文章。首先将已经编译发布的 MathJax 库用 npm 工具下载下来：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install mathjax@3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;npm 的执行目录下会出现 node_modules 文件夹，里面存放着 mathjax/es5，es5 文件夹里面有着所有编译发布好的 mathjax 库。然后，在 github pages 的 /js 目录下建立 mathjax 文件夹，把 mathjax/es5 里面的 mathjax 库复制过来。&lt;/p&gt;
+
+&lt;p&gt;最后一步，依然是在每片 post 之前插入 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;script&amp;gt;&lt;/code&gt; 标签，引用 /js 下的 mathjax，如下：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;script src=&quot;/js/mathjax/tex-chtml.js&quot; id=&quot;MathJax-script&quot; async&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;至此可以完美解析 LaTeX 语法，网页加载速度也很快。&lt;/p&gt;</content><author><name></name></author><category term="blog" /><summary type="html">配置环境</summary></entry><entry><title type="html">GAMES202 Real-Time Shadow Mapping</title><link href="http://stormphoenix.github.io/GAMES202_Lecture_03" rel="alternate" type="text/html" title="GAMES202 Real-Time Shadow Mapping" /><published>2021-09-20T12:25:50+08:00</published><updated>2021-09-20T12:25:50+08:00</updated><id>http://stormphoenix.github.io/GAMES202_Lecture_03</id><content type="html" xml:base="http://stormphoenix.github.io/GAMES202_Lecture_03">&lt;h3 id=&quot;real-time-shadow-mapping&quot;&gt;Real-Time Shadow Mapping&lt;/h3&gt;
 
 &lt;p&gt;一种在实时渲染中生成阴影的算法，后文用 SM 代替 Shadow Mapping&lt;/p&gt;
 
@@ -315,30 +378,4 @@ graph TD;
 
 &lt;p&gt;其次，简历可以做很多文章，凡是能够表现自己长处的地方都写上去。比如GPA、项目经验、工作经历、科研成果以及GPA。虽说不同的老师看重不同的点，比如有的老师看重GPA，其他老师看重项目经验，那么吧这些都写上去是没有坏处。不过千万注意，自己写上去的一定要是自己熟悉的，为了增加履历而写自己不熟悉的项目无疑是给自己挖坑。比如我，对Linux内核、JVM还有软件工程比较熟悉，老师问到这些我都能应答自如。有人会问：如果自己大学一片空白，没有这些经历怎么办？我的答案是：初试结束后的两个月时间是你最好的机会！要利用好这段时间，没有项目，就自己造一个项目；没有研究过什么东西，就找个方向研究，两个月绰绰有余。最后，简历是用来凸显自己实力的，要写的简洁，一面纸概括完自己的情况，不需要像其他人一样打印好几页纸，弄得花里胡哨。&lt;/p&gt;
 
-&lt;p&gt;我本科是华中农业大学，一个普通的211。但通过这次复试，我发现我的能力不比985高校学生差，甚至比大部分人还要强。同时我也知道，北大只是一个起点，距离领域前沿还有很大距离。务必保持谦虚谨慎，不骄不躁的作风，切记。&lt;/p&gt;</content><author><name></name></author><category term="life" /><summary type="html">我的北大故事，应该从考研进入复试讲起。在去北京之前，我最担心的就是笔试，今年是信科在考研复试中第一次在所有计算机专业中加入笔试环节，事先也没有公布任何考试大纲。加入我在笔试这一环节不及格就会被淘汰，后续的自我表现就完全没有机会了。不过后来发现这种担心完全是多余的，事实证明，对于一个合格的程序员，北大的笔试其实没有任何难度，因此我也顺理成章的进入面试环节。</summary></entry><entry><title type="html">坠入爱河</title><link href="http://stormphoenix.github.io/fall_in_love" rel="alternate" type="text/html" title="坠入爱河" /><published>2018-09-10T01:50:34+08:00</published><updated>2018-09-10T01:50:34+08:00</updated><id>http://stormphoenix.github.io/fall_in_love</id><content type="html" xml:base="http://stormphoenix.github.io/fall_in_love">&lt;p&gt;自从我爱上&lt;a href=&quot;https://weibo.com/u/2162251055&quot;&gt;你&lt;/a&gt;开始，已经有&lt;/p&gt;
-&lt;p id=&quot;content&quot;&gt;
-    &lt;h1 style=&quot;font-size: 30px; font-weight: bold&quot; id=&quot;time_text&quot;&gt;时间正在计算中... ...&lt;/h1&gt;
-&lt;/p&gt;
-&lt;p class=&quot;vcenter&quot;&gt;岁月悠悠，我们彼此守候。&lt;/p&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;
-        function show() {
-            var date1 = '2018/06/18 02:11:00';  //开始时间
-            var date2 = new Date();    //结束时间
-            var date3 = date2.getTime() - new Date(date1).getTime();   //时间差的毫秒数
-            //计算出相差天数
-            var days = Math.floor(date3 / (24 * 3600 * 1000))
-            //计算出小时数
-            var leave1 = date3 % (24 * 3600 * 1000)    //计算天数后剩余的毫秒数
-            var hours = Math.floor(leave1 / (3600 * 1000))
-            //计算相差分钟数
-            var leave2 = leave1 % (3600 * 1000)        //计算小时数后剩余的毫秒数
-            var minutes = Math.floor(leave2 / (60 * 1000))
-            //计算相差秒数
-            var leave3 = leave2 % (60 * 1000)      //计算分钟数后剩余的毫秒数
-            var seconds = Math.round(leave3 / 1000)
-            var $timeText = $(' &lt;h1 id=&quot;time_text&quot;&gt; ' + days + &quot; 天 &quot; + hours + &quot; 小时 &quot; + minutes + &quot; 分钟 &quot; + seconds + &quot; 秒了 &lt;/h1&gt;&quot;)
-            document.getElementById(&quot;time_text&quot;).innerText = days + &quot; 天 &quot; + hours + &quot; 小时 &quot; + minutes + &quot; 分钟 &quot; + seconds + &quot; 秒了 &quot;
-            
-        }
-        window.setInterval(&quot;show()&quot;, 1000)
-&lt;/script&gt;</content><author><name></name></author><category term="life" /><summary type="html">自从我爱上你开始，已经有 时间正在计算中... ... 岁月悠悠，我们彼此守候。</summary></entry></feed>
+&lt;p&gt;我本科是华中农业大学，一个普通的211。但通过这次复试，我发现我的能力不比985高校学生差，甚至比大部分人还要强。同时我也知道，北大只是一个起点，距离领域前沿还有很大距离。务必保持谦虚谨慎，不骄不躁的作风，切记。&lt;/p&gt;</content><author><name></name></author><category term="life" /><summary type="html">我的北大故事，应该从考研进入复试讲起。在去北京之前，我最担心的就是笔试，今年是信科在考研复试中第一次在所有计算机专业中加入笔试环节，事先也没有公布任何考试大纲。加入我在笔试这一环节不及格就会被淘汰，后续的自我表现就完全没有机会了。不过后来发现这种担心完全是多余的，事实证明，对于一个合格的程序员，北大的笔试其实没有任何难度，因此我也顺理成章的进入面试环节。</summary></entry></feed>

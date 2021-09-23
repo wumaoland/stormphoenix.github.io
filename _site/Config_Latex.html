@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>如何在 Github Pages 中配置 Latex | StormPhoenix</title>
+    <meta name="author" content="StormPhoenix" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="StormPhoenix's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <link rel="stylesheet" href="/css/style.css"/>
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+  </head>
+
+    <body class="body-post">
+  <div class="post-wrapper">
+    <h1 class="post-title"><a href="/Config_Latex" title="如何在 Github Pages 中配置 Latex">如何在 Github Pages 中配置 Latex</a></h1>
+    <p class="post-date">2021-09-23</p>
+
+    <script src="/js/mermaid/mermaid.min.js"></script>
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+
+
+    <h3 id="配置环境">配置环境</h3>
+
+<ul>
+  <li>OS：macOS Catalina</li>
+  <li>Github pages 构建工具：jekyll</li>
+</ul>
+
+<p>我自己试了三种方法，最后一种直接在本地用 MathJax javascript 库解析 LaTeX 效果是最好的。</p>
+
+<h3 id="用-jekyll-spaceship-插件处理-latex-语法">用 jekyll-spaceship 插件处理 LaTeX 语法</h3>
+
+<p>之前没接触过 ruby 语言，对 jekyll 的执行流不太清楚。这次借机会把 ruby \ rvm \ gem \ bundle 之间的关系理了一下。</p>
+
+<ul>
+  <li>ruby： 一种脚本语言</li>
+  <li>rvm：ruby 版本管理工具</li>
+  <li>gem：全局包管理器，管理 ruby 库的版本、依赖关系</li>
+  <li>bundle： 项目中的包管理器。有了 bundle，每个 ruby 项目都可以管理同版本的 ruby 库</li>
+</ul>
+
+<p>gem 可以理解为全局的包管理器，而 bundle 理解为项目级别的包管理器。一个项目可以是一个文件夹下面的所有内容。而 bundle 又是通过项目下面的 Gemfile / Gemfile.lock 文件起作用的。</p>
+
+<p>转入正题，jekyll-spaceship 是 jekyll 下的插件（本质上也是一个 ruby 库），功能很多，包括了处理 LaTeX 语法。而一个 github pages 本质上是一个项目，可以用 bundle 管理 jekyll-spaceship 插件。</p>
+
+<p>在 Gemfile 中的 <code class="language-plaintext highlighter-rouge">group</code> 标签添加 jekyll-spaceship 库：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>group :jekyll_plugins do
+  gem 'jekyll-spaceship'
+end
+</code></pre></div></div>
+
+<p>运行 bundle，bundle 会检查 Gemfile 配置更新项目依赖的库：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle install
+</code></pre></div></div>
+
+<p>安装过程如果无误，那么配置就完成了，可直接在 markdown 里编写 LaTeX 代码。</p>
+
+<p>缺点：jekyll 项目在本地运行可以完美解析 LaTeX 语法，但上传到 github pages 就不行了，猜测是 github 在构建 jekyll 项目时是没有 jekyll-spaceship 插件的。</p>
+
+<h3 id="cdn-分发-mathjaxjs">CDN 分发 MathJax.js</h3>
+
+<p>这种方法最方便简洁，在每篇 post 之前插入下面这行代码即可：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script type="text/javascript" async src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;&lt;/script&gt;
+</code></pre></div></div>
+
+<p>这段链接会指向一个 CDN 分发服务，将最新的 MathJax Js 库 发送到本地用于 LaTeX 渲染。</p>
+
+<p>缺点：虽然做起来很简单，但每次打开新 post 都会重新加载这段代码，引起不必要的网络开销，网页会卡上一会。</p>
+
+<h3 id="本地添加-mathjax-库">本地添加 MathJax 库</h3>
+
+<p>用 CDN 分发服务会让网页卡顿，所以我考虑将 MathJax Js 库全部存放到本地 js 文件夹。这里参考了 <a href="https://docs.mathjax.org/en/latest/web/hosting.html">Hosting Your Own Copy of MathJax</a> 这篇文章。首先将已经编译发布的 MathJax 库用 npm 工具下载下来：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install mathjax@3
+</code></pre></div></div>
+
+<p>npm 的执行目录下会出现 node_modules 文件夹，里面存放着 mathjax/es5，es5 文件夹里面有着所有编译发布好的 mathjax 库。然后，在 github pages 的 /js 目录下建立 mathjax 文件夹，把 mathjax/es5 里面的 mathjax 库复制过来。</p>
+
+<p>最后一步，依然是在每片 post 之前插入 <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> 标签，引用 /js 下的 mathjax，如下：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async&gt;&lt;/script&gt;
+</code></pre></div></div>
+
+<p>至此可以完美解析 LaTeX 语法，网页加载速度也很快。</p>
+
+
+    <div id="disqus_container">
+  <div class="share-con">
+    <script type="text/javascript" charset="utf-8">
+      (function(){
+        var param = {
+          url: 'http://stormphoenix.github.io/Config_Latex',
+          type: '6',
+          title: '《如何在 Github Pages 中配置 Latex》' + '- 用 jekyll + markdown 的形式部署 github pages，该如何支持 latex 语法？',
+          ralateUid: '6425419082',
+          rnd:new Date().valueOf()
+        }
+        var temp = [];
+        for( var p in param ){
+          temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+        }
+        document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="86" height="16"></iframe>')
+      })()
+    </script>
+  </div>
+
+  <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+  <div id="disqus_thread"></div>
+</div>
+
+
+  </div>
+
+  <div class="about-wrapper">
+	<!--  <iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1" style="margin: 30px 0;"></iframe> -->
+
+  <div class="aboutme">
+    <h2><a href="/">所有文章</a></h2>
+    <ul>
+      
+      <li>
+        <a href="/Config_Latex" class="title">如何在 Github Pages 中配置 Latex</a>
+      </li>
+      
+      <li>
+        <a href="/GAMES202_Lecture_03" class="title">GAMES202 Real-Time Shadow Mapping</a>
+      </li>
+      
+      <li>
+        <a href="/GAMES202_Lecture_02" class="title">GAMES202 CG Basics</a>
+      </li>
+      
+      <li>
+        <a href="/GAMES202_Lecture_01" class="title">GAMES202 Introduction and Overview</a>
+      </li>
+      
+      <li>
+        <a href="/anatomy-of-linux-kernel-2" class="title">Linux内核完全剖析（二）</a>
+      </li>
+      
+      <li>
+        <a href="/Spring-series-four" class="title">Spring系列（四）</a>
+      </li>
+      
+      <li>
+        <a href="/Spring-series-three" class="title">Spring系列（三）</a>
+      </li>
+      
+      <li>
+        <a href="/anatomy-of-linux-kernel-1" class="title">Linux内核完全剖析（一）</a>
+      </li>
+      
+      <li>
+        <a href="/Spring-series-two" class="title">Spring系列（二）</a>
+      </li>
+      
+      <li>
+        <a href="/Spring-series-one" class="title">Spring系列（一）</a>
+      </li>
+      
+      <li>
+        <a href="/use-quota" class="title">使用Quota</a>
+      </li>
+      
+      <li>
+        <a href="/Linux%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86" class="title">Linux账号管理</a>
+      </li>
+      
+      <li>
+        <a href="/Linux%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C" class="title">Linux文件操作</a>
+      </li>
+      
+      <li>
+        <a href="/use-ACL" class="title">ACL的使用</a>
+      </li>
+      
+      <li>
+        <a href="/carriage-return-line-feed-new-line-end-file" class="title">回车、换行、和文件末尾空行</a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+  <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+  <script src="/js/post.js" type="text/javascript"></script>
+</body>
+
+
+</html>
