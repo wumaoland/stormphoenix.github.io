@@ -8,6 +8,7 @@ github_username: StormPhoenix
 # feed: /atom.xml
 author_info: <a href="http://stormphoenix.github.io">StormPhoenix</a>
 markdown: kramdown
+usemathjax: true
 
 plugins:
   - jekyll-feed

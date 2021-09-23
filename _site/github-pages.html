@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>使用Github Pages建独立博客 | StormPhoenix</title>
-    <meta name="author" content="StormPhoenix">
+    <meta name="author" content="StormPhoenix" />
     <meta name="renderer" content="webkit">
-    <meta name="description" content="StormPhoenix's Blog">
+    <meta name="description" content="StormPhoenix's Blog" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <link rel="stylesheet" href="/css/style.css"/>
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
   </head>
 
@@ -19,48 +18,9 @@
     <h1 class="post-title"><a href="/github-pages" title="使用Github Pages建独立博客">使用Github Pages建独立博客</a></h1>
     <p class="post-date">2012-02-22</p>
 
-    
-<script src="/js/mermaid.min.js"></script>
+    <script src="/js/mermaid/mermaid.min.js"></script>
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
 
-<!--
-<script>
-  MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']]
-    }
-  };
-  </script>
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-  </script>
--->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-      inlineMath: [['$','$']]
-    }
-  });
-</script>
-<!-- <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> -->
-<script src="/js/MathJax_latest.js" type="text/javascript"></script> 
-
-<!--
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
--->
-
-<!-- <script src="/js/MathJax.js" type="text/javascript"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-      inlineMath: [['$','$']]
-    }
-  });
-</script>
--->
 
     <p><a href="http://github.com" title="Github">Github</a>很好的将代码和社区联系在了一起，于是发生了很多有趣的事情，世界也因为他美好了一点点。Github作为现在最流行的代码仓库，已经得到很多大公司和项目的青睐，比如<a href="https://github.com/jquery/jquery" title="jQuery@github">jQuery</a>、<a href="https://github.com/twitter/bootstrap" title="Twitter@github">Twitter</a>等。为使项目更方便的被人理解，介绍页面少不了，甚至会需要完整的文档站，Github替你想到了这一点，他提供了<a href="http://pages.github.com/" title="Github Pages">Github Pages</a>的服务，不仅可以方便的为项目建立介绍站点，也可以用来建立个人博客。</p>
 
@@ -68,8 +28,7 @@
 
 <ul>
     <li>轻量级的博客系统，没有麻烦的配置</li>
-    <li>使用标记语言，比如<a href="http://markdown.tw">Markdown</a>
-</li>
+    <li>使用标记语言，比如<a href="http://markdown.tw">Markdown</a></li>
     <li>无需自己搭建服务器</li>
     <li>根据Github的限制，对应的每个站有300MB空间</li>
     <li>可以绑定自己的域名</li>
@@ -95,11 +54,9 @@
 <p>我们选择<a href="https://www.dnspod.cn/" title="DNSPod">DNSPod</a>的服务，他们的产品做得不错，易用、免费，收费版有更高端的功能，暂不需要。注册登录之后，按照DNSPod的说法，只需三步（我们插入一步）：</p>
 
 <ul>
-	<li>首先添加域名记录，可参考DNSPod的帮助文档：<a href="https://www.dnspod.cn/Support">https://www.dnspod.cn/Support</a>
-</li>
+	<li>首先添加域名记录，可参考DNSPod的帮助文档：<a href="https://www.dnspod.cn/Support">https://www.dnspod.cn/Support</a></li>
 	<li>在DNSPod自己的域名下添加一条<a href="http://baike.baidu.com/view/65575.htm">A记录</a>，地址就是Github Pages的服务IP地址：207.97.227.245</li>
-	<li>在域名注册商处修改DNS服务:去Godaddy修改Nameservers为这两个地址：f1g1ns1.dnspod.net、f1g1ns2.dnspod.net。如果你不明白在哪里修改，可以参考这里：<a href="https://www.dnspod.cn/support/index/fid/119">Godaddy注册的域名如何使用DNSPod</a>
-</li>
+	<li>在域名注册商处修改DNS服务:去Godaddy修改Nameservers为这两个地址：f1g1ns1.dnspod.net、f1g1ns2.dnspod.net。如果你不明白在哪里修改，可以参考这里：<a href="https://www.dnspod.cn/support/index/fid/119">Godaddy注册的域名如何使用DNSPod</a></li>
 	<li>等待域名解析生效</li>
 </ul>
 
@@ -113,7 +70,7 @@
 <p>下载安装客户端之后，各个系统的配置就类似了，我们使用windows作为例子，Linux和Mac与此类似。</p>
 
 <p>在Windows下，打开Git Bash，其他系统下面则打开终端（Terminal）：
-<img src="/images/githubpages/bootcamp_1_win_gitbash.jpg" alt="Git Bash"></p>
+<img src="/images/githubpages/bootcamp_1_win_gitbash.jpg" alt="Git Bash" /></p>
 
 <h3 id="1检查ssh-keys的设置">1、检查SSH keys的设置</h3>
 <p>首先我们需要检查你电脑上现有的ssh key：</p>
@@ -148,7 +105,7 @@ Enter same passphrase again:&lt;再次输入加密串&gt;
 </code></pre></div></div>
 
 <p>最后看到这样的界面，就成功设置ssh key了：
-<img src="/images/githubpages/ssh-key-set.png" alt="ssh key success"></p>
+<img src="/images/githubpages/ssh-key-set.png" alt="ssh key success" /></p>
 
 <h3 id="4添加ssh-key到github">4、添加SSH Key到GitHub：</h3>
 <p>在本机设置SSH Key之后，需要添加到GitHub上，以完成SSH链接的设置。</p>
@@ -156,10 +113,10 @@ Enter same passphrase again:&lt;再次输入加密串&gt;
 <p>用文本编辑工具打开id_rsa.pub文件，如果看不到这个文件，你需要设置显示隐藏文件。准确的复制这个文件的内容，才能保证设置的成功。</p>
 
 <p>在GitHub的主页上点击设置按钮：
-<img src="/images/githubpages/github-account-setting.png" alt="github account setting"></p>
+<img src="/images/githubpages/github-account-setting.png" alt="github account setting" /></p>
 
 <p>选择SSH Keys项，把复制的内容粘贴进去，然后点击Add Key按钮即可：
-<img src="/images/githubpages/bootcamp_1_ssh.jpg" alt="set ssh keys"></p>
+<img src="/images/githubpages/bootcamp_1_ssh.jpg" alt="set ssh keys" /></p>
 
 <p>PS：如果需要配置多个GitHub账号，可以参看这个<a href="http://omiga.org/blog/archives/2269">多个github帐号的SSH key切换</a>，不过需要提醒一下的是，如果你只是通过这篇文章中所述配置了Host，那么你多个账号下面的提交用户会是一个人，所以需要通过命令<code class="language-plaintext highlighter-rouge">git config --global --unset user.email</code>删除用户账户设置，在每一个repo下面使用<code class="language-plaintext highlighter-rouge">git config --local user.email '你的github邮箱@mail.com'</code> 命令单独设置用户账户信息</p>
 
@@ -197,7 +154,7 @@ $ git config --global user.email "your_email@youremail.com"
 <p>有些工具没有通过SSH来链接GitHub。如果要使用这类工具，你需要找到然后设置你的API Token。</p>
 
 <p>在GitHub上，你可以点击<em>Account Setting &gt; Account Admin</em>：
-<img src="/images/githubpages/bootcamp_1_token.jpg" alt="set ssh keys"></p>
+<img src="/images/githubpages/bootcamp_1_token.jpg" alt="set ssh keys" /></p>
 
 <p>然后在你的命令行中，输入下面的命令，把token添加进去：</p>
 
@@ -215,9 +172,9 @@ $ git config --global user.token 0123456789your123456789token
 
 <h3 id="user--organization-pages">User &amp; Organization Pages</h3>
 <p>想建立个人博客是用的第一种，形如<code class="language-plaintext highlighter-rouge">beiyuu.github.io</code>这样的可访问的站，每个用户名下面只能建立一个，创建之后点击<code class="language-plaintext highlighter-rouge">Admin</code>进入项目管理，可以看到是这样的：
-<img src="/images/githubpages/user-pages.png" alt="user pages">
+<img src="/images/githubpages/user-pages.png" alt="user pages" />
 而普通的项目是这样的，即使你也是用的<code class="language-plaintext highlighter-rouge">othername.github.io</code>：
-<img src="/images/githubpages/other-pages.png" alt="other pages"></p>
+<img src="/images/githubpages/other-pages.png" alt="other pages" /></p>
 
 <p>创建好<code class="language-plaintext highlighter-rouge">username.github.io</code>项目之后，提交一个<code class="language-plaintext highlighter-rouge">index.html</code>文件，然后<code class="language-plaintext highlighter-rouge">push</code>到GitHub的<code class="language-plaintext highlighter-rouge">master</code>分支（也就是普通意义上的主干）。第一次页面生效需要一些时间，大概10分钟左右。</p>
 
@@ -250,15 +207,15 @@ $ git config --global user.token 0123456789your123456789token
 
 <p>基本的Jekyll结构如下：</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|-- \_config.yml
-|-- \_includes
-|-- \_layouts
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|-- _config.yml
+|-- _includes
+|-- _layouts
 |   |-- default.html
 |   `-- post.html
 |-- _posts
 |   |-- 2007-10-29-why-every-programmer-should-play-nethack.textile
 |   `-- 2009-04-26-barcamp-boston-4-roundup.textile
-|-- \_site
+|-- _site
 `-- index.html
 </code></pre></div></div>
 
@@ -289,38 +246,27 @@ $ git config --global user.token 0123456789your123456789token
 <p><code class="language-plaintext highlighter-rouge">Permalink</code>项用来定义你最终的文章链接是什么形式，他有下面几个变量：</p>
 
 <ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">year</code> 文件名中的年份</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">month</code> 文件名中的月份</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">day</code> 文件名中的日期</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">title</code> 文件名中的文章标题</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">categories</code> 文章的分类，如果文章没有分类，会忽略</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">i-month</code> 文件名中的除去前缀0的月份</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">i-day</code> 文件名中的除去前缀0的日期</li>
+  <li><code class="language-plaintext highlighter-rouge">year</code> 文件名中的年份</li>
+  <li><code class="language-plaintext highlighter-rouge">month</code> 文件名中的月份</li>
+  <li><code class="language-plaintext highlighter-rouge">day</code> 文件名中的日期</li>
+  <li><code class="language-plaintext highlighter-rouge">title</code> 文件名中的文章标题</li>
+  <li><code class="language-plaintext highlighter-rouge">categories</code> 文章的分类，如果文章没有分类，会忽略</li>
+  <li><code class="language-plaintext highlighter-rouge">i-month</code> 文件名中的除去前缀0的月份</li>
+  <li><code class="language-plaintext highlighter-rouge">i-day</code> 文件名中的除去前缀0的日期</li>
 </ul>
 
 <p>看看最终的配置效果：</p>
 
 <ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">permalink: pretty</code> /2009/04/29/slap-chop/index.html</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">permalink: /:month-:day-:year/:title.html</code> /04-29-2009/slap-chop.html</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">permalink: /blog/:year/:month/:day/:title</code> /blog/2009/04/29/slap-chop/index.html</li>
+  <li><code class="language-plaintext highlighter-rouge">permalink: pretty</code> /2009/04/29/slap-chop/index.html</li>
+  <li><code class="language-plaintext highlighter-rouge">permalink: /:month-:day-:year/:title.html</code> /04-29-2009/slap-chop.html</li>
+  <li><code class="language-plaintext highlighter-rouge">permalink: /blog/:year/:month/:day/:title</code> /blog/2009/04/29/slap-chop/index.html</li>
 </ul>
 
 <p>我使用的是：</p>
 
 <ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">permalink: /:title</code> /github-pages</li>
+  <li><code class="language-plaintext highlighter-rouge">permalink: /:title</code> /github-pages</li>
 </ul>
 
 <p>自定义项的内容，例如我们定义了<code class="language-plaintext highlighter-rouge">title:BeiYuu的博客</code>这样一项，那么你就可以在文章中使用<code class="language-plaintext highlighter-rouge">{ { site.title }}</code>来引用这个变量了，非常方便定义些全局变量。</p>
@@ -337,14 +283,10 @@ title: Blogging Like a Hacker
 <p>前后的<code class="language-plaintext highlighter-rouge">---</code>不能省略，在这之间，你可以定一些你需要的变量，layout就是调用<code class="language-plaintext highlighter-rouge">_layouts</code>下面的某一个模板，他还有一些其他的变量可以使用：</p>
 
 <ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">permalink</code> 你可以对某一篇文章使用通用设置之外的永久链接</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">published</code> 可以单独设置某一篇文章是否需要发布</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">category</code> 设置文章的分类</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">tags</code> 设置文章的tag</li>
+  <li><code class="language-plaintext highlighter-rouge">permalink</code> 你可以对某一篇文章使用通用设置之外的永久链接</li>
+  <li><code class="language-plaintext highlighter-rouge">published</code> 可以单独设置某一篇文章是否需要发布</li>
+  <li><code class="language-plaintext highlighter-rouge">category</code> 设置文章的分类</li>
+  <li><code class="language-plaintext highlighter-rouge">tags</code> 设置文章的tag</li>
 </ul>
 
 <p>上面的<code class="language-plaintext highlighter-rouge">title</code>就是自定义的内容，你也可以设置其他的内容，在文章中可以通过<code class="language-plaintext highlighter-rouge">{ { page.title }}</code>这样的形式调用。</p>
@@ -357,7 +299,7 @@ title: Blogging Like a Hacker
 <p>现在专做评论模块的产品有很多，比如<a href="http://disqus.com/">Disqus</a>，还有国产的<a href="http://duoshuo.com/">多说</a>，Disqus对现在各种系统的支持都比较全面，到写博客为止，多说现在仅是WordPress的一个插件，所以我这里暂时也使用不了，多说与国内的社交网络紧密结合，还是有很多亮点的，值得期待一下。我先选择了Disqus。</p>
 
 <p>注册账号什么的就不提了，Disqus支持很多的博客平台，参见下图：
-<img src="/images/githubpages/disqus-site.jpg" alt="Disqus sites"></p>
+<img src="/images/githubpages/disqus-site.jpg" alt="Disqus sites" /></p>
 
 <p>我们选择最下面的<code class="language-plaintext highlighter-rouge">Universal Code</code>就好，然后会看到一个介绍页面，把下面这段代码复制到你的模板里面，可以只复制到显示文章的模板中：</p>
 

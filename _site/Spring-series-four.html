@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Spring系列（四） | StormPhoenix</title>
-    <meta name="author" content="StormPhoenix">
+    <meta name="author" content="StormPhoenix" />
     <meta name="renderer" content="webkit">
-    <meta name="description" content="StormPhoenix's Blog">
+    <meta name="description" content="StormPhoenix's Blog" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <link rel="stylesheet" href="/css/style.css"/>
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
   </head>
 
@@ -19,48 +18,9 @@
     <h1 class="post-title"><a href="/Spring-series-four" title="Spring系列（四）">Spring系列（四）</a></h1>
     <p class="post-date">2017-07-25</p>
 
-    
-<script src="/js/mermaid.min.js"></script>
+    <script src="/js/mermaid/mermaid.min.js"></script>
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
 
-<!--
-<script>
-  MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']]
-    }
-  };
-  </script>
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-  </script>
--->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-      inlineMath: [['$','$']]
-    }
-  });
-</script>
-<!-- <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> -->
-<script src="/js/MathJax_latest.js" type="text/javascript"></script> 
-
-<!--
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
--->
-
-<!-- <script src="/js/MathJax.js" type="text/javascript"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-      inlineMath: [['$','$']]
-    }
-  });
-</script>
--->
 
     <h1 id="预备知识">预备知识</h1>
 <p>学习过Bean的基本装配知识即可。</p>
@@ -127,8 +87,7 @@
 <span class="sr">//</span> <span class="err">让</span> <span class="no">Spring</span> <span class="err">根据情况来装配。</span></code></pre></figure>
 
 <ul>
-  <li>
-<strong>Spring 条件化装配</strong>
+  <li><strong>Spring 条件化装配</strong>
 这种方式是利用 <code class="language-plaintext highlighter-rouge">@Conditional</code> 注解，实现根据不同的条件来装配 Bean的功能。</li>
 </ul>
 
@@ -182,8 +141,7 @@
 <p>我用的一个方法是在虚拟机启动的时候把 <code class="language-plaintext highlighter-rouge">flat</code> 设置成了环境变量。</p>
 
 <ul>
-  <li>
-<strong>利用Profile</strong>
+  <li><strong>利用Profile</strong>
 把 Profile 理解成一个环境，这个环境包含了一套 Bean。你现在有很多个 Profile，在运行时你来制定用哪一个Profile。</li>
 </ul>
 
@@ -218,8 +176,7 @@ spring.profiles.default</p>
 <p>至于如何设置的嘛，和上文一样，简单不解释。</p>
 
 <ul>
-  <li>
-<strong>使用限定符注解</strong>
+  <li><strong>使用限定符注解</strong>
 这样理解：有好多个实现相同接口的 Bean，我们要给这些 Bean 添加上一些不同的特征，到时候用的时候，可以根据我需要的特征挑选 Bean。</li>
 </ul>
 
