@@ -123,8 +123,10 @@ graph TD;
 
 $$ \int_{\Omega} f(x)g(x)dx \approx \frac{\int_{\Omega} f(x)dx}{\int_{\Omega}dx} \cdot \int_{\Omega} g(x) dx $$
 
-```
+
  成立条件：
+
+```
  (1) g(x) 的 support（积分范围）足够小。
  (2) g(x) 足够 smooth（平滑）。
 ```
