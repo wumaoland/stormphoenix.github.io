@@ -94,27 +94,14 @@ Shadow map 上记录的深度是离散、不连续的，不能代表场景中任
 
 有一种解决办法也是利用 PCF。首先假设，如果 p 点被遮挡，那么深度比较结果为 1，反之为 0。现在依然以点光源为模型生成 Shadow map，不在处理阴影的时候多次采样深度比较，结果做加权，最终 p 点得到的结果将会介于 [0, 1] 之间，用这个结果来表示阴影软硬程度，后文将具体介绍。
 
-![Conclusion](/images/RTR/Conclusion.jpeg){:width="70%"}
-
-
-<div class="mermaid">
-pie title Pets adopted by volunteers
-"Dogs" : 386
-"Cats" : 85
-"Rats" : 35
-</div>
+一张图来总结：
 
 <div class="mermaid">
 graph LR
-A[hard edge] -->B(Round edge)
-</div>
-
-<div class="mermaid">
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+A([Shadow Mapping 缺点]) --> B([Shadow map 分辨率限制])
+A --> C([点光源模型]) --> D[不能生成硬阴影]
+B --> E[自遮挡现象]
+B --> F[锯齿状阴影]
 </div>
 
 ### Shadow Mapping 后的数学原理
@@ -131,7 +118,7 @@ $$ \int_{\Omega} f(x)g(x)dx \approx \frac{\int_{\Omega} f(x)dx}{\int_{\Omega}dx}
  (2) g(x) 足够 smooth（平滑）。
 ```
 
-引入这个公式的目的是为了说明：在实时渲染领域，任何 “近似相等” 都等价于 “相等”。将这个约等式应用于渲染方程，将方程内的 Visibility 项提到公式外部，如下：
+引入这个公式的目的是为了说明：在实时渲染领域，任何 “近似相等” 都等价于 “相等”。以渲染方程为例，将方程内的 Visibility 项提到公式外部，如下：
 
 $$ L_o(p, \omega_o) = \int_{\Omega_{+}} L_i(p, \omega_i)f_r(p,\omega_i,\omega_o)\cos\theta_{i}V(p, \omega_i)d \omega_{i} $$
 
@@ -142,13 +129,13 @@ $$ L_o(p, \omega_o) \approx \frac{\int_{\Omega+}V(p, \omega_i)d\omega_i}{\int_{\
 重新审视一下公式成立条件，看这个近似能不能成立。首先是 
 
 ```
- (1) g(x) 的 support（积分范围）足够小。
+(1) g(x) 的 support（积分范围）足够小。
 ```
 
 这要求公式左边的 Li 的积分范围足够小，对应到实际环境是要求光源必须是点光源。点光源相当于是空间中的一个点，体积很小，从 p 点看向光源的立体角 wi 也相对小。
 
 ```
- (2) g(x) 必须是 smooth 的
+(2) g(x) 必须是 smooth 的
 ```
 
 这要求公示左边的 Li 和 BRDF 足够光滑。Li 足够光滑的情况是环境光、面光源，BRDF 必须是接近 diffuse 的。

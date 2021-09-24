@@ -1,6 +1,6 @@
 ---
 layout: post
-title:    "如何在 Github Pages 中配置 Latex"
+title:    "如何在 Github Pages 中配置 LaTeX"
 date:    2021-09-23 12:51:46 +0800
 categories:    blog
 description: 用 jekyll + markdown 的形式部署 github pages，该如何支持 latex 语法？
